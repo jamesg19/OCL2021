@@ -1,0 +1,7 @@
+    var prueba=10++
+    var abcd=prueba++;
+    print (abcd)
+
+    
+
+
