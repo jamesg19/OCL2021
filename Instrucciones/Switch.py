@@ -5,7 +5,7 @@ from TS.TablaSimbolos import TablaSimbolos
 from Instrucciones.Break import Break
 
 
-class If(Instruccion):
+class Switch(Instruccion):
     def __init__(self, condicion, instruccionesIf, instruccionesElse, ElseIf, fila, columna):
         self.condicion = condicion
         self.instruccionesIf = instruccionesIf
@@ -16,11 +16,9 @@ class If(Instruccion):
 
     def interpretar(self, tree, table):
         condicion = self.condicion.interpretar(tree, table)
-        if isinstance(condicion, Excepcion): 
-            return condicion
+        if isinstance(condicion, Excepcion): return condicion
 
         if self.condicion.tipo == TIPO.BOOLEANO:
-            
             if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
                 nuevaTabla = TablaSimbolos(table)       #NUEVO ENTORNO
                 for instruccion in self.instruccionesIf:

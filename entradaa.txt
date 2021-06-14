@@ -1,7 +1,3 @@
-    var prueba=10++
-    var abcd=prueba++;
-    print (abcd)
-
-    
-
+var a=9
+print(a+a++)
 

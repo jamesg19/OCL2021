@@ -241,11 +241,11 @@ class Aritmetica(Instruccion):
             print("INCREMENTO ENTRA")
             if self.OperacionIzq.tipo == TIPO.ENTERO:
                 self.tipo = TIPO.ENTERO
-                return  self.obtenerVal(self.OperacionIzq.tipo, izq)+1
+                return  self.obtenerVal(self.OperacionIzq.tipo, izq)
             
             elif self.OperacionIzq.tipo == TIPO.DECIMAL:
                 self.tipo = TIPO.DECIMAL
-                return self.obtenerVal(self.OperacionIzq.tipo, izq)+1
+                return self.obtenerVal(self.OperacionIzq.tipo, izq)
             return Excepcion("Semantico", "Tipo Erroneo de operacion para INCREMENTO ++", self.fila, self.columna)   
 
 

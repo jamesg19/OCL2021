@@ -7,7 +7,8 @@ USAC
 '''
 import re
 from TS.Excepcion import Excepcion
-
+#TABLA ASCII 
+#https://es.stackoverflow.com/questions/117556/clase-de-caracteres-para-cualquier-letra-incluyendo-todo-tipo-de-acentos
 errores = []
 tokens=(
     'VAR',
@@ -194,14 +195,16 @@ def t_COMENTARIO(t):
     return None
 
 def t_CADENA(t):
-    r'(\".*\")'
+    r'(\"([(-Za-z#-&]|([\\][n]|[\\][t]|[\\][r]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))+\")'
     t.value = t.value[1:-1] # remuevo las comillas
+    #t.value.replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t').replace('\\"', '\"').replace('\\\\', '\\')
     return t
 
 def t_CHART(t):
-    r'(\'([(-Za-z#-&]|([\n]|[\t]|[\r]|[\\][\\]|[\\][\']|[\\][\"]|[\{]|[\}]|[\|]|[\!]|[\_]))\')'
+    r'(\'([(-Za-z#-&]|([\\][n]|[\\][t]|[\\][r]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))\')'
+    #r'(\'([(-Za-z#-&]|([\\n]|[\\t]|[\\r]|[\\][\\]|[\\][\']|[\\][\"]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))\')'
     t.value = t.value[1:-1] # remuevo las comillas
-    
+    #t.value.replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t').replace('\\"', '\"').replace('\\\\', '\\')
     return t
 
 ##def t_CHART(t):
@@ -216,9 +219,8 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
 
-def t_error(t): #LEXICOS
-    print('caracter no reconocido: ' + str(t.value[0]))
-    # almacenamiento de errores lexicos
+def t_error(t):
+    errores.append(Excepcion("Lexico","Error léxico." + t.value[0] , t.lexer.lineno, find_column(input, t)))
     t.lexer.skip(1)
 
 def t_COMENTARIOBLOQU_error(t): #LEXICOS
@@ -342,12 +344,12 @@ def p_if1(t):
     t[0] = If(t[3], t[6], None, None, t.lineno(1), find_column(input, t.slice[1]))
 
 def p_ifelse(t):
-    '''
-    if : IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
+    ''' if : IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
     '''
     t[0] = If(t[3], t[6], t[10], None, t.lineno(1), find_column(input, t.slice[1]))
+
 def p_difelseif(t):
-    ''' if :  IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if '''
+     ''' if :  IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if '''
     t[0] = If(t[3], t[6], None, t[9], t.lineno(1), find_column(input, t.slice[1]))
 
 def p_switch(t):
@@ -367,8 +369,7 @@ def p_while(t):
     ''' while : WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE  LLAVE_CIERRA '''
     t[0] = While(t[3], t[6], t.lineno(1), find_column(input, t.slice[1]))
 def p_for(t):
-    '''
-    for : FOR PARENTESIS_ABRE condicionfor PARENTESIS_CIERRA  LLAVE_ABRE  LLAVE_CIERRA
+    ''' for : FOR PARENTESIS_ABRE condicionfor PARENTESIS_CIERRA  LLAVE_ABRE  LLAVE_CIERRA
     '''
 def p_forcondiciones(t):
     '''
@@ -415,8 +416,7 @@ def p_finInstruccion(t):
     t[0] = None
 
 def p_expresion_binaria(t):
-    '''
-    expresion : expresion MAS expresion
+    ''' expresion : expresion MAS expresion
             | expresion MENOS expresion
             | expresion POR expresion
             | expresion DIV expresion
@@ -430,8 +430,6 @@ def p_expresion_binaria(t):
             | expresion MENORIGUAL expresion  
             | expresion OR expresion  
             | expresion AND expresion 
-            
-              
     ''' 
     if t[2] == '+':
         t[0] = Aritmetica(OperadorAritmetico.MAS, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
@@ -498,10 +496,10 @@ def p_identificador(t):
     t[0] = Identificador(t[1], t.lineno(1), find_column(input, t.slice[1]))
 def p_cadena(t):
     ''' expresion : CADENA '''
-    t[0] = Primitivos(TIPO.CADENA,str(t[1]).replace('\\n', '\n'), t.lineno(1), find_column(input, t.slice[1]))
+    t[0] = Primitivos(TIPO.CADENA,str(t[1]).replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t').replace('\\"', '\"').replace('\\\\', '\\').replace('\\\'', '\''), t.lineno(1), find_column(input, t.slice[1]))
 def p_chart(t):
     ''' expresion : CHART '''
-    t[0] = Primitivos(TIPO.CHARACTER,str(t[1]).replace('\\n', '\n'), t.lineno(1), find_column(input, t.slice[1]))
+    t[0] = Primitivos(TIPO.CHARACTER,str(t[1]).replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t').replace('\\"', '\"').replace('\\\\', '\\').replace('\\\'', '\''), t.lineno(1), find_column(input, t.slice[1]))
 
 
 
@@ -553,13 +551,15 @@ for error in errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICO
     ast.updateConsola(error.toString())
 
 for instruccion in ast.getInstrucciones():      # REALIZAR LAS ACCIONES
-    value = instruccion.interpretar(ast,TSGlobal)
-    if isinstance(value, Excepcion) :
-        ast.getExcepciones().append(value)
-        ast.updateConsola(value.toString())
-    if isinstance(value, Break): 
-        err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
-        ast.getExcepciones().append(err)
-        ast.updateConsola(err.toString())
-
+    try: 
+        value = instruccion.interpretar(ast,TSGlobal)
+        if isinstance(value, Excepcion) :
+            ast.getExcepciones().append(value)
+            ast.updateConsola(value.toString())
+        if isinstance(value, Break): 
+            err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.getExcepciones().append(err)
+            ast.updateConsola(err.toString())
+    except: 
+        print("Error inesperado...")
 print(ast.getConsola())
