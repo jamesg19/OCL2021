@@ -14,6 +14,7 @@ class Incremento(Instruccion):
     def interpretar(self, tree, table):
         #identificador, tipo, fila, columna, valor
         simbolo = table.getTabla(self.id)
+        
         if simbolo == None:
             return Excepcion("Semantico",("IDENTIFICADOR no encontrado: "+str(self.id)),self.fila,self.columna)
         

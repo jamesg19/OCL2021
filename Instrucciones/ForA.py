@@ -4,19 +4,29 @@ from TS.Tipo import TIPO
 from TS.TablaSimbolos import TablaSimbolos
 from Instrucciones.Break import Break
 
-class While(Instruccion):
-
-    def __init__(self, condicion, instrucciones, fila, columna):
+class ForA(Instruccion):
+    def __init__(self,asginacion, condicion,actualiza, instrucciones, fila, columna):
+        self.asginacion=asginacion
         self.condicion = condicion
+        self.actualiza=actualiza
         self.instrucciones = instrucciones
         self.fila = fila
         self.columna = columna
 
     def interpretar(self, tree, table):
-        while True:
-            condicion = self.condicion.interpretar(tree, table)
-            if isinstance(condicion, Excepcion): return condicion
+        #ASIGNA VALOR
+        asginacion=self.asginacion.interpretar(tree, table)
+        if isinstance(asginacion, Excepcion): return asginacion
 
+        while True:
+
+            #verifica que se cumpla la condicion
+            try:
+                condicion = self.condicion.interpretar(tree, table)
+                if isinstance(condicion, Excepcion): return condicion
+            except:
+                return condicion
+            
             if self.condicion.tipo == TIPO.BOOLEANO:
                 if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
                     nuevaTabla = TablaSimbolos(table)       #NUEVO ENTORNO
@@ -25,8 +35,13 @@ class While(Instruccion):
                         if isinstance(result, Excepcion) :
                             tree.getExcepciones().append(result)
                             tree.updateConsola(result.toString())
+                        #SI HAY UN BREAK SALE DEL CICLO FOR
                         if isinstance(result, Break): return None
                 else:
                     break
+                
             else:
-                return Excepcion("Semantico", "Tipo de dato no booleano en WHILE.", self.fila, self.columna)
+                return Excepcion("Semantico", "Tipo de dato no booleano en FOR.", self.fila, self.columna)
+            #ACTUALIZA LA VARIABLE
+            actualiza=self.actualiza.interpretar(tree, table)
+            if isinstance(actualiza, Excepcion): return actualiza

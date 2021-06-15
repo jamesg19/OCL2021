@@ -159,7 +159,7 @@ class Aritmetica(Instruccion):
         
         #MULTIPLICACION   
         elif self.operador == OperadorAritmetico.POR: #MULTIPLICACION
-            print("ES MULTIPLIACION")
+            #print("ES MULTIPLIACION")
             if self.OperacionIzq.tipo == TIPO.ENTERO and self.OperacionDer.tipo == TIPO.ENTERO:
                 self.tipo = TIPO.ENTERO
                 return self.obtenerVal(self.OperacionIzq.tipo, izq) * self.obtenerVal(self.OperacionDer.tipo, der)    
@@ -172,7 +172,7 @@ class Aritmetica(Instruccion):
             elif self.OperacionIzq.tipo == TIPO.DECIMAL and self.OperacionDer.tipo == TIPO.DECIMAL:
                 self.tipo = TIPO.DECIMAL
                 return self.obtenerVal(self.OperacionIzq.tipo, izq) * self.obtenerVal(self.OperacionDer.tipo, der)                
-            print("RETORNA UN ERROR")
+            #print("RETORNA UN ERROR")
             return Excepcion("Semantico", "Tipo Erroneo de operacion para * MULTPILICACION.", self.fila, self.columna)
 
         #DIVISON   

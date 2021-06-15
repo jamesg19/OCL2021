@@ -188,7 +188,6 @@ def t_COMENTARIOBLOQU_end(t):
     print('sale')
     t.lexer.begin('INITIAL')
 
-
 def t_COMENTARIO(t):
     r'[\#][^\n]+'
     print('Comment Line')
@@ -204,12 +203,7 @@ def t_CHART(t):
     r'(\'([(-Za-z#-&]|([\\][n]|[\\][t]|[\\][r]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))\')'
     #r'(\'([(-Za-z#-&]|([\\n]|[\\t]|[\\r]|[\\][\\]|[\\][\']|[\\][\"]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))\')'
     t.value = t.value[1:-1] # remuevo las comillas
-    #t.value.replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t').replace('\\"', '\"').replace('\\\\', '\\')
     return t
-
-##def t_CHART(t):
-    ##r'[#-&(-\[a-\}]'
-    ##return t
 
 # Caracteres ignorados
 t_ignore = " \t"
@@ -219,13 +213,13 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
 
-def t_error(t):
-    errores.append(Excepcion("Lexico","Error léxico." + t.value[0] , t.lexer.lineno, find_column(input, t)))
-    t.lexer.skip(1)
-
 def t_COMENTARIOBLOQU_error(t): #LEXICOS
     #print('caracter no reconocido  ' + str(t.value[0]))
     # almacenamiento de errores lexicos
+    t.lexer.skip(1)
+
+def t_error(t):
+    errores.append(Excepcion("Lexico","Error léxico." + t.value[0] , t.lexer.lineno, find_column(input, t)))
     t.lexer.skip(1)
 
 def find_column(inp, token):
@@ -265,6 +259,8 @@ from Expresiones.Identificador import Identificador
 from Instrucciones.Asignacion import Asignacion
 from Instrucciones.If import If
 from Instrucciones.While import While
+from Instrucciones.For import For
+from Instrucciones.ForA import ForA
 from Instrucciones.Break import Break
 from Expresiones.Incremento import Incremento
 from Expresiones.Decremento import Decremento
@@ -300,7 +296,7 @@ def p_declaraciones(t):
     '''
     t[0] = t[1]
 def p_instruccion_error(t):
-    'instruccion        : error  '
+    'instruccion        : error finInstruccion'
     errores.append(Excepcion("Sintáctico","Error Sintáctico." + str(t[1].value) , t.lineno(1), find_column(input, t.slice[1])))
     t[0] = ""
 
@@ -332,8 +328,9 @@ def p_var(t):
 def p_incrementa(t):
     ''' variables : IDENTIFICADOR INCREMENTO finInstruccion ''' 
     t[0] = Incremento(t[1], t.lineno(1), find_column(input, t.slice[1]))
-def p_incrementa(t):
-    ''' variables : IDENTIFICADOR INCREMENTO finInstruccion ''' 
+    
+def p_decrementa(t):
+    ''' variables : IDENTIFICADOR DECREMENTO finInstruccion ''' 
     t[0] = Decremento(t[1], t.lineno(1), find_column(input, t.slice[1]))
 
 #--------------------------IF------------------------
@@ -349,7 +346,7 @@ def p_ifelse(t):
     t[0] = If(t[3], t[6], t[10], None, t.lineno(1), find_column(input, t.slice[1]))
 
 def p_difelseif(t):
-     ''' if :  IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if '''
+    ''' if :  IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if '''
     t[0] = If(t[3], t[6], None, t[9], t.lineno(1), find_column(input, t.slice[1]))
 
 def p_switch(t):
@@ -366,26 +363,36 @@ def p_default(t):
     default : DEFAULT DOSPUNTOS break
     '''
 def p_while(t):
-    ''' while : WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE  LLAVE_CIERRA '''
+    ''' while : WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA '''
     t[0] = While(t[3], t[6], t.lineno(1), find_column(input, t.slice[1]))
-def p_for(t):
-    ''' for : FOR PARENTESIS_ABRE condicionfor PARENTESIS_CIERRA  LLAVE_ABRE  LLAVE_CIERRA
+def p_for1(t):
+    ''' for : FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA  LLAVE_ABRE instrucciones LLAVE_CIERRA
     '''
-def p_forcondiciones(t):
+    t[0]=For(t[3],t[5],t[7],t[10],t.lineno(1), find_column(input, t.slice[1]))
+
+def p_for2(t):
+    ''' for : FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA  LLAVE_ABRE instrucciones LLAVE_CIERRA
     '''
-    condicionfor : declaracionfor PTCOMA expresion PTCOMA actualizacion
-    '''
-def p_declaracionfor(t):
-    '''
-    declaracionfor : VAR IDENTIFICADOR  IGUAL expresion  
-                | IDENTIFICADOR IGUAL expresion  
-    '''
-def p_actualizacionfor(t):
-    '''
-    actualizacion : IDENTIFICADOR INCREMENTO
-                    | IDENTIFICADOR DECREMENTO
-                    | IDENTIFICADOR IGUAL expresion
-    '''
+    t[0]=ForA(t[3],t[5],t[7],t[10],t.lineno(1), find_column(input, t.slice[1]))
+
+def p_declaracionfor1(t):
+    ''' declaracionfor1 : VAR IDENTIFICADOR IGUAL expresion   '''
+    t[0] = Declaracion(TIPO.ENTERO, t[2], t.lineno(2), find_column(input, t.slice[2]), t[4])
+
+def p_declaracionfor2(t):
+    ''' declaracionfor2 : IDENTIFICADOR IGUAL expresion  '''
+    t[0] = Asignacion(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_actualizacionfor1(t):
+    ''' actualizacion : IDENTIFICADOR INCREMENTO '''
+    t[0] = Incremento(t[1], t.lineno(1), find_column(input, t.slice[1]))
+def p_actualizacionfor2(t):
+    ''' actualizacion :  IDENTIFICADOR DECREMENTO '''
+    t[0] = Decremento(t[1], t.lineno(1), find_column(input, t.slice[1]))
+def p_actualizacionfor3(t):
+    ''' actualizacion :   IDENTIFICADOR IGUAL expresion '''
+    t[0] = Asignacion(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
+
 def p_funciones(t):
     '''
     funciones : FUNC IDENTIFICADOR PARENTESIS_ABRE parametrosf PARENTESIS_CIERRA LLAVE_ABRE LLAVE_CIERRA
@@ -449,6 +456,12 @@ def p_expresion_binaria(t):
         t[0] = Relacional(OperadorRelacional.MAYORQUE, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
     elif t[2] == '==':
         t[0] = Relacional(OperadorRelacional.IGUALIGUAL, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '<=':
+        t[0] = Relacional(OperadorRelacional.MENORIGUAL, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '>=':
+        t[0] = Relacional(OperadorRelacional.MAYORIGUAL, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '=!':
+        t[0] = Relacional(OperadorRelacional.DIFERENTE, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
     elif t[2] == '&&':
         t[0] = Logica(OperadorLogico.AND, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
     elif t[2] == '||':
@@ -467,7 +480,7 @@ def p_expresion_unaria(t):
 def p_incremento(t):
     ''' expresion : IDENTIFICADOR INCREMENTO %prec MASMAS'''
     t[0] = Incremento(t[1], t.lineno(1), find_column(input, t.slice[1]))
-
+    
 
 def p_decremento(t):
     ''' expresion : IDENTIFICADOR DECREMENTO %prec MENOSMENOS '''
@@ -549,17 +562,19 @@ ast.setTSglobal(TSGlobal)
 for error in errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICOS
     ast.getExcepciones().append(error)
     ast.updateConsola(error.toString())
-
-for instruccion in ast.getInstrucciones():      # REALIZAR LAS ACCIONES
-    try: 
-        value = instruccion.interpretar(ast,TSGlobal)
-        if isinstance(value, Excepcion) :
-            ast.getExcepciones().append(value)
-            ast.updateConsola(value.toString())
-        if isinstance(value, Break): 
-            err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
-            ast.getExcepciones().append(err)
-            ast.updateConsola(err.toString())
-    except: 
-        print("Error inesperado...")
+try:
+    for instruccion in ast.getInstrucciones():      # REALIZAR LAS ACCIONES
+        try: 
+            value = instruccion.interpretar(ast,TSGlobal)
+            if isinstance(value, Excepcion) :
+                ast.getExcepciones().append(value)
+                ast.updateConsola(value.toString())
+            if isinstance(value, Break): 
+                err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+                ast.getExcepciones().append(err)
+                ast.updateConsola(err.toString())
+        except: 
+            print("Error inesperado...1")
+except:
+    print("error")
 print(ast.getConsola())
