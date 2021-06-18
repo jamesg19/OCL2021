@@ -14,18 +14,19 @@ class ForA(Instruccion):
         self.columna = columna
 
     def interpretar(self, tree, table):
+
         #ASIGNA VALOR
+        
         asginacion=self.asginacion.interpretar(tree, table)
         if isinstance(asginacion, Excepcion): return asginacion
+        
+
 
         while True:
 
             #verifica que se cumpla la condicion
-            try:
-                condicion = self.condicion.interpretar(tree, table)
-                if isinstance(condicion, Excepcion): return condicion
-            except:
-                return condicion
+            condicion = self.condicion.interpretar(tree, table)
+            if isinstance(condicion, Excepcion): return condicion
             
             if self.condicion.tipo == TIPO.BOOLEANO:
                 if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION

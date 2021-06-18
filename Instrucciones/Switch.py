@@ -1,45 +1,57 @@
 from Abstract.Instruccion import Instruccion
-from TS.Excepcion import Excepcion
-from TS.Tipo import TIPO
-from TS.TablaSimbolos import TablaSimbolos
-from Instrucciones.Break import Break
-
+from TS.Excepcion         import Excepcion
+from TS.Tipo              import TIPO
+from TS.Tipo              import OperadorRelacional
+from TS.TablaSimbolos     import TablaSimbolos
+from Expresiones.Relacional     import Relacional
 
 class Switch(Instruccion):
-    def __init__(self, condicion, instruccionesIf, instruccionesElse, ElseIf, fila, columna):
-        self.condicion = condicion
-        self.instruccionesIf = instruccionesIf
-        self.instruccionesElse = instruccionesElse
-        self.elseIf = ElseIf
-        self.fila = fila
-        self.columna = columna
+    def __init__(self, expresion, lst_case,default, fila, columna):
+        self.expresion= expresion
+        self.lst_case= lst_case
+        self.default= default
+        self.fila= fila
+        self.columna= columna
 
     def interpretar(self, tree, table):
-        condicion = self.condicion.interpretar(tree, table)
-        if isinstance(condicion, Excepcion): return condicion
-
-        if self.condicion.tipo == TIPO.BOOLEANO:
-            if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
-                nuevaTabla = TablaSimbolos(table)       #NUEVO ENTORNO
-                for instruccion in self.instruccionesIf:
-                    result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
-                    if isinstance(result, Excepcion) :
-                        tree.getExcepciones().append(result)
-                        tree.updateConsola(result.toString())
-                    if isinstance(result, Break): return result
-            else:               #ELSE
-                if self.instruccionesElse != None:
-                    nuevaTabla = TablaSimbolos(table)       #NUEVO ENTORNO
-                    for instruccion in self.instruccionesElse:
-                        result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
-                        if isinstance(result, Excepcion) :
-                            tree.getExcepciones().append(result)
-                            tree.updateConsola(result.toString()) 
-                        if isinstance(result, Break): return result
-                elif self.elseIf != None:
-                    result = self.elseIf.interpretar(tree, table)
-                    if isinstance(result, Excepcion): return result
-                    if isinstance(result, Break): return result
-
+        print("INTERPRETA")
+        #si la lista de casos en nula
+        if self.lst_case == None:
+            #si default no es nulo lo ejecuta
+            if self.default != None:
+                self.default.interpretar(tree,table)
         else:
-            return Excepcion("Semantico", "Tipo de dato no booleano en IF.", self.fila, self.columna)
+            
+            #si la lista de casos contiene alguno
+            result = False
+            
+            #lee todos los casos con el for
+            for case in self.lst_case:
+                #obtiene el valor del case
+                value_case = case.expresion.interpretar(tree,table)
+                if isinstance(value_case, Excepcion): return value_case
+                #obtiene el valor del switch
+                value_expresion = self.expresion.interpretar(tree,table)
+                if isinstance(value_expresion,Excepcion): return value_expresion
+                
+                if str(value_expresion) == str(value_case):
+                    #si el valor de la expresion es igual al valor de la expresion switch
+                    #interpreta el case 
+                    result = case.interpretar(tree, table)
+                    if isinstance(result, Excepcion) :
+                            tree.getExcepciones().append(result)
+                            tree.updateConsola(result.toString())
+                    
+                    #break
+                    if result:
+                        break
+                
+            if not(result): # si result  == true --> el caso evaluado trae break
+                if self.default != None:
+                    self.default.interpretar(tree,table)
+
+
+
+
+
+    

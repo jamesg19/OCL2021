@@ -15,16 +15,22 @@ class For(Instruccion):
         self.columna = columna
 
     def interpretar(self, tree, table):
+        
         nuevaTabla = TablaSimbolos(table)       #NUEVO ENTORNO
+        
         declaracion=self.declaracion.interpretar(tree, nuevaTabla)
         if isinstance(declaracion, Excepcion): return declaracion
+        
+        
+        
         while True:
-
+            
             #verifica que se cumpla la condicion
             try:
                 condicion = self.condicion.interpretar(tree, nuevaTabla)
                 if isinstance(condicion, Excepcion): return condicion
             except:
+                
                 return condicion
             
             if self.condicion.tipo == TIPO.BOOLEANO:
@@ -46,3 +52,4 @@ class For(Instruccion):
             #ACTUALIZA LA VARIABLE
             actualiza=self.actualiza.interpretar(tree, nuevaTabla)
             if isinstance(actualiza, Excepcion): return actualiza
+        

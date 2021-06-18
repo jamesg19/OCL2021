@@ -1,8 +1,5 @@
 var a = 1
 var b=1
+var objeto=1;
 
-for(var c=0;b<10;b++){
-
-    print(c)
-}
-
+print(true =! true)

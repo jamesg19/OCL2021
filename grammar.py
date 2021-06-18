@@ -261,7 +261,10 @@ from Instrucciones.If import If
 from Instrucciones.While import While
 from Instrucciones.For import For
 from Instrucciones.ForA import ForA
+from Instrucciones.Switch import Switch
+from Instrucciones.Case import Case
 from Instrucciones.Break import Break
+from Instrucciones.Default import Default
 from Expresiones.Incremento import Incremento
 from Expresiones.Decremento import Decremento
 
@@ -292,11 +295,12 @@ def p_declaraciones(t):
                 | for
                 | funciones 
                 | print
+                | break
 
     '''
     t[0] = t[1]
 def p_instruccion_error(t):
-    'instruccion        : error finInstruccion'
+    'instruccion        : error PTCOMA'
     errores.append(Excepcion("Sintáctico","Error Sintáctico." + str(t[1].value) , t.lineno(1), find_column(input, t.slice[1])))
     t[0] = ""
 
@@ -349,19 +353,45 @@ def p_difelseif(t):
     ''' if :  IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if '''
     t[0] = If(t[3], t[6], None, t[9], t.lineno(1), find_column(input, t.slice[1]))
 
+
+
 def p_switch(t):
-    '''
-    switch : SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE cases LLAVE_CIERRA
-    '''
+    ''' switch : SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases LLAVE_CIERRA '''
+    t[0] = Switch(t[3],t[6],None,t.lineno(5), find_column(input, t.slice[5]))
+
+def p_switch1(t):
+    ''' switch : SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases default LLAVE_CIERRA '''
+    t[0] = Switch(t[3], t[6], t[7], t.lineno(5), find_column(input, t.slice[5]))
+    
+def p_switch2(t):
+    ''' switch : SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE  default LLAVE_CIERRA '''
+    t[0] = Switch(t[3], None, t[6], t.lineno(5), find_column(input, t.slice[5]))
+    
+def p_listacases1(t):
+    ''' listacases : listacases case '''
+    if t[2] != "":
+        t[1].append(t[2])
+    t[0] = t[1]
+
+def p_listacases2(t):
+    ''' listacases :  case '''
+    if t[1] == "":
+        t[0] = []
+    else:    
+        t[0] = [t[1]]
+
 def p_cases(t):
-    '''
-    cases : CASE expresion DOSPUNTOS break cases
-            | CASE expresion DOSPUNTOS break default
-    '''
-def p_default(t):
-    '''
-    default : DEFAULT DOSPUNTOS break
-    '''
+    ''' case : CASE expresion DOSPUNTOS instrucciones '''
+    t[0] = Case(t[2],t[4],t.lineno(3), find_column(input, t.slice[3]))
+
+def p_defauult(t):
+    ''' default : DEFAULT DOSPUNTOS instrucciones '''
+    t[0] = Default(t[3],t.lineno(2), find_column(input, t.slice[2]))
+
+
+
+
+
 def p_while(t):
     ''' while : WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA '''
     t[0] = While(t[3], t[6], t.lineno(1), find_column(input, t.slice[1]))
@@ -374,6 +404,7 @@ def p_for2(t):
     ''' for : FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA  LLAVE_ABRE instrucciones LLAVE_CIERRA
     '''
     t[0]=ForA(t[3],t[5],t[7],t[10],t.lineno(1), find_column(input, t.slice[1]))
+
 
 def p_declaracionfor1(t):
     ''' declaracionfor1 : VAR IDENTIFICADOR IGUAL expresion   '''
@@ -413,9 +444,8 @@ def p_print(t):
     t[0] = Imprimir(t[3], t.lineno(1), find_column(input, t.slice[1]))
 
 def p_break(t):
-    ''' break : BREAK finInstruccion
-            | '''
-    t[0] = None
+    ''' break : BREAK finInstruccion '''
+    t[0] = Break(t.lineno(1), find_column(input, t.slice[1]))
 
 def p_finInstruccion(t):
     ''' finInstruccion : PTCOMA
@@ -554,15 +584,15 @@ entrada = f.read()
 
 from TS.Arbol import Arbol
 from TS.TablaSimbolos import TablaSimbolos
-
-instrucciones = parse(entrada.lower()) #ARBOL AST
-ast = Arbol(instrucciones)
-TSGlobal = TablaSimbolos()
-ast.setTSglobal(TSGlobal)
-for error in errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICOS
-    ast.getExcepciones().append(error)
-    ast.updateConsola(error.toString())
 try:
+    instrucciones = parse(entrada.lower()) #ARBOL AST
+    ast = Arbol(instrucciones)
+    TSGlobal = TablaSimbolos()
+    ast.setTSglobal(TSGlobal)
+    for error in errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICOS
+        ast.getExcepciones().append(error)
+        ast.updateConsola(error.toString())
+
     for instruccion in ast.getInstrucciones():      # REALIZAR LAS ACCIONES
         try: 
             value = instruccion.interpretar(ast,TSGlobal)
@@ -573,8 +603,8 @@ try:
                 err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
                 ast.getExcepciones().append(err)
                 ast.updateConsola(err.toString())
-        except: 
-            print("Error inesperado...1")
-except:
-    print("error")
+        except IOError: 
+            print(IOError)
+except IOError:
+    print("a")
 print(ast.getConsola())
