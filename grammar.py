@@ -265,6 +265,9 @@ from Instrucciones.Switch import Switch
 from Instrucciones.Case import Case
 from Instrucciones.Break import Break
 from Instrucciones.Default import Default
+from Instrucciones.Main import Main
+from Instrucciones.DeclaracionNULA import DeclaracionNULA
+from Instrucciones.AsignacionNULA import AsignacionNULA
 from Expresiones.Incremento import Incremento
 from Expresiones.Decremento import Decremento
 
@@ -296,19 +299,17 @@ def p_declaraciones(t):
                 | funciones 
                 | print
                 | break
-
+                | main
     '''
     t[0] = t[1]
 def p_instruccion_error(t):
-    'instruccion        : error PTCOMA'
+    'instruccion : error PTCOMA'
     errores.append(Excepcion("Sintáctico","Error Sintáctico." + str(t[1].value) , t.lineno(1), find_column(input, t.slice[1])))
     t[0] = ""
 
 def p_variables1(t):
-    '''
-    variables : var IDENTIFICADOR finInstruccion
-    '''
-    
+    ''' variables : var IDENTIFICADOR finInstruccion '''
+    t[0] = DeclaracionNULA(TIPO.NULO, t[2], t.lineno(2), find_column(input, t.slice[2]))
 def p_declara(t):
     ''' variables : var IDENTIFICADOR  IGUAL expresion  finInstruccion ''' 
     t[0] = Declaracion(TIPO.ENTERO, t[2], t.lineno(2), find_column(input, t.slice[2]), t[4])
@@ -316,7 +317,7 @@ def p_declara(t):
 
 def p_asginacionnula1(t):
     ''' variables : var IDENTIFICADOR  IGUAL NULL  finInstruccion '''
-    t[0] = Declaracion(TIPO.NULO, t[2], t.lineno(2), find_column(input, t.slice[2]), t[4])
+    t[0] = DeclaracionNULA(TIPO.NULO, t[2], t.lineno(2), find_column(input, t.slice[2]))
 
 def p_asgina(t):
     ''' variables : IDENTIFICADOR IGUAL expresion finInstruccion ''' 
@@ -324,7 +325,7 @@ def p_asgina(t):
 
 def p_asginacionnula2(t):
     ''' variables : IDENTIFICADOR  IGUAL NULL  finInstruccion '''
-    t[0] = Asignacion(t[1], None, t.lineno(1), find_column(input, t.slice[1]))
+    t[0] = AsignacionNULA(t[1], None, t.lineno(1), find_column(input, t.slice[1]))
 
 def p_var(t):
     ''' var : VAR '''
@@ -389,8 +390,9 @@ def p_defauult(t):
     t[0] = Default(t[3],t.lineno(2), find_column(input, t.slice[2]))
 
 
-
-
+def p_menu(t):
+    ''' main : MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA '''
+    t[0] = Main(t[5], t.lineno(1), find_column(input, t.slice[1]))
 
 def p_while(t):
     ''' while : WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA '''
@@ -549,7 +551,6 @@ def p_chart(t):
 '''
 import ply.yacc as yacc
 parser = yacc.yacc()
-
 f = open("./entradaa.txt", "r")
 input = f.read()
 #print(input)
@@ -593,8 +594,8 @@ try:
         ast.getExcepciones().append(error)
         ast.updateConsola(error.toString())
 
-    for instruccion in ast.getInstrucciones():      # REALIZAR LAS ACCIONES
-        try: 
+    for instruccion in ast.getInstrucciones():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
+        if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, DeclaracionNULA) or isinstance(instruccion, AsignacionNULA):
             value = instruccion.interpretar(ast,TSGlobal)
             if isinstance(value, Excepcion) :
                 ast.getExcepciones().append(value)
@@ -603,8 +604,31 @@ try:
                 err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
                 ast.getExcepciones().append(err)
                 ast.updateConsola(err.toString())
-        except IOError: 
-            print(IOError)
-except IOError:
+            
+    for instruccion in ast.getInstrucciones():      # 2DA PASADA (MAIN)
+        contador = 0
+        if isinstance(instruccion, Main):
+            contador += 1
+            if contador == 2: # VERIFICAR LA DUPLICIDAD
+                err = Excepcion("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
+                ast.getExcepciones().append(err)
+                ast.updateConsola(err.toString())
+                break
+
+            value = instruccion.interpretar(ast,TSGlobal)
+            if isinstance(value, Excepcion) :
+                ast.getExcepciones().append(value)
+                ast.updateConsola(value.toString())
+
+            if isinstance(value, Break): 
+                err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+                ast.getExcepciones().append(err)
+                ast.updateConsola(err.toString())
+    for instruccion in ast.getInstrucciones():    
+        if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA)):
+            err = Excepcion("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
+            ast.getExcepciones().append(err)
+            ast.updateConsola(err.toString())
+except:
     print("a")
 print(ast.getConsola())
