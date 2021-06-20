@@ -72,16 +72,77 @@ def guardarComo():
     fguardar.close()
     archivo = guardar
 
-def openPDF():      
+def openPDF():
     #dirname = os.path.dirname(__file__)
     #direcc = os.path.join(dirname, 'errores.pdf')
-    os.startfile("C:\\Users\\james\\Desktop\\Switch.txt")
+    os.startfile("C:\\Users\\james\\Desktop\\errores.html")
 
 def CrearReporteError(data):
-    formato="<HTML>"
-    formato+=""
+    try:
+        formato="<!DOCTYPE html>"\
+            "<html lang=\"en\">"\
+            "<head>"\
+            " <meta charset=\"utf-8\">"\
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, shrink-to-fit=no\">"\
+                "<title>James Gramajo</title>"\
+                "<link rel=\"stylesheet\" href=\"assets/bootstrap/css/bootstrap.min.css\">"\
+                "<link rel=\"stylesheet\" href=\"assets/fonts/font-awesome.min.css\">"\
+                "<link rel=\"stylesheet\" href=\"assets/css/Dark-NavBar-1.css\">"\
+                "<link rel=\"stylesheet\" href=\"assets/css/Dark-NavBar-2.css\">"\
+                "<link rel=\"stylesheet\" href=\"assets/css/Dark-NavBar.css\">" \
+                "<link rel=\"stylesheet\" href=\"assets/css/styles.css\">"\
+                "<link rel=\"stylesheet\" href=\"assets/css/Table-With-Search-1.css\">"\
+                "<link rel=\"stylesheet\" href=\"assets/css/Table-With-Search.css\">"\
+            "</head>"\
+            "<body>"\
+                "<div >"\
+                    "<nav class=\"navbar navbar-light navbar-expand-md sticky-top navigation-clean-button\" style=\"height:80px;background-color:#37434d;color:#ffffff;\">"\
+                        "<div class=\"container-fluid\"><a class=\"navbar-brand\" href=\"#\"><i class=\"fa fa-globe\"></i>&nbsp;Compiladores 1 2021 REPORTE ERRORES</a><button data-bs-toggle=\"collapse\" class=\"navbar-toggler\" data-bs-target=\"#navcol-1\"><span class=\"visually-hidden\">Toggle navigation</span><span class=\"navbar-toggler-icon\"></span></button>"\
+                            "<div class=\"collapse navbar-collapse\" id=\"navcol-1\">"\
+                                "<ul class=\"navbar-nav ms-auto\">"\
+                                    "<li class=\"nav-item\"></li>"\
+                                    "<li class=\"nav-item\"></li>"\
+                                    "<li class=\"nav-item\"></li>"\
+                                    "<li class=\"nav-item\"></li>"\
+                                    "<li class=\"nav-item\"></li>"\
+                                "</ul>"\
+                            "</div>"\
+                        "</div>"\
+                    "</nav>"\
+                "</div>"\
+                "<div class=\"col-md-12 search-table-col\"><span class=\"counter pull-right\"></span></div>"\
+                "<div class=\"table-responsive table table-hover table-bordered results\">"\
+                    "<table class=\"table table-hover table-bordered\">"\
+                        "<thead class=\"bill-header cs\">"\
+                            "<tr>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-2\">&nbsp;&nbsp;  </th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-1\">TIPO</th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-2\">DESCRIPCCION </th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-3\">LINEA</th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-2\">COLUMNA</th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-2\">&nbsp;&nbsp;  </th>"\
+                            "</tr>"\
+                        "</thead>"\
+                        "<tbody>"\
+                    "<tr>"\
+                    "</tr>"\
+                        "</tbody>"\
+                    "</table>"\
+                "</div>"
+        cadennass=data.split("\n")
 
+        for palabra in cadennass:
+            formato+="<p align=\"center\">"+palabra.strip()+"</p>\n"
 
+        formato+="<script src=\"assets/bootstrap/js/bootstrap.min.js\"></script>"\
+                "<script src=\"assets/js/Table-With-Search.js\"></script>"\
+                "</body>"\
+                "</html>"
+        fguardar = open("C:\\Users\\james\\Desktop\\errores.html", "w+")
+        fguardar.write(formato)
+        fguardar.close()
+    except:
+        pass
 
 
 def pintar(*args):
@@ -176,8 +237,9 @@ def ejecutar():
                 ast.updateConsolaError(err.toString())
     except IOError:
         imprimir_en_consolaError(IOError)
-    imprimir_en_consola(ast.getConsola())
-    imprimir_en_consolaError(ast.getConsolaError())
+    imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
+    imprimir_en_consolaError(ast.getConsolaError())#imprime los errores
+    CrearReporteError(ast.getConsolaError())
 
 
 #def debug():
