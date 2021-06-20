@@ -1,3 +1,8 @@
+from Instrucciones.Main import Main
+from Instrucciones.Asignacion import Asignacion
+from Instrucciones.Declaracion import Declaracion
+from Instrucciones.AsignacionNULA import AsignacionNULA
+from Instrucciones.DeclaracionNULA import DeclaracionNULA
 import os
 import re
 from TS.Excepcion import Excepcion
@@ -36,12 +41,14 @@ def abrir():
     global archivo
     archivo = tk.filedialog.askopenfilename(title = "Abrir Archivo", initialdir = "")
 
-    entrada = open(archivo)
+    entrada = open(archivo,"r",encoding="utf-8")
     content = entrada.read()
 
     editor.delete(1.0, tk.END)
-    for s in recorrerInput(content):
-        editor.insert(tk.INSERT, s[1], s[0])
+    errores.delete(1.0, tk.END)
+    editor.insert(1.0,content)
+    #for s in recorrerInput(content):
+        #editor.insert(tk.INSERT, s[1], s[0])
     entrada.close()
     lineas()
 ######################################################### ----GUARDAR---- #######################################################
@@ -75,6 +82,7 @@ def pintar(*args):
         editor.insert(tk.INSERT, s[1], s[0])
     lineas()
 
+
 ##CONTADOR DE LINEAS EN LA BARRA VERTICAL
 def lineas(*args):      #ACTUALIZAR LINEAS
     posicion(None)
@@ -90,8 +98,8 @@ def lineas(*args):      #ACTUALIZAR LINEAS
         strline = str(cont).split(".")[0]
         lines.create_text(2,y,anchor="nw", text=strline, font = ("Arial", 12))
         cont = editor.index("%s+1line" % cont)
-
-def posicion(event):    #ACTUALIZAR POSICION
+############################################ ACTUALIZAR POSICION #################################################
+def posicion(event):    
    #obtiene la posicion
     posicionCursor = "Cursor: "+editor.index(tk.INSERT)
     #settea el texto
@@ -102,67 +110,65 @@ def posicion(event):    #ACTUALIZAR POSICION
 
 ###########################################  METODO PARA EJECUTAR EL CODIGO  ##################################### 
 def ejecutar():
+    errores.delete(1.0, tk.END)
+    consola.delete(1.0, tk.END)
     #f = open("./entradaa.txt", "r")
     #entrada = f.read()
     entrada = editor.get(1.0, tk.END)
+    #f = open("./entradaa.txt", "r")
+    #entrada = f.read()
+    
     from TS.Arbol import Arbol
     from TS.TablaSimbolos import TablaSimbolos
     import grammar
     try:
-        instrucciones = parse(entrada.lower()) #ARBOL AST
-ast = Arbol(instrucciones)
-TSGlobal = TablaSimbolos()
-ast.setTSglobal(TSGlobal)
-for error in errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICOS
-    ast.getExcepciones().append(error)
-    ast.updateConsola(error.toString())
+        instrucciones = grammar.parse(entrada.lower()) #ARBOL AST
+        ast = Arbol(instrucciones)
+        TSGlobal = TablaSimbolos()
+        ast.setTSglobal(TSGlobal)
+        for error in grammar.errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICOS
+            ast.getExcepciones().append(error)
+            ast.updateConsola(error.toString())
 
-for instruccion in ast.getInstrucciones():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
-    if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion):
-        value = instruccion.interpretar(ast,TSGlobal)
-        if isinstance(value, Excepcion) :
-            ast.getExcepciones().append(value)
-            ast.updateConsola(value.toString())
-        if isinstance(value, Break): 
-            err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
-            ast.getExcepciones().append(err)
-            ast.updateConsola(err.toString())
-        
-for instruccion in ast.getInstrucciones():      # 2DA PASADA (MAIN)
-    contador = 0
-    if isinstance(instruccion, Main):
-        contador += 1
-        if contador == 2: # VERIFICAR LA DUPLICIDAD
-            err = Excepcion("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
-            ast.getExcepciones().append(err)
-            ast.updateConsola(err.toString())
-            break
-        value = instruccion.interpretar(ast,TSGlobal)
-        if isinstance(value, Excepcion) :
-            ast.getExcepciones().append(value)
-            ast.updateConsola(value.toString())
-        if isinstance(value, Break): 
-            err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
-            ast.getExcepciones().append(err)
-            ast.updateConsola(err.toString())
+        for instruccion in ast.getInstrucciones():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
+            if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, DeclaracionNULA) or isinstance(instruccion, AsignacionNULA):
+                value = instruccion.interpretar(ast,TSGlobal)
+                if isinstance(value, Excepcion) :
+                    ast.getExcepciones().append(value)
+                    ast.updateConsola(value.toString())
+                if isinstance(value, Break): 
+                    err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+                    ast.getExcepciones().append(err)
+                    ast.updateConsola(err.toString())
+                
+        for instruccion in ast.getInstrucciones():      # 2DA PASADA (MAIN)
+            contador = 0
+            if isinstance(instruccion, Main):
+                contador += 1
+                if contador == 2: # VERIFICAR LA DUPLICIDAD
+                    err = Excepcion("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
+                    ast.getExcepciones().append(err)
+                    ast.updateConsola(err.toString())
+                    break
 
-for instruccion in ast.getInstrucciones():    
-    if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion)):
-        err = Excepcion("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
-        ast.getExcepciones().append(err)
-        ast.updateConsola(err.toString())
+                value = instruccion.interpretar(ast,TSGlobal)
+                if isinstance(value, Excepcion) :
+                    ast.getExcepciones().append(value)
+                    ast.updateConsola(value.toString())
 
-print(ast.getConsola())
-
-
-
-
-
-
-
+                if isinstance(value, Break): 
+                    err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+                    ast.getExcepciones().append(err)
+                    ast.updateConsola(err.toString())
+        for instruccion in ast.getInstrucciones():    
+            if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA)):
+                err = Excepcion("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
+                ast.getExcepciones().append(err)
+                ast.updateConsola(err.toString())
     except IOError:
-        print("a")
-    print(ast.getConsola())  
+        imprimir_en_consola(IOError)
+    imprimir_en_consola(ast.getConsola())
+
 
 #def debug():
     #btn = tk.Button(text="Next")
@@ -301,7 +307,9 @@ def recorrerInput(i):  #Funcion para obtener palabras reservadas, signos, numero
 ########################################ELEMENTOS
 frame   = tk.Frame(raiz, bg="gray60")
 editor  = scrolledtext.ScrolledText( undo = True)
+errores  = scrolledtext.ScrolledText( undo = True)
 consola = scrolledtext.ScrolledText( undo = True)
+
 
 #################################CAMBIO DE COLORES
 editor.tag_config('reservada', foreground='blue')
@@ -318,7 +326,8 @@ editor.config(bd=0, padx=6, pady=4, font=("Arial",12))
 consola.config(bd=0,padx=6, pady=4, font=("Arial",12),height=10)
 #Barra vertical, izquierda, donde se mostrara la catidad de lineas
 lines = tk.Canvas( width = 30, height = 465, background = 'gray60')
-lbl = ttk.Label( text = "Salida:")    
+lbl = ttk.Label( text = "ERRORES: ")  
+lbl2 = ttk.Label( text = "CONSOLA")   
 
 editor.bind('<Return>',    lineas)
 editor.bind('<BackSpace>', lineas)
@@ -332,9 +341,11 @@ frame.grid(sticky='news')
 
 #Posicion de los elementos
 editor.grid (row = 3, column = 1, padx = 10,  pady = 10)
+errores.grid(row = 3, column = 2, padx = 10,  pady = 10)
 consola.grid(row = 5, column = 1, padx = 10,  pady = 10)
 lines.grid  (row = 3, column = 0 )
 lbl.grid(row=4,column=0)
+lbl2.grid(row=2,column=2)
 
 #menu
 menubar  = tk.Menu(raiz)
@@ -360,6 +371,8 @@ raiz.config(menu=menubar)
 #from grammar import compilar as exec_code
 
 def  imprimir_en_consola(consol):
-    consola.delete("1.0",tk.END)
-    consola.insert(tk.INSERT,consol)
+    #consola.configure(state='enabled')
+    errores.delete("1.0",tk.END)
+    errores.insert(tk.INSERT,consol)
+    #consola.configure(state='disabled')
 raiz.mainloop()
