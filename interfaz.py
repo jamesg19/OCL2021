@@ -73,7 +73,7 @@ def guardarComo():
     archivo = guardar
 
 def openPDF():
-    #dirname = os.path.dirname(__file__)
+    dirname = os.path.dirname(__file__)
     #direcc = os.path.join(dirname, 'errores.pdf')
     os.startfile("C:\\Users\\james\\Desktop\\errores.html")
 
@@ -138,7 +138,7 @@ def CrearReporteError(data):
                 "<script src=\"assets/js/Table-With-Search.js\"></script>"\
                 "</body>"\
                 "</html>"
-        fguardar = open("C:\\Users\\james\\Desktop\\errores.html", "w+")
+        fguardar = open("C:\\Users\\james\\Desktop\\errores.html", "w+",encoding="utf-8")
         fguardar.write(formato)
         fguardar.close()
     except:
