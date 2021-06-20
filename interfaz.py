@@ -41,7 +41,7 @@ def abrir():
     global archivo
     archivo = tk.filedialog.askopenfilename(title = "Abrir Archivo", initialdir = "")
 
-    entrada = open(archivo,"r")
+    entrada = open(archivo,"r",encoding="utf-8")
     #.decode('iso-8859-1').encode('utf8')
     #entrada=entrada.decode('base64','strict')
     content = entrada.read()
@@ -77,8 +77,10 @@ def openPDF():
     #direcc = os.path.join(dirname, 'errores.pdf')
     os.startfile("C:\\Users\\james\\Desktop\\Switch.txt")
 
-def CrearReporteError():
-    formato=""
+def CrearReporteError(data):
+    formato="<HTML>"
+    formato+=""
+
 
 
 
@@ -393,4 +395,5 @@ def  imprimir_en_consolaError(consoll):
     consola.delete("1.0",tk.END)
     consola.insert(tk.INSERT,consoll)
     #errores.configure(state='disabled')
+
 raiz.mainloop()
