@@ -41,9 +41,11 @@ def abrir():
     global archivo
     archivo = tk.filedialog.askopenfilename(title = "Abrir Archivo", initialdir = "")
 
-    entrada = open(archivo,"r",encoding="utf-8")
+    entrada = open(archivo,"r")
+    #.decode('iso-8859-1').encode('utf8')
+    #entrada=entrada.decode('base64','strict')
     content = entrada.read()
-
+    
     editor.delete(1.0, tk.END)
     errores.delete(1.0, tk.END)
     editor.insert(1.0,content)
@@ -71,10 +73,15 @@ def guardarComo():
     archivo = guardar
 
 def openPDF():      
-    dirname = os.path.dirname(__file__)
-    direcc = os.path.join(dirname, 'errores.pdf')
-    os.startfile(direcc)
-    
+    #dirname = os.path.dirname(__file__)
+    #direcc = os.path.join(dirname, 'errores.pdf')
+    os.startfile("C:\\Users\\james\\Desktop\\Switch.txt")
+
+def CrearReporteError():
+    formato=""
+
+
+
 def pintar(*args):
     content = editor.get("1.0", tk.END)
     print(content)
@@ -128,18 +135,18 @@ def ejecutar():
         ast.setTSglobal(TSGlobal)
         for error in grammar.errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICOS
             ast.getExcepciones().append(error)
-            ast.updateConsola(error.toString())
+            ast.updateConsolaError(error.toString())
 
         for instruccion in ast.getInstrucciones():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
             if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, DeclaracionNULA) or isinstance(instruccion, AsignacionNULA):
                 value = instruccion.interpretar(ast,TSGlobal)
                 if isinstance(value, Excepcion) :
                     ast.getExcepciones().append(value)
-                    ast.updateConsola(value.toString())
+                    ast.updateConsolaError(value.toString())
                 if isinstance(value, Break): 
                     err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
-                    ast.updateConsola(err.toString())
+                    ast.updateConsolaError(err.toString())
                 
         for instruccion in ast.getInstrucciones():      # 2DA PASADA (MAIN)
             contador = 0
@@ -148,26 +155,27 @@ def ejecutar():
                 if contador == 2: # VERIFICAR LA DUPLICIDAD
                     err = Excepcion("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
-                    ast.updateConsola(err.toString())
+                    ast.updateConsolaError(err.toString())
                     break
 
                 value = instruccion.interpretar(ast,TSGlobal)
                 if isinstance(value, Excepcion) :
                     ast.getExcepciones().append(value)
-                    ast.updateConsola(value.toString())
+                    ast.updateConsolaError(value.toString())
 
                 if isinstance(value, Break): 
                     err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
-                    ast.updateConsola(err.toString())
+                    ast.updateConsolaError(err.toString())
         for instruccion in ast.getInstrucciones():    
             if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA)):
                 err = Excepcion("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
                 ast.getExcepciones().append(err)
-                ast.updateConsola(err.toString())
+                ast.updateConsolaError(err.toString())
     except IOError:
-        imprimir_en_consola(IOError)
+        imprimir_en_consolaError(IOError)
     imprimir_en_consola(ast.getConsola())
+    imprimir_en_consolaError(ast.getConsolaError())
 
 
 #def debug():
@@ -307,8 +315,8 @@ def recorrerInput(i):  #Funcion para obtener palabras reservadas, signos, numero
 ########################################ELEMENTOS
 frame   = tk.Frame(raiz, bg="gray60")
 editor  = scrolledtext.ScrolledText( undo = True)
-errores  = scrolledtext.ScrolledText( undo = True)
-consola = scrolledtext.ScrolledText( undo = True)
+consola  = scrolledtext.ScrolledText( undo = True)
+errores = scrolledtext.ScrolledText( undo = True)
 
 
 #################################CAMBIO DE COLORES
@@ -364,6 +372,11 @@ run = tk.Menu(menubar,tearoff=0)
 run.add_command(label="Ejecutar", command=ejecutar)
 menubar.add_cascade(menu=run, label="Ejecutar")
 
+er = tk.Menu(menubar,tearoff=0)
+
+er.add_command(label="Exportar Errores", command=openPDF)
+menubar.add_cascade(menu=er, label="Exportar Errores")
+
 
 raiz.title("COMPI 1 2021 JAMES GRAMAJO")
 raiz.config(menu=menubar)
@@ -375,4 +388,9 @@ def  imprimir_en_consola(consol):
     errores.delete("1.0",tk.END)
     errores.insert(tk.INSERT,consol)
     #consola.configure(state='disabled')
+def  imprimir_en_consolaError(consoll):
+    #errores.configure(state='enabled')
+    consola.delete("1.0",tk.END)
+    consola.insert(tk.INSERT,consoll)
+    #errores.configure(state='disabled')
 raiz.mainloop()

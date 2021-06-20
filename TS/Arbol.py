@@ -3,6 +3,7 @@ class Arbol:
         self.instrucciones = instrucciones
         self.excepciones = []
         self.consola = ""
+        self.consolaError=""
         self.TSglobal = None
 
     def getInstrucciones(self):
@@ -19,12 +20,18 @@ class Arbol:
 
     def getConsola(self):
         return self.consola
+
+    def getConsolaError(self):
+        return self.consolaError
     
     def setConsola(self, consola):
         self.consola = consola
 
     def updateConsola(self,cadena):
         self.consola += str(cadena) + '\n'
+
+    def updateConsolaError(self,cadena):
+        self.consolaError+=str(cadena)+ '\n'
 
     def getTSGlobal(self):
         return self.TSglobal
