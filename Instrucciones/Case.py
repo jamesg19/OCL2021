@@ -22,7 +22,7 @@ class Case(Instruccion):
             result = instruccion.interpretar(tree, nuevaTabla)  # EJECUTA INSTRUCCION ADENTRO DEL CASE
             if isinstance(result, Excepcion):
                 tree.getExcepciones().append(result)
-                tree.updateConsola(result.toString())
+                tree.updateConsolaError(result.toString())
 
             if isinstance(result, Break): return True
 

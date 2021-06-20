@@ -5,6 +5,7 @@ from TS.TablaSimbolos import TablaSimbolos
 
 class Break(Instruccion):
     def __init__(self, fila, columna):
+        
         self.fila = fila
         self.columna = columna
 

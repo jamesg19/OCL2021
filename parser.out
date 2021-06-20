@@ -12,7 +12,6 @@ Unused terminals:
     ESPLINEA
     ESPRETORNO
     ESPTAB
-    LENGTH
     NEW
     READ
     RETURN
@@ -139,7 +138,6 @@ IGUAL                : 15 16 17 18 36 37 40
 IGUALACION           : 60
 INCREMENTO           : 20 38 70
 INT                  : 44 45
-LENGTH               : 
 LLAVE_ABRE           : 22 23 23 24 25 26 27 32 33 34 35 41
 LLAVE_CIERRA         : 22 23 23 24 25 26 27 32 33 34 35 41
 MAIN                 : 32

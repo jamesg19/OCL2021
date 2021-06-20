@@ -35,7 +35,7 @@ class ForA(Instruccion):
                         result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
                         if isinstance(result, Excepcion) :
                             tree.getExcepciones().append(result)
-                            tree.updateConsola(result.toString())
+                            tree.updateConsolaError(result.toString())
                         #SI HAY UN BREAK SALE DEL CICLO FOR
                         if isinstance(result, Break): return None
                 else:

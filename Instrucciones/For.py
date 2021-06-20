@@ -17,12 +17,11 @@ class For(Instruccion):
     def interpretar(self, tree, table):
         
         nuevaTabla = TablaSimbolos(table)       #NUEVO ENTORNO
-        
+        nuevaTabla2 = TablaSimbolos(table)       #NUEVO ENTORNO2
         declaracion=self.declaracion.interpretar(tree, nuevaTabla)
-        if isinstance(declaracion, Excepcion): return declaracion
-        
-        
-        
+        if isinstance(declaracion, Excepcion): 
+            return declaracion
+
         while True:
             
             #verifica que se cumpla la condicion
@@ -36,12 +35,12 @@ class For(Instruccion):
             if self.condicion.tipo == TIPO.BOOLEANO:
                 
                 if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
-
+                    
                     for instruccion in self.instrucciones:
                         result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
                         if isinstance(result, Excepcion) :
                             tree.getExcepciones().append(result)
-                            tree.updateConsola(result.toString())
+                            tree.updateConsolaError(result.toString())
                         #SI HAY UN BREAK SALE DEL CICLO FOR
                         if isinstance(result, Break): return None
                 else:

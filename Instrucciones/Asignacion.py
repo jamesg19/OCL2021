@@ -12,12 +12,18 @@ class Asignacion(Instruccion):
     
     def interpretar(self, tree, table):
         value = self.expresion.interpretar(tree, table) # Valor a asignar a la variable
-        if isinstance(value, Excepcion): return value
+        if isinstance(value, Excepcion): 
+            tree.getExcepciones().append(value)
+            tree.updateConsolaError(value.toString())
+            return value
 
         simbolo = Simbolo(self.identificador, self.expresion.tipo, self.fila, self.columna, value)
 
         result = table.actualizarTabla(simbolo)
 
-        if isinstance(result, Excepcion): return result
+        if isinstance(result, Excepcion):
+            tree.getExcepciones().append(result)
+            tree.updateConsolaError(result.toString())
+            return result
         return None
 

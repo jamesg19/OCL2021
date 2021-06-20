@@ -40,7 +40,7 @@ class Switch(Instruccion):
                     result = case.interpretar(tree, table)
                     if isinstance(result, Excepcion) :
                             tree.getExcepciones().append(result)
-                            tree.updateConsola(result.toString())
+                            tree.updateConsolaError(result.toString())
                     
                     #break
                     if result:

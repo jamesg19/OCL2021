@@ -16,5 +16,5 @@ class Default(Instruccion):
             result = instruccion.interpretar(tree, nuevaTabla)  # EJECUTA INSTRUCCION ADENTRO DEL default
             if isinstance(result, Excepcion):
                 tree.getExcepciones().append(result)
-                tree.updateConsola(result.toString())
+                tree.updateConsolaError(result.toString())
             if isinstance(result, Break): return True

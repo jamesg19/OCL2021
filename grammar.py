@@ -10,10 +10,40 @@ from TS.Excepcion import Excepcion
 #TABLA ASCII 
 #https://es.stackoverflow.com/questions/117556/clase-de-caracteres-para-cualquier-letra-incluyendo-todo-tipo-de-acentos
 errores = []
-tokens=(
-    'VAR',
-    'TRUE',
-    'FALSE',
+reservadas = {
+    'var'       : 'VAR',
+    'true'       : 'TRUE',
+    'false'       : 'FALSE',
+    'null'       : 'NULL',
+    'int'       : 'INT',
+    'double'       : 'DOUBLE',
+    'string'       : 'STRING',
+    'char'       : 'CHAR',
+    'new'       : 'NEW',
+    'else'       : 'ELSE',
+    'print'       : 'PRINT',
+    'switch'       : 'SWITCH',
+    'case'       : 'CASE',
+    'default'       : 'DEFAULT',
+    'break'       : 'BREAK',
+    'while'       : 'WHILE',
+    'for'       : 'FOR',
+    'return'       : 'RETURN',
+    'func'       : 'FUNC',
+    'main'       : 'MAIN',
+    'if'       : 'IF',
+    'read'       : 'READ',
+    'tolower'       : 'TOLOWER',
+    'toupper'       : 'TOUPPER',
+
+}
+
+
+
+
+
+tokens=[
+
     'COMILLAS',
     'COMILLASIMPLE',
     'ESPCOMILLAS',
@@ -22,7 +52,6 @@ tokens=(
     'ESPLINEA',
     'ESPRETORNO',
     'ESPTAB',
-    'NULL',
     'MAS',
     'MENOS',
     'POR',
@@ -53,42 +82,19 @@ tokens=(
     'LLAVE_CIERRA',
     'PARENTESIS_ABRE',
     'PARENTESIS_CIERRA',
-    #PARA CASTEOS
-    'STRING',
-    'INT',
-    'CHAR',
-    'DOUBLE',
+
     #INCREMENTO Y DECREMENTO
     'INCREMENTO',
     'DECREMENTO',
-    'NEW',
-    'IF',
-    'ELSE',
-    'PRINT',
-    'SWITCH',
-    'CASE',
-    'DEFAULT',
-    'BREAK',
-    'WHILE',
-    'FOR',
-    'RETURN',
-    'FUNC',
-    'MAIN',
     'IDENTIFICADOR',
-    'READ',
-    'TOLOWER',
-    'TOUPPER',
-    'LENGTH',
     'CADENA'
-)
+]+ list(reservadas.values())
 states = (
   ('COMENTARIOBLOQU','exclusive'),
 )
 
 #tokens
-t_VAR=              r'([V]|[v])([A]|[a])([R]|[r])'
-t_TRUE=             r'[Tt][Rr][Uu][Ee]'
-t_FALSE=            r'[Ff][Aa][Ll][Ss][Ee]'
+
 t_COMILLAS=         r'[\"]'
 t_COMILLASIMPLE=    r'[\']'
 t_ESPCOMILLAS=      r'[\\][\"]'
@@ -97,7 +103,6 @@ t_ESPBARRAINVERTIVA=r'[\\]'
 t_ESPLINEA=         r'[\\][n]'
 t_ESPRETORNO=       r'[\\][r]'
 t_ESPTAB=           r'[\\][t]'
-t_NULL=             r'[Nn][Uu][Ll][Ll]'
 t_MAS=              r'\+'
 t_MENOS=            r'-'
 t_POR=              r'\*'
@@ -126,30 +131,9 @@ t_LLAVE_ABRE=       r'\{'
 t_LLAVE_CIERRA=     r'\}'
 t_PARENTESIS_ABRE=  r'\('
 t_PARENTESIS_CIERRA=r'\)'
-#tokens en casteos
-t_INT=              r'[Ii][Nn][Tt]'
-t_DOUBLE=           r'[Dd][Oo][Uu][Bb][Ll][Ee]'
-t_STRING=           r'[Ss][Tt][Rr][Ii][Nn][Gg]'
-t_CHAR=             r'[Cc][Hh][Aa][Rr]'
 t_INCREMENTO=       r'\+\+'
 t_DECREMENTO=       r'\-\-'
-t_NEW=              r'[Nn][Ee][Ww]'
-t_ELSE=             r'[Ee][Ll][Ss][Ee]'
-t_PRINT=            r'[Pp][Rr][Ii][Nn][Tt]'
-t_SWITCH=           r'[Ss][Ww][Ii][Tt][Cc][Hh]'
-t_CASE=             r'[Cc][Aa][Ss][Ee]'
-t_DEFAULT=          r'[Dd][Ee][Ff][Aa][Uu][Ll][Tt]'
-t_BREAK=            r'[Bb][Rr][Ee][Aa][Kk]'
-t_WHILE=            r'[Ww][Hh][Ii][Ll][Ee]'
-t_FOR=              r'[Ff][Oo][Rr]'
-t_RETURN=           r'[Rr][Ee][Tt][Uu][Rr][Nn]'
-t_FUNC=             r'[Ff][Uu][Nn][Cc]'
-t_IDENTIFICADOR=    r'[A-Z_-z0-9]+'
-t_MAIN=             r'[Mm][Aa][Ii][Nn]'
-t_IF=               r'[I][F]|[i][f]|[I][f]|[i][F]'
-t_READ=             r'[Rr][Ee][Aa][Dd]'
-t_TOLOWER=          r'[Tt][Oo][Ll][Oo][Ww][Ee][Rr]'
-t_TOUPPER=          r'[Tt][Oo][Uu][Pp][Pp][Ee][Rr]'
+#t_IDENTIFICADOR=    r'[A-Z_-z0-9]+'
 
 
 def t_DECIMAL(t):
@@ -169,6 +153,11 @@ def t_ENTERO(t):
         print("Integer value too large '%d'" % t.value)
         t.value = 0
     return t
+def t_IDENTIFICADOR(t):
+    r'[a-zA-Z][a-zA-Z_0-9]*'
+    t.type = reservadas.get(t.value.lower(),'IDENTIFICADOR')
+    return t
+
 
 def t_begin_COMENTARIOBLOQU(t):
     r'[\#][\*]'
@@ -194,7 +183,7 @@ def t_COMENTARIO(t):
     return None
 
 def t_CADENA(t):
-    r'(\"([(-Za-zÀ-ÖØ-öø-ÿ#-&]|([\\][nN]|[\\][tT]|[\\][rR]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))*\")'
+    r'(\"([(-Za-zÀ-ÖØ-öø-ÿ#-&]|([\\][nN]|[\\][tT]|[\\][rR]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]|[░░]|[▒▒]|[▓▓]))*\")'
     t.value = t.value[1:-1] # remuevo las comillas
     #t.value.replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t').replace('\\"', '\"').replace('\\\\', '\\')
     return t

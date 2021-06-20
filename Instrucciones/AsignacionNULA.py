@@ -13,12 +13,16 @@ class AsignacionNULA(Instruccion):
 
     def interpretar(self, tree, table):
         value = "None"
-        if isinstance(value, Excepcion): return value
+        if isinstance(value, Excepcion): 
+            return value
         
         simbolo = Simbolo(self.identificador, TIPO.NULO, self.fila, self.columna, value)
 
         result = table.actualizarTabla(simbolo)
 
-        if isinstance(result, Excepcion): return result
+        if isinstance(result, Excepcion): 
+            tree.getExcepciones().append(result)
+            tree.updateConsolaError(result.toString())
+            return result
         return None
 
