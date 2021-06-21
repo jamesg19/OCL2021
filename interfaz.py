@@ -115,11 +115,15 @@ def CrearReporteError(data):
                     "<table class=\"table table-hover table-bordered\">"\
                         "<thead class=\"bill-header cs\">"\
                             "<tr>"\
-                                "<th id=\"trs-hd\" class=\"col-lg-2\">&nbsp;&nbsp;  </th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-2\">&nbsp;&nbsp;</th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-2\">&nbsp;&nbsp;</th>"\
                                 "<th id=\"trs-hd\" class=\"col-lg-1\">TIPO</th>"\
-                                "<th id=\"trs-hd\" class=\"col-lg-2\">DESCRIPCCION </th>"\
-                                "<th id=\"trs-hd\" class=\"col-lg-3\">LINEA</th>"\
-                                "<th id=\"trs-hd\" class=\"col-lg-2\">COLUMNA</th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-1\">DESCRIPCCION </th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-1\">LINEA</th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-1\">COLUMNA</th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-2\">&nbsp;&nbsp;  </th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-2\">&nbsp;&nbsp;  </th>"\
+                                "<th id=\"trs-hd\" class=\"col-lg-2\">&nbsp;&nbsp;  </th>"\
                                 "<th id=\"trs-hd\" class=\"col-lg-2\">&nbsp;&nbsp;  </th>"\
                             "</tr>"\
                         "</thead>"\
@@ -192,6 +196,7 @@ def ejecutar():
     from TS.TablaSimbolos import TablaSimbolos
     import grammar
     try:
+        contador = 0
         instrucciones = grammar.parse(entrada.lower()) #ARBOL AST
         ast = Arbol(instrucciones)
         TSGlobal = TablaSimbolos()
@@ -212,15 +217,15 @@ def ejecutar():
                     ast.updateConsolaError(err.toString())
                 
         for instruccion in ast.getInstrucciones():      # 2DA PASADA (MAIN)
-            contador = 0
+            
             if isinstance(instruccion, Main):
-                contador += 1
-                if contador == 2: # VERIFICAR LA DUPLICIDAD
+                contador =contador + 1
+                if contador > 1: # VERIFICAR LA DUPLICIDAD
                     err = Excepcion("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
                     break
-
+                 
                 value = instruccion.interpretar(ast,TSGlobal)
                 if isinstance(value, Excepcion) :
                     ast.getExcepciones().append(value)
@@ -230,6 +235,10 @@ def ejecutar():
                     err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
+
+                
+
+
         for instruccion in ast.getInstrucciones():    
             if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA)):
                 err = Excepcion("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
