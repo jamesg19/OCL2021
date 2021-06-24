@@ -35,6 +35,7 @@ reservadas = {
     'read'       : 'READ',
     'tolower'       : 'TOLOWER',
     'toupper'       : 'TOUPPER',
+    'func'          : 'FUNC',
 
 }
 
@@ -259,6 +260,8 @@ from Instrucciones.DeclaracionNULA import DeclaracionNULA
 from Instrucciones.AsignacionNULA import AsignacionNULA
 from Expresiones.Incremento import Incremento
 from Expresiones.Decremento import Decremento
+from Instrucciones.Funcion import Funcion
+from Instrucciones.Llamada import Llamada
 
 
 def p_inicio(t):
@@ -289,6 +292,8 @@ def p_declaraciones(t):
                 | print
                 | break
                 | main
+                | funcion_void
+                | llamada_fvoid
     '''
     t[0] = t[1]
 def p_instruccion_error(t):
@@ -414,6 +419,15 @@ def p_actualizacionfor2(t):
 def p_actualizacionfor3(t):
     ''' actualizacion :   IDENTIFICADOR IGUAL expresion '''
     t[0] = Asignacion(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
+##########################################  FUNCIONES ########################################
+def p_llamada(t) :
+    ''' llamada_fvoid     : IDENTIFICADOR PARENTESIS_ABRE  PARENTESIS_CIERRA finInstruccion'''
+    t[0] = Llamada(t[1], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_funcion_void(t):
+    ''' funcion_void : FUNC IDENTIFICADOR PARENTESIS_ABRE  PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    '''
+    t[0] = Funcion(t[2], t[6], t.lineno(1), find_column(input, t.slice[1]))
 
 def p_funciones(t):
     '''

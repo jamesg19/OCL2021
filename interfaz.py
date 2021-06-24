@@ -3,6 +3,8 @@ from Instrucciones.Asignacion import Asignacion
 from Instrucciones.Declaracion import Declaracion
 from Instrucciones.AsignacionNULA import AsignacionNULA
 from Instrucciones.DeclaracionNULA import DeclaracionNULA
+from Instrucciones.Funcion import Funcion
+from Instrucciones.Llamada import Llamada
 import os
 import re
 from TS.Excepcion import Excepcion
@@ -206,6 +208,9 @@ def ejecutar():
             ast.updateConsolaError(error.toString())
 
         for instruccion in ast.getInstrucciones():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
+            if isinstance(instruccion, Funcion):
+                ast.addFuncion(instruccion)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
+
             if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, DeclaracionNULA) or isinstance(instruccion, AsignacionNULA):
                 value = instruccion.interpretar(ast,TSGlobal)
                 if isinstance(value, Excepcion) :
@@ -236,14 +241,13 @@ def ejecutar():
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
 
-                
-
-
+        #Tercera pasada
         for instruccion in ast.getInstrucciones():    
-            if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA)):
+            if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA) or isinstance(instruccion, Funcion) ):
                 err = Excepcion("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
                 ast.getExcepciones().append(err)
                 ast.updateConsolaError(err.toString())
+                
     except IOError:
         imprimir_en_consolaError(IOError)
     imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
