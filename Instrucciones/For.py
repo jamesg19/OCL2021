@@ -17,16 +17,16 @@ class For(Instruccion):
     def interpretar(self, tree, table):
         
         nuevaTabla = TablaSimbolos(table)       #NUEVO ENTORNO
-        nuevaTabla2 = TablaSimbolos(table)       #NUEVO ENTORNO2
+        #nuevaTabla2 = TablaSimbolos(table)       #NUEVO ENTORNO2
         declaracion=self.declaracion.interpretar(tree, nuevaTabla)
         if isinstance(declaracion, Excepcion): 
             return declaracion
 
         while True:
-            
+            nuevaTabla2 = TablaSimbolos(nuevaTabla)       #NUEVO ENTORNO2
             #verifica que se cumpla la condicion
             try:
-                condicion = self.condicion.interpretar(tree, nuevaTabla)
+                condicion = self.condicion.interpretar(tree, nuevaTabla2)
                 if isinstance(condicion, Excepcion): return condicion
             except:
                 
@@ -37,7 +37,7 @@ class For(Instruccion):
                 if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
                     
                     for instruccion in self.instrucciones:
-                        result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
+                        result = instruccion.interpretar(tree, nuevaTabla2) #EJECUTA INSTRUCCION ADENTRO DEL IF
                         if isinstance(result, Excepcion) :
                             tree.getExcepciones().append(result)
                             tree.updateConsolaError(result.toString())
@@ -49,6 +49,6 @@ class For(Instruccion):
             else:
                 return Excepcion("Semantico", "Tipo de dato no booleano en FOR.", self.fila, self.columna)
             #ACTUALIZA LA VARIABLE
-            actualiza=self.actualiza.interpretar(tree, nuevaTabla)
+            actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
             if isinstance(actualiza, Excepcion): return actualiza
         

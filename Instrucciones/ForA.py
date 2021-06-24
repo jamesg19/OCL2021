@@ -21,16 +21,16 @@ class ForA(Instruccion):
         if isinstance(asginacion, Excepcion): return asginacion
         
 
-
+        nuevaTabla = TablaSimbolos(table)       #NUEVO ENTORNO
         while True:
-
+            nuevaTabla2 = TablaSimbolos(nuevaTabla)       #NUEVO ENTORNO
             #verifica que se cumpla la condicion
-            condicion = self.condicion.interpretar(tree, table)
+            condicion = self.condicion.interpretar(tree, nuevaTabla2)
             if isinstance(condicion, Excepcion): return condicion
             
             if self.condicion.tipo == TIPO.BOOLEANO:
                 if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
-                    nuevaTabla = TablaSimbolos(table)       #NUEVO ENTORNO
+                    nuevaTabla = TablaSimbolos(nuevaTabla2)       #NUEVO ENTORNO
                     for instruccion in self.instrucciones:
                         result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
                         if isinstance(result, Excepcion) :
@@ -44,5 +44,5 @@ class ForA(Instruccion):
             else:
                 return Excepcion("Semantico", "Tipo de dato no booleano en FOR.", self.fila, self.columna)
             #ACTUALIZA LA VARIABLE
-            actualiza=self.actualiza.interpretar(tree, table)
+            actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
             if isinstance(actualiza, Excepcion): return actualiza
