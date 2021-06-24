@@ -30,9 +30,9 @@ class ForA(Instruccion):
             
             if self.condicion.tipo == TIPO.BOOLEANO:
                 if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
-                    nuevaTabla = TablaSimbolos(nuevaTabla2)       #NUEVO ENTORNO
+                    #nuevaTabla = TablaSimbolos(nuevaTabla2)       #NUEVO ENTORNO
                     for instruccion in self.instrucciones:
-                        result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
+                        result = instruccion.interpretar(tree, nuevaTabla2) #EJECUTA INSTRUCCION ADENTRO DEL IF
                         if isinstance(result, Excepcion) :
                             tree.getExcepciones().append(result)
                             tree.updateConsolaError(result.toString())
