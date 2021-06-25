@@ -11,28 +11,29 @@ from TS.Excepcion import Excepcion
 #https://es.stackoverflow.com/questions/117556/clase-de-caracteres-para-cualquier-letra-incluyendo-todo-tipo-de-acentos
 errores = []
 reservadas = {
-    'var'       : 'VAR',
-    'true'       : 'TRUE',
-    'false'       : 'FALSE',
-    'null'       : 'NULL',
-    'int'       : 'INT',
-    'double'       : 'DOUBLE',
-    'string'       : 'STRING',
-    'char'       : 'CHAR',
-    'new'       : 'NEW',
-    'else'       : 'ELSE',
-    'print'       : 'PRINT',
-    'switch'       : 'SWITCH',
-    'case'       : 'CASE',
+    'var'           : 'VAR',
+    'true'          : 'TRUE',
+    'false'         : 'FALSE',
+    'null'          : 'NULL',
+    'int'           : 'INT',
+    'double'        : 'DOUBLE',
+    'string'        : 'STRING',
+    'char'          : 'CHAR',
+    'boolean'       : 'BOOLEAN',
+    'new'           : 'NEW',
+    'else'          : 'ELSE',
+    'print'         : 'PRINT',
+    'switch'        : 'SWITCH',
+    'case'          : 'CASE',
     'default'       : 'DEFAULT',
-    'break'       : 'BREAK',
-    'while'       : 'WHILE',
-    'for'       : 'FOR',
-    'return'       : 'RETURN',
-    'func'       : 'FUNC',
-    'main'       : 'MAIN',
-    'if'       : 'IF',
-    'read'       : 'READ',
+    'break'         : 'BREAK',
+    'while'         : 'WHILE',
+    'for'           : 'FOR',
+    'return'        : 'RETURN',
+    'func'          : 'FUNC',
+    'main'          : 'MAIN',
+    'if'            : 'IF',
+    'read'          : 'READ',
     'tolower'       : 'TOLOWER',
     'toupper'       : 'TOUPPER',
     'func'          : 'FUNC',
@@ -288,7 +289,6 @@ def p_declaraciones(t):
                 | switch
                 | while
                 | for
-                | funciones 
                 | print
                 | break
                 | main
@@ -420,30 +420,72 @@ def p_actualizacionfor3(t):
     ''' actualizacion :   IDENTIFICADOR IGUAL expresion '''
     t[0] = Asignacion(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
 ##########################################  FUNCIONES ########################################
-def p_llamada(t) :
+def p_llamada1(t) :
     ''' llamada_fvoid     : IDENTIFICADOR PARENTESIS_ABRE  PARENTESIS_CIERRA finInstruccion'''
-    t[0] = Llamada(t[1], t.lineno(1), find_column(input, t.slice[1]))
+    t[0] = Llamada(t[1], [], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_llamada2(t) :
+    ''' llamada_fvoid     : IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA finInstruccion'''
+    t[0] = Llamada(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_parametros1(t) :
+    'parametros_llamada : parametros_llamada COMA parametro_llamada'
+    t[1].append(t[3])
+    t[0] = t[1]
+
+def p_parametros2(t) :
+    'parametros_llamada : parametro_llamada'
+    t[0] = [t[1]]
+
+#///////////////////////////////////////PARAMETRO LLAMADA A FUNCION//////////////////////////////////////////////////
+
+def p_parametroLL(t) :
+    'parametro_llamada : expresion'
+    t[0] = t[1]
 
 def p_funcion_void(t):
     ''' funcion_void : FUNC IDENTIFICADOR PARENTESIS_ABRE  PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
     '''
-    t[0] = Funcion(t[2], t[6], t.lineno(1), find_column(input, t.slice[1]))
+    t[0] = Funcion(t[2], [], t[6], t.lineno(1), find_column(input, t.slice[1]))
 
-def p_funciones(t):
-    '''
-    funciones : FUNC IDENTIFICADOR PARENTESIS_ABRE parametrosf PARENTESIS_CIERRA LLAVE_ABRE LLAVE_CIERRA
-    '''
-def p_parametrosf(t):
-    '''
-    parametrosf : STRING IDENTIFICADOR COMA parametrosf
-                | STRING IDENTIFICADOR 
-                | INT IDENTIFICADOR COMA parametrosf
-                | INT IDENTIFICADOR
-                | CHAR IDENTIFICADOR COMA parametrosf
-                | CHAR IDENTIFICADOR
-                | DOUBLE IDENTIFICADOR COMA parametrosf
-                | DOUBLE IDENTIFICADOR
-    '''
+def p_funcion_void2(t):
+    ''' funcion_void : FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA '''
+    t[0] = Funcion(t[2],t[4], t[7], t.lineno(1), find_column(input, t.slice[1]))
+
+#///////////////////////////////////////PARAMETROS 1+//////////////////////////////////////////////////
+
+def p_parametros_1(t) :
+    'parametros     : parametros COMA parametro'
+    t[1].append(t[3])
+    t[0] = t[1]
+
+def p_parametros_2(t) :
+    'parametros    : parametro'
+    t[0] = [t[1]]
+
+#///////////////////////////////////////PARAMETRO 1 //////////////////////////////////////////////////
+
+def p_parametro_int(t) :
+    'parametro     : INT IDENTIFICADOR'
+    t[0] = {'tipo':TIPO.ENTERO,'identificador':t[2]}
+
+def p_parametro_string(t) :
+    'parametro     : STRING IDENTIFICADOR'
+    t[0] = {'tipo':TIPO.CADENA,'identificador':t[2]}
+
+def p_parametro_decimal(t) :
+    'parametro     : DOUBLE IDENTIFICADOR'
+    t[0] = {'tipo':TIPO.DECIMAL,'identificador':t[2]}
+
+def p_parametro_boolean(t) :
+    'parametro     : BOOLEAN IDENTIFICADOR'
+    t[0] = {'tipo':TIPO.BOOLEANO,'identificador':t[2]}
+
+def p_parametro_char(t) :
+    'parametro     : CHAR IDENTIFICADOR'
+    t[0] = {'tipo':TIPO.CHARACTER,'identificador':t[2]}
+
+
 def p_print(t):
     ''' print : PRINT PARENTESIS_ABRE expresion PARENTESIS_CIERRA finInstruccion '''
     t[0] = Imprimir(t[3], t.lineno(1), find_column(input, t.slice[1]))

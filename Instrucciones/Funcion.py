@@ -5,9 +5,10 @@ from Instrucciones.Break import Break
 
 
 class Funcion(Instruccion):
-    def __init__(self, nombre, instrucciones, fila, columna):
+    def __init__(self, nombre, parametros, instrucciones, fila, columna):
         self.nombre = nombre.lower()
         self.instrucciones = instrucciones
+        self.parametros = parametros
         self.fila = fila
         self.columna = columna
         self.tipo = None

@@ -7,7 +7,7 @@ class TablaSimbolos:
     def __init__(self, anterior = None):
         self.tabla = {} # Diccionario Vacio
         self.anterior = anterior
-        self.funciones = []
+        #self.funciones = []
 
     def setTabla(self, simbolo):      # Agregar una variable
         if simbolo.id.lower() in self.tabla :
@@ -19,7 +19,7 @@ class TablaSimbolos:
     def getTabla(self, id):            # obtener una variable
         try:
             tablaActual = self
-            while tablaActual.tabla != None:
+            while tablaActual != None:
                 if id in tablaActual.tabla :
                     return tablaActual.tabla[id]           # RETORNA SIMBOLO
                 else:

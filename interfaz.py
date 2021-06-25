@@ -199,7 +199,7 @@ def ejecutar():
     import grammar
     try:
         contador = 0
-        instrucciones = grammar.parse(entrada.lower()) #ARBOL AST
+        instrucciones = grammar.parse(entrada) #ARBOL AST
         ast = Arbol(instrucciones)
         TSGlobal = TablaSimbolos()
         ast.setTSglobal(TSGlobal)
@@ -247,7 +247,7 @@ def ejecutar():
                 err = Excepcion("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
                 ast.getExcepciones().append(err)
                 ast.updateConsolaError(err.toString())
-                
+
     except IOError:
         imprimir_en_consolaError(IOError)
     imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
