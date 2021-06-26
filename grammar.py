@@ -627,7 +627,6 @@ def parse(inp) :
 '''
 f = open("./entradaa.txt", "r",encoding="utf-8")
 entrada = f.read()
-
 from TS.Arbol import Arbol
 from TS.TablaSimbolos import TablaSimbolos
 try:
@@ -638,7 +637,6 @@ try:
     for error in errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICOS
         ast.getExcepciones().append(error)
         ast.updateConsola(error.toString())
-
     for instruccion in ast.getInstrucciones():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
         if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, DeclaracionNULA) or isinstance(instruccion, AsignacionNULA):
             value = instruccion.interpretar(ast,TSGlobal)
@@ -659,12 +657,10 @@ try:
                 ast.getExcepciones().append(err)
                 ast.updateConsola(err.toString())
                 break
-
             value = instruccion.interpretar(ast,TSGlobal)
             if isinstance(value, Excepcion) :
                 ast.getExcepciones().append(value)
                 ast.updateConsola(value.toString())
-
             if isinstance(value, Break): 
                 err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
                 ast.getExcepciones().append(err)

@@ -1,5 +1,3 @@
-
-
 from TS.Excepcion import Excepcion
 from TS.Tipo import  TIPO
 
@@ -19,7 +17,7 @@ class TablaSimbolos:
     def getTabla(self, id):            # obtener una variable
         try:
             tablaActual = self
-            while tablaActual != None:
+            while tablaActual.tabla != None:
                 if id in tablaActual.tabla :
                     return tablaActual.tabla[id]           # RETORNA SIMBOLO
                 else:
