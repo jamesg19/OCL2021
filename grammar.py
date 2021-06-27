@@ -5,6 +5,7 @@ ALUMNO ESTRELLA: JAMES OSMIN GRAMAJO CARCAMO
 CARNÉ: 201731172
 USAC
 '''
+from Instrucciones.Return import Return
 import re
 from TS.Excepcion import Excepcion
 #TABLA ASCII 
@@ -291,9 +292,10 @@ def p_declaraciones(t):
                 | for
                 | print
                 | break
+                | returnn finInstruccion
                 | main
                 | funcion_void
-                | llamada_fvoid
+                | llamada_fvoid finInstruccion
     '''
     t[0] = t[1]
 def p_instruccion_error(t):
@@ -421,13 +423,17 @@ def p_actualizacionfor3(t):
     t[0] = Asignacion(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
 ##########################################  FUNCIONES ########################################
 def p_llamada1(t) :
-    ''' llamada_fvoid     : IDENTIFICADOR PARENTESIS_ABRE  PARENTESIS_CIERRA finInstruccion'''
+    ''' llamada_fvoid     : IDENTIFICADOR PARENTESIS_ABRE  PARENTESIS_CIERRA '''
     t[0] = Llamada(t[1], [], t.lineno(1), find_column(input, t.slice[1]))
 
 def p_llamada2(t) :
-    ''' llamada_fvoid     : IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA finInstruccion'''
+    ''' llamada_fvoid     : IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA '''
     t[0] = Llamada(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
 
+def p_returnn(t):
+    ''' returnn : RETURN expresion '''
+    t[0] = Return(t[2], t.lineno(1), find_column(input, t.slice[1]))
+    
 def p_parametros1(t) :
     'parametros_llamada : parametros_llamada COMA parametro_llamada'
     t[1].append(t[3])
@@ -591,7 +597,9 @@ def p_chart(t):
     ''' expresion : CHART '''
     t[0] = Primitivos(TIPO.CHARACTER,str(t[1]).replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t').replace('\\"', '\"').replace('\\\\', '\\').replace('\\\'', '\''), t.lineno(1), find_column(input, t.slice[1]))
 
-
+def p_expresion_llamadaa(t):
+    '''expresion : llamada_fvoid '''
+    t[0] = t[1]
 
 '''
 import ply.yacc as yacc

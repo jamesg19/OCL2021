@@ -1,3 +1,4 @@
+from Instrucciones.Return import Return
 from Instrucciones.Main import Main
 from Instrucciones.Asignacion import Asignacion
 from Instrucciones.Declaracion import Declaracion
@@ -200,6 +201,7 @@ def ejecutar():
     try:
         contador = 0
         instrucciones = grammar.parse(entrada.lower()) #ARBOL AST
+        #instrucciones = grammar.parse(entrada) #ARBOL AST
         ast = Arbol(instrucciones)
         TSGlobal = TablaSimbolos()
         ast.setTSglobal(TSGlobal)
@@ -220,6 +222,10 @@ def ejecutar():
                     err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
+                if isinstance(value, Return): 
+                    err = Excepcion("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
+                    ast.getExcepciones().append(err)
+                    ast.updateConsola(err.toString())
                 
         for instruccion in ast.getInstrucciones():      # 2DA PASADA (MAIN)
             
@@ -238,6 +244,11 @@ def ejecutar():
 
                 if isinstance(value, Break): 
                     err = Excepcion("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+                    ast.getExcepciones().append(err)
+                    ast.updateConsolaError(err.toString())
+                
+                if isinstance(value, Return): 
+                    err = Excepcion("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
 

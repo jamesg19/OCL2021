@@ -1,3 +1,4 @@
+from Instrucciones.Return import Return
 from Abstract.Instruccion import Instruccion
 from Instrucciones.Break import Break
 from TS.Excepcion         import Excepcion
@@ -11,8 +12,7 @@ class Case(Instruccion):
         self.fila              = fila
         self.columna           = columna
 
-
-        
+ 
 
     def interpretar(self, tree, table):
 
@@ -25,6 +25,7 @@ class Case(Instruccion):
                 tree.updateConsolaError(result.toString())
 
             if isinstance(result, Break): return True
+            if isinstance(result, Return): return result
 
 
 
