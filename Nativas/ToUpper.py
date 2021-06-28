@@ -12,6 +12,7 @@ class ToUpper(Instruccion):
     
     def interpretar(self, tree, table):
         value = self.expresion.interpretar(tree, table) 
+        if isinstance(value, Excepcion): return value
 
         if self.tipo == None:
                 if isinstance(value,str):#CADENA

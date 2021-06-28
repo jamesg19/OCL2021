@@ -110,6 +110,7 @@ Rule 89    expresion -> TOUPPER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 Rule 90    expresion -> TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 Rule 91    expresion -> TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 Rule 92    expresion -> ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+Rule 93    expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 
 Terminals, with rules where they appear
 
@@ -163,8 +164,8 @@ NEW                  :
 NOT                  : 77
 NULL                 : 18 20
 OR                   : 74
-PARENTESIS_ABRE      : 24 25 26 27 28 29 34 35 36 37 43 44 49 50 58 80 89 90 91 92
-PARENTESIS_CIERRA    : 24 25 26 27 28 29 34 35 36 37 43 44 49 50 58 80 89 90 91 92
+PARENTESIS_ABRE      : 24 25 26 27 28 29 34 35 36 37 43 44 49 50 58 80 89 90 91 92 93
+PARENTESIS_CIERRA    : 24 25 26 27 28 29 34 35 36 37 43 44 49 50 58 80 89 90 91 92 93
 POR                  : 64
 POT                  : 66
 PRINT                : 58
@@ -178,6 +179,7 @@ TOLOWER              : 90
 TOUPPER              : 89
 TRUE                 : 83
 TRUNCATE             : 91
+TYPEOF               : 93
 VAR                  : 21 38
 WHILE                : 35
 error                : 15
@@ -190,7 +192,7 @@ case                 : 30 31
 declaracionfor1      : 36
 declaracionfor2      : 37
 default              : 28 29
-expresion            : 17 19 24 25 26 27 28 29 32 35 36 37 38 39 42 45 48 58 62 62 63 63 64 64 65 65 66 66 67 67 68 68 69 69 70 70 71 71 72 72 73 73 74 74 75 75 76 77 80 89 90 91 92
+expresion            : 17 19 24 25 26 27 28 29 32 35 36 37 38 39 42 45 48 58 62 62 63 63 64 64 65 65 66 66 67 67 68 68 69 69 70 70 71 71 72 72 73 73 74 74 75 75 76 77 80 89 90 91 92 93
 finInstruccion       : 11 14 16 17 18 19 20 22 23 58 59
 for                  : 8
 funcion_void         : 13
@@ -766,6 +768,7 @@ state 24
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -783,6 +786,7 @@ state 24
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
     expresion                      shift and go to state 44
     llamada_fvoid                  shift and go to state 55
@@ -791,7 +795,7 @@ state 25
 
     (34) main -> MAIN . PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
 
-    PARENTESIS_ABRE shift and go to state 60
+    PARENTESIS_ABRE shift and go to state 61
 
 
 state 26
@@ -799,7 +803,7 @@ state 26
     (49) funcion_void -> FUNC . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
     (50) funcion_void -> FUNC . IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
 
-    IDENTIFICADOR   shift and go to state 61
+    IDENTIFICADOR   shift and go to state 62
 
 
 state 27
@@ -927,7 +931,7 @@ state 33
     (60) finInstruccion -> . PTCOMA
     (61) finInstruccion -> .
 
-    IGUAL           shift and go to state 63
+    IGUAL           shift and go to state 64
     PTCOMA          shift and go to state 30
     error           reduce using rule 61 (finInstruccion -> .)
     IDENTIFICADOR   reduce using rule 61 (finInstruccion -> .)
@@ -946,7 +950,7 @@ state 33
     DEFAULT         reduce using rule 61 (finInstruccion -> .)
     CASE            reduce using rule 61 (finInstruccion -> .)
 
-    finInstruccion                 shift and go to state 62
+    finInstruccion                 shift and go to state 63
 
 state 34
 
@@ -983,10 +987,11 @@ state 34
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
-    NULL            shift and go to state 65
+    NULL            shift and go to state 66
     MENOS           shift and go to state 45
     NOT             shift and go to state 46
     IDENTIFICADOR   shift and go to state 47
@@ -1001,8 +1006,9 @@ state 34
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 64
+    expresion                      shift and go to state 65
     llamada_fvoid                  shift and go to state 55
 
 state 35
@@ -1029,7 +1035,7 @@ state 35
     DEFAULT         reduce using rule 61 (finInstruccion -> .)
     CASE            reduce using rule 61 (finInstruccion -> .)
 
-    finInstruccion                 shift and go to state 66
+    finInstruccion                 shift and go to state 67
 
 state 36
 
@@ -1055,7 +1061,7 @@ state 36
     DEFAULT         reduce using rule 61 (finInstruccion -> .)
     CASE            reduce using rule 61 (finInstruccion -> .)
 
-    finInstruccion                 shift and go to state 67
+    finInstruccion                 shift and go to state 68
 
 state 37
 
@@ -1095,10 +1101,11 @@ state 37
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
-    PARENTESIS_CIERRA shift and go to state 68
+    PARENTESIS_CIERRA shift and go to state 69
     MENOS           shift and go to state 45
     NOT             shift and go to state 46
     IDENTIFICADOR   shift and go to state 47
@@ -1113,10 +1120,11 @@ state 37
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    parametros_llamada             shift and go to state 69
-    parametro_llamada              shift and go to state 70
-    expresion                      shift and go to state 71
+    parametros_llamada             shift and go to state 70
+    parametro_llamada              shift and go to state 71
+    expresion                      shift and go to state 72
     llamada_fvoid                  shift and go to state 55
 
 state 38
@@ -1155,6 +1163,7 @@ state 38
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -1172,8 +1181,9 @@ state 38
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 72
+    expresion                      shift and go to state 73
     llamada_fvoid                  shift and go to state 55
 
 state 39
@@ -1212,6 +1222,7 @@ state 39
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -1229,8 +1240,9 @@ state 39
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 73
+    expresion                      shift and go to state 74
     llamada_fvoid                  shift and go to state 55
 
 state 40
@@ -1267,6 +1279,7 @@ state 40
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -1284,8 +1297,9 @@ state 40
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 74
+    expresion                      shift and go to state 75
     llamada_fvoid                  shift and go to state 55
 
 state 41
@@ -1295,11 +1309,11 @@ state 41
     (38) declaracionfor1 -> . VAR IDENTIFICADOR IGUAL expresion
     (39) declaracionfor2 -> . IDENTIFICADOR IGUAL expresion
 
-    VAR             shift and go to state 77
-    IDENTIFICADOR   shift and go to state 78
+    VAR             shift and go to state 78
+    IDENTIFICADOR   shift and go to state 79
 
-    declaracionfor1                shift and go to state 75
-    declaracionfor2                shift and go to state 76
+    declaracionfor1                shift and go to state 76
+    declaracionfor2                shift and go to state 77
 
 state 42
 
@@ -1335,6 +1349,7 @@ state 42
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -1352,8 +1367,9 @@ state 42
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 79
+    expresion                      shift and go to state 80
     llamada_fvoid                  shift and go to state 55
 
 state 43
@@ -1413,20 +1429,20 @@ state 44
     LLAVE_CIERRA    reduce using rule 45 (returnn -> RETURN expresion .)
     DEFAULT         reduce using rule 45 (returnn -> RETURN expresion .)
     CASE            reduce using rule 45 (returnn -> RETURN expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
 state 45
@@ -1463,6 +1479,7 @@ state 45
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -1480,8 +1497,9 @@ state 45
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 94
+    expresion                      shift and go to state 95
     llamada_fvoid                  shift and go to state 55
 
 state 46
@@ -1518,6 +1536,7 @@ state 46
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -1535,8 +1554,9 @@ state 46
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 95
+    expresion                      shift and go to state 96
     llamada_fvoid                  shift and go to state 55
 
 state 47
@@ -1547,8 +1567,8 @@ state 47
     (43) llamada_fvoid -> IDENTIFICADOR . PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> IDENTIFICADOR . PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
-    INCREMENTO      shift and go to state 96
-    DECREMENTO      shift and go to state 97
+    INCREMENTO      shift and go to state 97
+    DECREMENTO      shift and go to state 98
     MAS             reduce using rule 85 (expresion -> IDENTIFICADOR .)
     MENOS           reduce using rule 85 (expresion -> IDENTIFICADOR .)
     POR             reduce using rule 85 (expresion -> IDENTIFICADOR .)
@@ -1620,6 +1640,7 @@ state 48
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -1637,8 +1658,9 @@ state 48
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 98
+    expresion                      shift and go to state 99
     llamada_fvoid                  shift and go to state 55
 
 state 49
@@ -1925,46 +1947,53 @@ state 56
 
     (89) expresion -> TOUPPER . PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 
-    PARENTESIS_ABRE shift and go to state 99
+    PARENTESIS_ABRE shift and go to state 100
 
 
 state 57
 
     (90) expresion -> TOLOWER . PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 
-    PARENTESIS_ABRE shift and go to state 100
+    PARENTESIS_ABRE shift and go to state 101
 
 
 state 58
 
     (91) expresion -> TRUNCATE . PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 
-    PARENTESIS_ABRE shift and go to state 101
+    PARENTESIS_ABRE shift and go to state 102
 
 
 state 59
 
     (92) expresion -> ROUND . PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 
-    PARENTESIS_ABRE shift and go to state 102
+    PARENTESIS_ABRE shift and go to state 103
 
 
 state 60
 
-    (34) main -> MAIN PARENTESIS_ABRE . PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-
-    PARENTESIS_CIERRA shift and go to state 103
-
-
-state 61
-
-    (49) funcion_void -> FUNC IDENTIFICADOR . PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (50) funcion_void -> FUNC IDENTIFICADOR . PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (93) expresion -> TYPEOF . PARENTESIS_ABRE expresion PARENTESIS_CIERRA
 
     PARENTESIS_ABRE shift and go to state 104
 
 
+state 61
+
+    (34) main -> MAIN PARENTESIS_ABRE . PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+
+    PARENTESIS_CIERRA shift and go to state 105
+
+
 state 62
+
+    (49) funcion_void -> FUNC IDENTIFICADOR . PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (50) funcion_void -> FUNC IDENTIFICADOR . PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+
+    PARENTESIS_ABRE shift and go to state 106
+
+
+state 63
 
     (16) variables -> var IDENTIFICADOR finInstruccion .
 
@@ -1986,7 +2015,7 @@ state 62
     CASE            reduce using rule 16 (variables -> var IDENTIFICADOR finInstruccion .)
 
 
-state 63
+state 64
 
     (17) variables -> var IDENTIFICADOR IGUAL . expresion finInstruccion
     (18) variables -> var IDENTIFICADOR IGUAL . NULL finInstruccion
@@ -2021,10 +2050,11 @@ state 63
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
-    NULL            shift and go to state 106
+    NULL            shift and go to state 108
     MENOS           shift and go to state 45
     NOT             shift and go to state 46
     IDENTIFICADOR   shift and go to state 47
@@ -2039,11 +2069,12 @@ state 63
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 105
+    expresion                      shift and go to state 107
     llamada_fvoid                  shift and go to state 55
 
-state 64
+state 65
 
     (19) variables -> IDENTIFICADOR IGUAL expresion . finInstruccion
     (62) expresion -> expresion . MAS expresion
@@ -2063,20 +2094,20 @@ state 64
     (60) finInstruccion -> . PTCOMA
     (61) finInstruccion -> .
 
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
     PTCOMA          shift and go to state 30
     error           reduce using rule 61 (finInstruccion -> .)
     IDENTIFICADOR   reduce using rule 61 (finInstruccion -> .)
@@ -2095,9 +2126,9 @@ state 64
     DEFAULT         reduce using rule 61 (finInstruccion -> .)
     CASE            reduce using rule 61 (finInstruccion -> .)
 
-    finInstruccion                 shift and go to state 107
+    finInstruccion                 shift and go to state 109
 
-state 65
+state 66
 
     (20) variables -> IDENTIFICADOR IGUAL NULL . finInstruccion
     (60) finInstruccion -> . PTCOMA
@@ -2121,9 +2152,9 @@ state 65
     DEFAULT         reduce using rule 61 (finInstruccion -> .)
     CASE            reduce using rule 61 (finInstruccion -> .)
 
-    finInstruccion                 shift and go to state 108
+    finInstruccion                 shift and go to state 110
 
-state 66
+state 67
 
     (22) variables -> IDENTIFICADOR INCREMENTO finInstruccion .
 
@@ -2145,7 +2176,7 @@ state 66
     CASE            reduce using rule 22 (variables -> IDENTIFICADOR INCREMENTO finInstruccion .)
 
 
-state 67
+state 68
 
     (23) variables -> IDENTIFICADOR DECREMENTO finInstruccion .
 
@@ -2167,7 +2198,7 @@ state 67
     CASE            reduce using rule 23 (variables -> IDENTIFICADOR DECREMENTO finInstruccion .)
 
 
-state 68
+state 69
 
     (43) llamada_fvoid -> IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA .
 
@@ -2207,16 +2238,16 @@ state 68
     DOSPUNTOS       reduce using rule 43 (llamada_fvoid -> IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA .)
 
 
-state 69
+state 70
 
     (44) llamada_fvoid -> IDENTIFICADOR PARENTESIS_ABRE parametros_llamada . PARENTESIS_CIERRA
     (46) parametros_llamada -> parametros_llamada . COMA parametro_llamada
 
-    PARENTESIS_CIERRA shift and go to state 109
-    COMA            shift and go to state 110
+    PARENTESIS_CIERRA shift and go to state 111
+    COMA            shift and go to state 112
 
 
-state 70
+state 71
 
     (47) parametros_llamada -> parametro_llamada .
 
@@ -2224,7 +2255,7 @@ state 70
     COMA            reduce using rule 47 (parametros_llamada -> parametro_llamada .)
 
 
-state 71
+state 72
 
     (48) parametro_llamada -> expresion .
     (62) expresion -> expresion . MAS expresion
@@ -2244,23 +2275,23 @@ state 71
 
     PARENTESIS_CIERRA reduce using rule 48 (parametro_llamada -> expresion .)
     COMA            reduce using rule 48 (parametro_llamada -> expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 72
+state 73
 
     (24) if -> IF PARENTESIS_ABRE expresion . PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
     (25) if -> IF PARENTESIS_ABRE expresion . PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
@@ -2280,24 +2311,24 @@ state 72
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PARENTESIS_CIERRA shift and go to state 111
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    PARENTESIS_CIERRA shift and go to state 113
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 73
+state 74
 
     (27) switch -> SWITCH PARENTESIS_ABRE expresion . PARENTESIS_CIERRA LLAVE_ABRE listacases LLAVE_CIERRA
     (28) switch -> SWITCH PARENTESIS_ABRE expresion . PARENTESIS_CIERRA LLAVE_ABRE listacases default LLAVE_CIERRA
@@ -2317,24 +2348,24 @@ state 73
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PARENTESIS_CIERRA shift and go to state 112
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    PARENTESIS_CIERRA shift and go to state 114
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 74
+state 75
 
     (35) while -> WHILE PARENTESIS_ABRE expresion . PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
     (62) expresion -> expresion . MAS expresion
@@ -2352,52 +2383,52 @@ state 74
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PARENTESIS_CIERRA shift and go to state 113
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
-
-
-state 75
-
-    (36) for -> FOR PARENTESIS_ABRE declaracionfor1 . PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-
-    PTCOMA          shift and go to state 114
+    PARENTESIS_CIERRA shift and go to state 115
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
 state 76
 
-    (37) for -> FOR PARENTESIS_ABRE declaracionfor2 . PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (36) for -> FOR PARENTESIS_ABRE declaracionfor1 . PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
 
-    PTCOMA          shift and go to state 115
+    PTCOMA          shift and go to state 116
 
 
 state 77
 
-    (38) declaracionfor1 -> VAR . IDENTIFICADOR IGUAL expresion
+    (37) for -> FOR PARENTESIS_ABRE declaracionfor2 . PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
 
-    IDENTIFICADOR   shift and go to state 116
+    PTCOMA          shift and go to state 117
 
 
 state 78
 
-    (39) declaracionfor2 -> IDENTIFICADOR . IGUAL expresion
+    (38) declaracionfor1 -> VAR . IDENTIFICADOR IGUAL expresion
 
-    IGUAL           shift and go to state 117
+    IDENTIFICADOR   shift and go to state 118
 
 
 state 79
+
+    (39) declaracionfor2 -> IDENTIFICADOR . IGUAL expresion
+
+    IGUAL           shift and go to state 119
+
+
+state 80
 
     (58) print -> PRINT PARENTESIS_ABRE expresion . PARENTESIS_CIERRA finInstruccion
     (62) expresion -> expresion . MAS expresion
@@ -2415,24 +2446,24 @@ state 79
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PARENTESIS_CIERRA shift and go to state 118
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    PARENTESIS_CIERRA shift and go to state 120
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 80
+state 81
 
     (62) expresion -> expresion MAS . expresion
     (62) expresion -> . expresion MAS expresion
@@ -2466,6 +2497,7 @@ state 80
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -2483,11 +2515,12 @@ state 80
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 119
+    expresion                      shift and go to state 121
     llamada_fvoid                  shift and go to state 55
 
-state 81
+state 82
 
     (63) expresion -> expresion MENOS . expresion
     (62) expresion -> . expresion MAS expresion
@@ -2521,6 +2554,7 @@ state 81
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -2538,11 +2572,12 @@ state 81
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 120
+    expresion                      shift and go to state 122
     llamada_fvoid                  shift and go to state 55
 
-state 82
+state 83
 
     (64) expresion -> expresion POR . expresion
     (62) expresion -> . expresion MAS expresion
@@ -2576,6 +2611,7 @@ state 82
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -2593,11 +2629,12 @@ state 82
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 121
+    expresion                      shift and go to state 123
     llamada_fvoid                  shift and go to state 55
 
-state 83
+state 84
 
     (65) expresion -> expresion DIV . expresion
     (62) expresion -> . expresion MAS expresion
@@ -2631,6 +2668,7 @@ state 83
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -2648,11 +2686,12 @@ state 83
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 122
+    expresion                      shift and go to state 124
     llamada_fvoid                  shift and go to state 55
 
-state 84
+state 85
 
     (66) expresion -> expresion POT . expresion
     (62) expresion -> . expresion MAS expresion
@@ -2686,6 +2725,7 @@ state 84
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -2703,11 +2743,12 @@ state 84
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 123
+    expresion                      shift and go to state 125
     llamada_fvoid                  shift and go to state 55
 
-state 85
+state 86
 
     (67) expresion -> expresion MODULO . expresion
     (62) expresion -> . expresion MAS expresion
@@ -2741,6 +2782,7 @@ state 85
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -2758,11 +2800,12 @@ state 85
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 124
+    expresion                      shift and go to state 126
     llamada_fvoid                  shift and go to state 55
 
-state 86
+state 87
 
     (68) expresion -> expresion IGUALACION . expresion
     (62) expresion -> . expresion MAS expresion
@@ -2796,6 +2839,7 @@ state 86
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -2813,11 +2857,12 @@ state 86
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 125
+    expresion                      shift and go to state 127
     llamada_fvoid                  shift and go to state 55
 
-state 87
+state 88
 
     (69) expresion -> expresion DIREFENCIACION . expresion
     (62) expresion -> . expresion MAS expresion
@@ -2851,6 +2896,7 @@ state 87
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -2868,11 +2914,12 @@ state 87
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 126
+    expresion                      shift and go to state 128
     llamada_fvoid                  shift and go to state 55
 
-state 88
+state 89
 
     (70) expresion -> expresion MAYORQ . expresion
     (62) expresion -> . expresion MAS expresion
@@ -2906,6 +2953,7 @@ state 88
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -2923,11 +2971,12 @@ state 88
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 127
+    expresion                      shift and go to state 129
     llamada_fvoid                  shift and go to state 55
 
-state 89
+state 90
 
     (71) expresion -> expresion MENORQ . expresion
     (62) expresion -> . expresion MAS expresion
@@ -2961,6 +3010,7 @@ state 89
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -2978,11 +3028,12 @@ state 89
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 128
+    expresion                      shift and go to state 130
     llamada_fvoid                  shift and go to state 55
 
-state 90
+state 91
 
     (72) expresion -> expresion MAYORIGUAL . expresion
     (62) expresion -> . expresion MAS expresion
@@ -3016,6 +3067,7 @@ state 90
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -3033,11 +3085,12 @@ state 90
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 129
+    expresion                      shift and go to state 131
     llamada_fvoid                  shift and go to state 55
 
-state 91
+state 92
 
     (73) expresion -> expresion MENORIGUAL . expresion
     (62) expresion -> . expresion MAS expresion
@@ -3071,6 +3124,7 @@ state 91
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -3088,11 +3142,12 @@ state 91
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 130
+    expresion                      shift and go to state 132
     llamada_fvoid                  shift and go to state 55
 
-state 92
+state 93
 
     (74) expresion -> expresion OR . expresion
     (62) expresion -> . expresion MAS expresion
@@ -3126,6 +3181,7 @@ state 92
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -3143,11 +3199,12 @@ state 92
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 131
+    expresion                      shift and go to state 133
     llamada_fvoid                  shift and go to state 55
 
-state 93
+state 94
 
     (75) expresion -> expresion AND . expresion
     (62) expresion -> . expresion MAS expresion
@@ -3181,6 +3238,7 @@ state 93
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -3198,11 +3256,12 @@ state 93
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 132
+    expresion                      shift and go to state 134
     llamada_fvoid                  shift and go to state 55
 
-state 94
+state 95
 
     (76) expresion -> MENOS expresion .
     (62) expresion -> expresion . MAS expresion
@@ -3255,23 +3314,23 @@ state 94
     COMA            reduce using rule 76 (expresion -> MENOS expresion .)
     DOSPUNTOS       reduce using rule 76 (expresion -> MENOS expresion .)
 
-  ! MAS             [ shift and go to state 80 ]
-  ! MENOS           [ shift and go to state 81 ]
-  ! POR             [ shift and go to state 82 ]
-  ! DIV             [ shift and go to state 83 ]
-  ! POT             [ shift and go to state 84 ]
-  ! MODULO          [ shift and go to state 85 ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! MAS             [ shift and go to state 81 ]
+  ! MENOS           [ shift and go to state 82 ]
+  ! POR             [ shift and go to state 83 ]
+  ! DIV             [ shift and go to state 84 ]
+  ! POT             [ shift and go to state 85 ]
+  ! MODULO          [ shift and go to state 86 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 95
+state 96
 
     (77) expresion -> NOT expresion .
     (62) expresion -> expresion . MAS expresion
@@ -3311,18 +3370,18 @@ state 95
     PARENTESIS_CIERRA reduce using rule 77 (expresion -> NOT expresion .)
     COMA            reduce using rule 77 (expresion -> NOT expresion .)
     DOSPUNTOS       reduce using rule 77 (expresion -> NOT expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
 
   ! MAS             [ reduce using rule 77 (expresion -> NOT expresion .) ]
   ! MENOS           [ reduce using rule 77 (expresion -> NOT expresion .) ]
@@ -3336,11 +3395,11 @@ state 95
   ! MENORQ          [ reduce using rule 77 (expresion -> NOT expresion .) ]
   ! MAYORIGUAL      [ reduce using rule 77 (expresion -> NOT expresion .) ]
   ! MENORIGUAL      [ reduce using rule 77 (expresion -> NOT expresion .) ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 96
+state 97
 
     (78) expresion -> IDENTIFICADOR INCREMENTO .
 
@@ -3380,7 +3439,7 @@ state 96
     DOSPUNTOS       reduce using rule 78 (expresion -> IDENTIFICADOR INCREMENTO .)
 
 
-state 97
+state 98
 
     (79) expresion -> IDENTIFICADOR DECREMENTO .
 
@@ -3420,7 +3479,7 @@ state 97
     DOSPUNTOS       reduce using rule 79 (expresion -> IDENTIFICADOR DECREMENTO .)
 
 
-state 98
+state 99
 
     (80) expresion -> PARENTESIS_ABRE expresion . PARENTESIS_CIERRA
     (62) expresion -> expresion . MAS expresion
@@ -3438,24 +3497,24 @@ state 98
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PARENTESIS_CIERRA shift and go to state 133
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    PARENTESIS_CIERRA shift and go to state 135
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 99
+state 100
 
     (89) expresion -> TOUPPER PARENTESIS_ABRE . expresion PARENTESIS_CIERRA
     (62) expresion -> . expresion MAS expresion
@@ -3489,6 +3548,7 @@ state 99
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -3506,11 +3566,12 @@ state 99
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 134
+    expresion                      shift and go to state 136
     llamada_fvoid                  shift and go to state 55
 
-state 100
+state 101
 
     (90) expresion -> TOLOWER PARENTESIS_ABRE . expresion PARENTESIS_CIERRA
     (62) expresion -> . expresion MAS expresion
@@ -3544,6 +3605,7 @@ state 100
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -3561,11 +3623,12 @@ state 100
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 135
+    expresion                      shift and go to state 137
     llamada_fvoid                  shift and go to state 55
 
-state 101
+state 102
 
     (91) expresion -> TRUNCATE PARENTESIS_ABRE . expresion PARENTESIS_CIERRA
     (62) expresion -> . expresion MAS expresion
@@ -3599,6 +3662,7 @@ state 101
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -3616,11 +3680,12 @@ state 101
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 136
+    expresion                      shift and go to state 138
     llamada_fvoid                  shift and go to state 55
 
-state 102
+state 103
 
     (92) expresion -> ROUND PARENTESIS_ABRE . expresion PARENTESIS_CIERRA
     (62) expresion -> . expresion MAS expresion
@@ -3654,6 +3719,7 @@ state 102
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -3671,18 +3737,76 @@ state 102
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 137
+    expresion                      shift and go to state 139
     llamada_fvoid                  shift and go to state 55
 
-state 103
+state 104
+
+    (93) expresion -> TYPEOF PARENTESIS_ABRE . expresion PARENTESIS_CIERRA
+    (62) expresion -> . expresion MAS expresion
+    (63) expresion -> . expresion MENOS expresion
+    (64) expresion -> . expresion POR expresion
+    (65) expresion -> . expresion DIV expresion
+    (66) expresion -> . expresion POT expresion
+    (67) expresion -> . expresion MODULO expresion
+    (68) expresion -> . expresion IGUALACION expresion
+    (69) expresion -> . expresion DIREFENCIACION expresion
+    (70) expresion -> . expresion MAYORQ expresion
+    (71) expresion -> . expresion MENORQ expresion
+    (72) expresion -> . expresion MAYORIGUAL expresion
+    (73) expresion -> . expresion MENORIGUAL expresion
+    (74) expresion -> . expresion OR expresion
+    (75) expresion -> . expresion AND expresion
+    (76) expresion -> . MENOS expresion
+    (77) expresion -> . NOT expresion
+    (78) expresion -> . IDENTIFICADOR INCREMENTO
+    (79) expresion -> . IDENTIFICADOR DECREMENTO
+    (80) expresion -> . PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (81) expresion -> . ENTERO
+    (82) expresion -> . DECIMAL
+    (83) expresion -> . TRUE
+    (84) expresion -> . FALSE
+    (85) expresion -> . IDENTIFICADOR
+    (86) expresion -> . CADENA
+    (87) expresion -> . CHART
+    (88) expresion -> . llamada_fvoid
+    (89) expresion -> . TOUPPER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
+    (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
+
+    MENOS           shift and go to state 45
+    NOT             shift and go to state 46
+    IDENTIFICADOR   shift and go to state 47
+    PARENTESIS_ABRE shift and go to state 48
+    ENTERO          shift and go to state 49
+    DECIMAL         shift and go to state 50
+    TRUE            shift and go to state 51
+    FALSE           shift and go to state 52
+    CADENA          shift and go to state 53
+    CHART           shift and go to state 54
+    TOUPPER         shift and go to state 56
+    TOLOWER         shift and go to state 57
+    TRUNCATE        shift and go to state 58
+    ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
+
+    expresion                      shift and go to state 140
+    llamada_fvoid                  shift and go to state 55
+
+state 105
 
     (34) main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA
 
-    LLAVE_ABRE      shift and go to state 138
+    LLAVE_ABRE      shift and go to state 141
 
 
-state 104
+state 106
 
     (49) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE . PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
     (50) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE . parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
@@ -3694,17 +3818,17 @@ state 104
     (56) parametro -> . BOOLEAN IDENTIFICADOR
     (57) parametro -> . CHAR IDENTIFICADOR
 
-    PARENTESIS_CIERRA shift and go to state 139
-    INT             shift and go to state 142
-    STRING          shift and go to state 143
-    DOUBLE          shift and go to state 144
-    BOOLEAN         shift and go to state 145
-    CHAR            shift and go to state 146
+    PARENTESIS_CIERRA shift and go to state 142
+    INT             shift and go to state 145
+    STRING          shift and go to state 146
+    DOUBLE          shift and go to state 147
+    BOOLEAN         shift and go to state 148
+    CHAR            shift and go to state 149
 
-    parametros                     shift and go to state 140
-    parametro                      shift and go to state 141
+    parametros                     shift and go to state 143
+    parametro                      shift and go to state 144
 
-state 105
+state 107
 
     (17) variables -> var IDENTIFICADOR IGUAL expresion . finInstruccion
     (62) expresion -> expresion . MAS expresion
@@ -3724,20 +3848,20 @@ state 105
     (60) finInstruccion -> . PTCOMA
     (61) finInstruccion -> .
 
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
     PTCOMA          shift and go to state 30
     error           reduce using rule 61 (finInstruccion -> .)
     IDENTIFICADOR   reduce using rule 61 (finInstruccion -> .)
@@ -3756,9 +3880,9 @@ state 105
     DEFAULT         reduce using rule 61 (finInstruccion -> .)
     CASE            reduce using rule 61 (finInstruccion -> .)
 
-    finInstruccion                 shift and go to state 147
+    finInstruccion                 shift and go to state 150
 
-state 106
+state 108
 
     (18) variables -> var IDENTIFICADOR IGUAL NULL . finInstruccion
     (60) finInstruccion -> . PTCOMA
@@ -3782,9 +3906,9 @@ state 106
     DEFAULT         reduce using rule 61 (finInstruccion -> .)
     CASE            reduce using rule 61 (finInstruccion -> .)
 
-    finInstruccion                 shift and go to state 148
+    finInstruccion                 shift and go to state 151
 
-state 107
+state 109
 
     (19) variables -> IDENTIFICADOR IGUAL expresion finInstruccion .
 
@@ -3806,7 +3930,7 @@ state 107
     CASE            reduce using rule 19 (variables -> IDENTIFICADOR IGUAL expresion finInstruccion .)
 
 
-state 108
+state 110
 
     (20) variables -> IDENTIFICADOR IGUAL NULL finInstruccion .
 
@@ -3828,7 +3952,7 @@ state 108
     CASE            reduce using rule 20 (variables -> IDENTIFICADOR IGUAL NULL finInstruccion .)
 
 
-state 109
+state 111
 
     (44) llamada_fvoid -> IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA .
 
@@ -3868,7 +3992,7 @@ state 109
     DOSPUNTOS       reduce using rule 44 (llamada_fvoid -> IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA .)
 
 
-state 110
+state 112
 
     (46) parametros_llamada -> parametros_llamada COMA . parametro_llamada
     (48) parametro_llamada -> . expresion
@@ -3903,6 +4027,7 @@ state 110
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -3920,37 +4045,38 @@ state 110
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    parametro_llamada              shift and go to state 149
-    expresion                      shift and go to state 71
+    parametro_llamada              shift and go to state 152
+    expresion                      shift and go to state 72
     llamada_fvoid                  shift and go to state 55
 
-state 111
+state 113
 
     (24) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA
     (25) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
     (26) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if
 
-    LLAVE_ABRE      shift and go to state 150
+    LLAVE_ABRE      shift and go to state 153
 
 
-state 112
+state 114
 
     (27) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA . LLAVE_ABRE listacases LLAVE_CIERRA
     (28) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA . LLAVE_ABRE listacases default LLAVE_CIERRA
     (29) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA . LLAVE_ABRE default LLAVE_CIERRA
 
-    LLAVE_ABRE      shift and go to state 151
+    LLAVE_ABRE      shift and go to state 154
 
 
-state 113
+state 115
 
     (35) while -> WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA
 
-    LLAVE_ABRE      shift and go to state 152
+    LLAVE_ABRE      shift and go to state 155
 
 
-state 114
+state 116
 
     (36) for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA . expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
     (62) expresion -> . expresion MAS expresion
@@ -3984,6 +4110,7 @@ state 114
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -4001,11 +4128,12 @@ state 114
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 153
+    expresion                      shift and go to state 156
     llamada_fvoid                  shift and go to state 55
 
-state 115
+state 117
 
     (37) for -> FOR PARENTESIS_ABRE declaracionfor2 PTCOMA . expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
     (62) expresion -> . expresion MAS expresion
@@ -4039,6 +4167,7 @@ state 115
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -4056,18 +4185,19 @@ state 115
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 154
+    expresion                      shift and go to state 157
     llamada_fvoid                  shift and go to state 55
 
-state 116
+state 118
 
     (38) declaracionfor1 -> VAR IDENTIFICADOR . IGUAL expresion
 
-    IGUAL           shift and go to state 155
+    IGUAL           shift and go to state 158
 
 
-state 117
+state 119
 
     (39) declaracionfor2 -> IDENTIFICADOR IGUAL . expresion
     (62) expresion -> . expresion MAS expresion
@@ -4101,6 +4231,7 @@ state 117
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -4118,11 +4249,12 @@ state 117
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 156
+    expresion                      shift and go to state 159
     llamada_fvoid                  shift and go to state 55
 
-state 118
+state 120
 
     (58) print -> PRINT PARENTESIS_ABRE expresion PARENTESIS_CIERRA . finInstruccion
     (60) finInstruccion -> . PTCOMA
@@ -4146,9 +4278,9 @@ state 118
     DEFAULT         reduce using rule 61 (finInstruccion -> .)
     CASE            reduce using rule 61 (finInstruccion -> .)
 
-    finInstruccion                 shift and go to state 157
+    finInstruccion                 shift and go to state 160
 
-state 119
+state 121
 
     (62) expresion -> expresion MAS expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4196,28 +4328,28 @@ state 119
     PARENTESIS_CIERRA reduce using rule 62 (expresion -> expresion MAS expresion .)
     COMA            reduce using rule 62 (expresion -> expresion MAS expresion .)
     DOSPUNTOS       reduce using rule 62 (expresion -> expresion MAS expresion .)
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
 
   ! POR             [ reduce using rule 62 (expresion -> expresion MAS expresion .) ]
   ! DIV             [ reduce using rule 62 (expresion -> expresion MAS expresion .) ]
   ! POT             [ reduce using rule 62 (expresion -> expresion MAS expresion .) ]
   ! MODULO          [ reduce using rule 62 (expresion -> expresion MAS expresion .) ]
-  ! MAS             [ shift and go to state 80 ]
-  ! MENOS           [ shift and go to state 81 ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! MAS             [ shift and go to state 81 ]
+  ! MENOS           [ shift and go to state 82 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 120
+state 122
 
     (63) expresion -> expresion MENOS expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4265,28 +4397,28 @@ state 120
     PARENTESIS_CIERRA reduce using rule 63 (expresion -> expresion MENOS expresion .)
     COMA            reduce using rule 63 (expresion -> expresion MENOS expresion .)
     DOSPUNTOS       reduce using rule 63 (expresion -> expresion MENOS expresion .)
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
 
   ! POR             [ reduce using rule 63 (expresion -> expresion MENOS expresion .) ]
   ! DIV             [ reduce using rule 63 (expresion -> expresion MENOS expresion .) ]
   ! POT             [ reduce using rule 63 (expresion -> expresion MENOS expresion .) ]
   ! MODULO          [ reduce using rule 63 (expresion -> expresion MENOS expresion .) ]
-  ! MAS             [ shift and go to state 80 ]
-  ! MENOS           [ shift and go to state 81 ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! MAS             [ shift and go to state 81 ]
+  ! MENOS           [ shift and go to state 82 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 121
+state 123
 
     (64) expresion -> expresion POR expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4337,25 +4469,25 @@ state 121
     PARENTESIS_CIERRA reduce using rule 64 (expresion -> expresion POR expresion .)
     COMA            reduce using rule 64 (expresion -> expresion POR expresion .)
     DOSPUNTOS       reduce using rule 64 (expresion -> expresion POR expresion .)
-    POT             shift and go to state 84
+    POT             shift and go to state 85
 
   ! POT             [ reduce using rule 64 (expresion -> expresion POR expresion .) ]
-  ! MAS             [ shift and go to state 80 ]
-  ! MENOS           [ shift and go to state 81 ]
-  ! POR             [ shift and go to state 82 ]
-  ! DIV             [ shift and go to state 83 ]
-  ! MODULO          [ shift and go to state 85 ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! MAS             [ shift and go to state 81 ]
+  ! MENOS           [ shift and go to state 82 ]
+  ! POR             [ shift and go to state 83 ]
+  ! DIV             [ shift and go to state 84 ]
+  ! MODULO          [ shift and go to state 86 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 122
+state 124
 
     (65) expresion -> expresion DIV expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4406,25 +4538,25 @@ state 122
     PARENTESIS_CIERRA reduce using rule 65 (expresion -> expresion DIV expresion .)
     COMA            reduce using rule 65 (expresion -> expresion DIV expresion .)
     DOSPUNTOS       reduce using rule 65 (expresion -> expresion DIV expresion .)
-    POT             shift and go to state 84
+    POT             shift and go to state 85
 
   ! POT             [ reduce using rule 65 (expresion -> expresion DIV expresion .) ]
-  ! MAS             [ shift and go to state 80 ]
-  ! MENOS           [ shift and go to state 81 ]
-  ! POR             [ shift and go to state 82 ]
-  ! DIV             [ shift and go to state 83 ]
-  ! MODULO          [ shift and go to state 85 ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! MAS             [ shift and go to state 81 ]
+  ! MENOS           [ shift and go to state 82 ]
+  ! POR             [ shift and go to state 83 ]
+  ! DIV             [ shift and go to state 84 ]
+  ! MODULO          [ shift and go to state 86 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 123
+state 125
 
     (66) expresion -> expresion POT expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4477,23 +4609,23 @@ state 123
     COMA            reduce using rule 66 (expresion -> expresion POT expresion .)
     DOSPUNTOS       reduce using rule 66 (expresion -> expresion POT expresion .)
 
-  ! MAS             [ shift and go to state 80 ]
-  ! MENOS           [ shift and go to state 81 ]
-  ! POR             [ shift and go to state 82 ]
-  ! DIV             [ shift and go to state 83 ]
-  ! POT             [ shift and go to state 84 ]
-  ! MODULO          [ shift and go to state 85 ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! MAS             [ shift and go to state 81 ]
+  ! MENOS           [ shift and go to state 82 ]
+  ! POR             [ shift and go to state 83 ]
+  ! DIV             [ shift and go to state 84 ]
+  ! POT             [ shift and go to state 85 ]
+  ! MODULO          [ shift and go to state 86 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 124
+state 126
 
     (67) expresion -> expresion MODULO expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4544,25 +4676,25 @@ state 124
     PARENTESIS_CIERRA reduce using rule 67 (expresion -> expresion MODULO expresion .)
     COMA            reduce using rule 67 (expresion -> expresion MODULO expresion .)
     DOSPUNTOS       reduce using rule 67 (expresion -> expresion MODULO expresion .)
-    POT             shift and go to state 84
+    POT             shift and go to state 85
 
   ! POT             [ reduce using rule 67 (expresion -> expresion MODULO expresion .) ]
-  ! MAS             [ shift and go to state 80 ]
-  ! MENOS           [ shift and go to state 81 ]
-  ! POR             [ shift and go to state 82 ]
-  ! DIV             [ shift and go to state 83 ]
-  ! MODULO          [ shift and go to state 85 ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! MAS             [ shift and go to state 81 ]
+  ! MENOS           [ shift and go to state 82 ]
+  ! POR             [ shift and go to state 83 ]
+  ! DIV             [ shift and go to state 84 ]
+  ! MODULO          [ shift and go to state 86 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 125
+state 127
 
     (68) expresion -> expresion IGUALACION expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4608,12 +4740,12 @@ state 125
     PARENTESIS_CIERRA reduce using rule 68 (expresion -> expresion IGUALACION expresion .)
     COMA            reduce using rule 68 (expresion -> expresion IGUALACION expresion .)
     DOSPUNTOS       reduce using rule 68 (expresion -> expresion IGUALACION expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
 
   ! MAS             [ reduce using rule 68 (expresion -> expresion IGUALACION expresion .) ]
   ! MENOS           [ reduce using rule 68 (expresion -> expresion IGUALACION expresion .) ]
@@ -4621,17 +4753,17 @@ state 125
   ! DIV             [ reduce using rule 68 (expresion -> expresion IGUALACION expresion .) ]
   ! POT             [ reduce using rule 68 (expresion -> expresion IGUALACION expresion .) ]
   ! MODULO          [ reduce using rule 68 (expresion -> expresion IGUALACION expresion .) ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 126
+state 128
 
     (69) expresion -> expresion DIREFENCIACION expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4677,12 +4809,12 @@ state 126
     PARENTESIS_CIERRA reduce using rule 69 (expresion -> expresion DIREFENCIACION expresion .)
     COMA            reduce using rule 69 (expresion -> expresion DIREFENCIACION expresion .)
     DOSPUNTOS       reduce using rule 69 (expresion -> expresion DIREFENCIACION expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
 
   ! MAS             [ reduce using rule 69 (expresion -> expresion DIREFENCIACION expresion .) ]
   ! MENOS           [ reduce using rule 69 (expresion -> expresion DIREFENCIACION expresion .) ]
@@ -4690,17 +4822,17 @@ state 126
   ! DIV             [ reduce using rule 69 (expresion -> expresion DIREFENCIACION expresion .) ]
   ! POT             [ reduce using rule 69 (expresion -> expresion DIREFENCIACION expresion .) ]
   ! MODULO          [ reduce using rule 69 (expresion -> expresion DIREFENCIACION expresion .) ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 127
+state 129
 
     (70) expresion -> expresion MAYORQ expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4746,12 +4878,12 @@ state 127
     PARENTESIS_CIERRA reduce using rule 70 (expresion -> expresion MAYORQ expresion .)
     COMA            reduce using rule 70 (expresion -> expresion MAYORQ expresion .)
     DOSPUNTOS       reduce using rule 70 (expresion -> expresion MAYORQ expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
 
   ! MAS             [ reduce using rule 70 (expresion -> expresion MAYORQ expresion .) ]
   ! MENOS           [ reduce using rule 70 (expresion -> expresion MAYORQ expresion .) ]
@@ -4759,17 +4891,17 @@ state 127
   ! DIV             [ reduce using rule 70 (expresion -> expresion MAYORQ expresion .) ]
   ! POT             [ reduce using rule 70 (expresion -> expresion MAYORQ expresion .) ]
   ! MODULO          [ reduce using rule 70 (expresion -> expresion MAYORQ expresion .) ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 128
+state 130
 
     (71) expresion -> expresion MENORQ expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4815,12 +4947,12 @@ state 128
     PARENTESIS_CIERRA reduce using rule 71 (expresion -> expresion MENORQ expresion .)
     COMA            reduce using rule 71 (expresion -> expresion MENORQ expresion .)
     DOSPUNTOS       reduce using rule 71 (expresion -> expresion MENORQ expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
 
   ! MAS             [ reduce using rule 71 (expresion -> expresion MENORQ expresion .) ]
   ! MENOS           [ reduce using rule 71 (expresion -> expresion MENORQ expresion .) ]
@@ -4828,17 +4960,17 @@ state 128
   ! DIV             [ reduce using rule 71 (expresion -> expresion MENORQ expresion .) ]
   ! POT             [ reduce using rule 71 (expresion -> expresion MENORQ expresion .) ]
   ! MODULO          [ reduce using rule 71 (expresion -> expresion MENORQ expresion .) ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 129
+state 131
 
     (72) expresion -> expresion MAYORIGUAL expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4884,12 +5016,12 @@ state 129
     PARENTESIS_CIERRA reduce using rule 72 (expresion -> expresion MAYORIGUAL expresion .)
     COMA            reduce using rule 72 (expresion -> expresion MAYORIGUAL expresion .)
     DOSPUNTOS       reduce using rule 72 (expresion -> expresion MAYORIGUAL expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
 
   ! MAS             [ reduce using rule 72 (expresion -> expresion MAYORIGUAL expresion .) ]
   ! MENOS           [ reduce using rule 72 (expresion -> expresion MAYORIGUAL expresion .) ]
@@ -4897,17 +5029,17 @@ state 129
   ! DIV             [ reduce using rule 72 (expresion -> expresion MAYORIGUAL expresion .) ]
   ! POT             [ reduce using rule 72 (expresion -> expresion MAYORIGUAL expresion .) ]
   ! MODULO          [ reduce using rule 72 (expresion -> expresion MAYORIGUAL expresion .) ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 130
+state 132
 
     (73) expresion -> expresion MENORIGUAL expresion .
     (62) expresion -> expresion . MAS expresion
@@ -4953,12 +5085,12 @@ state 130
     PARENTESIS_CIERRA reduce using rule 73 (expresion -> expresion MENORIGUAL expresion .)
     COMA            reduce using rule 73 (expresion -> expresion MENORIGUAL expresion .)
     DOSPUNTOS       reduce using rule 73 (expresion -> expresion MENORIGUAL expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
 
   ! MAS             [ reduce using rule 73 (expresion -> expresion MENORIGUAL expresion .) ]
   ! MENOS           [ reduce using rule 73 (expresion -> expresion MENORIGUAL expresion .) ]
@@ -4966,17 +5098,17 @@ state 130
   ! DIV             [ reduce using rule 73 (expresion -> expresion MENORIGUAL expresion .) ]
   ! POT             [ reduce using rule 73 (expresion -> expresion MENORIGUAL expresion .) ]
   ! MODULO          [ reduce using rule 73 (expresion -> expresion MENORIGUAL expresion .) ]
-  ! IGUALACION      [ shift and go to state 86 ]
-  ! DIREFENCIACION  [ shift and go to state 87 ]
-  ! MAYORQ          [ shift and go to state 88 ]
-  ! MENORQ          [ shift and go to state 89 ]
-  ! MAYORIGUAL      [ shift and go to state 90 ]
-  ! MENORIGUAL      [ shift and go to state 91 ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! IGUALACION      [ shift and go to state 87 ]
+  ! DIREFENCIACION  [ shift and go to state 88 ]
+  ! MAYORQ          [ shift and go to state 89 ]
+  ! MENORQ          [ shift and go to state 90 ]
+  ! MAYORIGUAL      [ shift and go to state 91 ]
+  ! MENORIGUAL      [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 131
+state 133
 
     (74) expresion -> expresion OR expresion .
     (62) expresion -> expresion . MAS expresion
@@ -5015,19 +5147,19 @@ state 131
     PARENTESIS_CIERRA reduce using rule 74 (expresion -> expresion OR expresion .)
     COMA            reduce using rule 74 (expresion -> expresion OR expresion .)
     DOSPUNTOS       reduce using rule 74 (expresion -> expresion OR expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    AND             shift and go to state 93
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    AND             shift and go to state 94
 
   ! MAS             [ reduce using rule 74 (expresion -> expresion OR expresion .) ]
   ! MENOS           [ reduce using rule 74 (expresion -> expresion OR expresion .) ]
@@ -5042,10 +5174,10 @@ state 131
   ! MAYORIGUAL      [ reduce using rule 74 (expresion -> expresion OR expresion .) ]
   ! MENORIGUAL      [ reduce using rule 74 (expresion -> expresion OR expresion .) ]
   ! AND             [ reduce using rule 74 (expresion -> expresion OR expresion .) ]
-  ! OR              [ shift and go to state 92 ]
+  ! OR              [ shift and go to state 93 ]
 
 
-state 132
+state 134
 
     (75) expresion -> expresion AND expresion .
     (62) expresion -> expresion . MAS expresion
@@ -5085,18 +5217,18 @@ state 132
     PARENTESIS_CIERRA reduce using rule 75 (expresion -> expresion AND expresion .)
     COMA            reduce using rule 75 (expresion -> expresion AND expresion .)
     DOSPUNTOS       reduce using rule 75 (expresion -> expresion AND expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
 
   ! MAS             [ reduce using rule 75 (expresion -> expresion AND expresion .) ]
   ! MENOS           [ reduce using rule 75 (expresion -> expresion AND expresion .) ]
@@ -5110,11 +5242,11 @@ state 132
   ! MENORQ          [ reduce using rule 75 (expresion -> expresion AND expresion .) ]
   ! MAYORIGUAL      [ reduce using rule 75 (expresion -> expresion AND expresion .) ]
   ! MENORIGUAL      [ reduce using rule 75 (expresion -> expresion AND expresion .) ]
-  ! OR              [ shift and go to state 92 ]
-  ! AND             [ shift and go to state 93 ]
+  ! OR              [ shift and go to state 93 ]
+  ! AND             [ shift and go to state 94 ]
 
 
-state 133
+state 135
 
     (80) expresion -> PARENTESIS_ABRE expresion PARENTESIS_CIERRA .
 
@@ -5154,7 +5286,7 @@ state 133
     DOSPUNTOS       reduce using rule 80 (expresion -> PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
 
 
-state 134
+state 136
 
     (89) expresion -> TOUPPER PARENTESIS_ABRE expresion . PARENTESIS_CIERRA
     (62) expresion -> expresion . MAS expresion
@@ -5172,24 +5304,24 @@ state 134
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PARENTESIS_CIERRA shift and go to state 158
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    PARENTESIS_CIERRA shift and go to state 161
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 135
+state 137
 
     (90) expresion -> TOLOWER PARENTESIS_ABRE expresion . PARENTESIS_CIERRA
     (62) expresion -> expresion . MAS expresion
@@ -5207,24 +5339,24 @@ state 135
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PARENTESIS_CIERRA shift and go to state 159
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    PARENTESIS_CIERRA shift and go to state 162
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 136
+state 138
 
     (91) expresion -> TRUNCATE PARENTESIS_ABRE expresion . PARENTESIS_CIERRA
     (62) expresion -> expresion . MAS expresion
@@ -5242,24 +5374,24 @@ state 136
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PARENTESIS_CIERRA shift and go to state 160
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    PARENTESIS_CIERRA shift and go to state 163
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 137
+state 139
 
     (92) expresion -> ROUND PARENTESIS_ABRE expresion . PARENTESIS_CIERRA
     (62) expresion -> expresion . MAS expresion
@@ -5277,24 +5409,59 @@ state 137
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PARENTESIS_CIERRA shift and go to state 161
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    PARENTESIS_CIERRA shift and go to state 164
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 138
+state 140
+
+    (93) expresion -> TYPEOF PARENTESIS_ABRE expresion . PARENTESIS_CIERRA
+    (62) expresion -> expresion . MAS expresion
+    (63) expresion -> expresion . MENOS expresion
+    (64) expresion -> expresion . POR expresion
+    (65) expresion -> expresion . DIV expresion
+    (66) expresion -> expresion . POT expresion
+    (67) expresion -> expresion . MODULO expresion
+    (68) expresion -> expresion . IGUALACION expresion
+    (69) expresion -> expresion . DIREFENCIACION expresion
+    (70) expresion -> expresion . MAYORQ expresion
+    (71) expresion -> expresion . MENORQ expresion
+    (72) expresion -> expresion . MAYORIGUAL expresion
+    (73) expresion -> expresion . MENORIGUAL expresion
+    (74) expresion -> expresion . OR expresion
+    (75) expresion -> expresion . AND expresion
+
+    PARENTESIS_CIERRA shift and go to state 165
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
+
+
+state 141
 
     (34) main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE . instrucciones LLAVE_CIERRA
     (2) instrucciones -> . instrucciones instruccion
@@ -5350,7 +5517,7 @@ state 138
     FUNC            shift and go to state 26
     VAR             shift and go to state 27
 
-    instrucciones                  shift and go to state 162
+    instrucciones                  shift and go to state 166
     instruccion                    shift and go to state 3
     variables                      shift and go to state 4
     if                             shift and go to state 5
@@ -5365,23 +5532,23 @@ state 138
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 139
+state 142
 
     (49) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA
 
-    LLAVE_ABRE      shift and go to state 163
+    LLAVE_ABRE      shift and go to state 167
 
 
-state 140
+state 143
 
     (50) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros . PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
     (51) parametros -> parametros . COMA parametro
 
-    PARENTESIS_CIERRA shift and go to state 164
-    COMA            shift and go to state 165
+    PARENTESIS_CIERRA shift and go to state 168
+    COMA            shift and go to state 169
 
 
-state 141
+state 144
 
     (52) parametros -> parametro .
 
@@ -5389,42 +5556,42 @@ state 141
     COMA            reduce using rule 52 (parametros -> parametro .)
 
 
-state 142
-
-    (53) parametro -> INT . IDENTIFICADOR
-
-    IDENTIFICADOR   shift and go to state 166
-
-
-state 143
-
-    (54) parametro -> STRING . IDENTIFICADOR
-
-    IDENTIFICADOR   shift and go to state 167
-
-
-state 144
-
-    (55) parametro -> DOUBLE . IDENTIFICADOR
-
-    IDENTIFICADOR   shift and go to state 168
-
-
 state 145
 
-    (56) parametro -> BOOLEAN . IDENTIFICADOR
-
-    IDENTIFICADOR   shift and go to state 169
-
-
-state 146
-
-    (57) parametro -> CHAR . IDENTIFICADOR
+    (53) parametro -> INT . IDENTIFICADOR
 
     IDENTIFICADOR   shift and go to state 170
 
 
+state 146
+
+    (54) parametro -> STRING . IDENTIFICADOR
+
+    IDENTIFICADOR   shift and go to state 171
+
+
 state 147
+
+    (55) parametro -> DOUBLE . IDENTIFICADOR
+
+    IDENTIFICADOR   shift and go to state 172
+
+
+state 148
+
+    (56) parametro -> BOOLEAN . IDENTIFICADOR
+
+    IDENTIFICADOR   shift and go to state 173
+
+
+state 149
+
+    (57) parametro -> CHAR . IDENTIFICADOR
+
+    IDENTIFICADOR   shift and go to state 174
+
+
+state 150
 
     (17) variables -> var IDENTIFICADOR IGUAL expresion finInstruccion .
 
@@ -5446,7 +5613,7 @@ state 147
     CASE            reduce using rule 17 (variables -> var IDENTIFICADOR IGUAL expresion finInstruccion .)
 
 
-state 148
+state 151
 
     (18) variables -> var IDENTIFICADOR IGUAL NULL finInstruccion .
 
@@ -5468,7 +5635,7 @@ state 148
     CASE            reduce using rule 18 (variables -> var IDENTIFICADOR IGUAL NULL finInstruccion .)
 
 
-state 149
+state 152
 
     (46) parametros_llamada -> parametros_llamada COMA parametro_llamada .
 
@@ -5476,7 +5643,7 @@ state 149
     COMA            reduce using rule 46 (parametros_llamada -> parametros_llamada COMA parametro_llamada .)
 
 
-state 150
+state 153
 
     (24) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE . instrucciones LLAVE_CIERRA
     (25) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE . instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
@@ -5534,7 +5701,7 @@ state 150
     FUNC            shift and go to state 26
     VAR             shift and go to state 27
 
-    instrucciones                  shift and go to state 171
+    instrucciones                  shift and go to state 175
     if                             shift and go to state 5
     instruccion                    shift and go to state 3
     variables                      shift and go to state 4
@@ -5549,7 +5716,7 @@ state 150
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 151
+state 154
 
     (27) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE . listacases LLAVE_CIERRA
     (28) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE . listacases default LLAVE_CIERRA
@@ -5559,14 +5726,14 @@ state 151
     (33) default -> . DEFAULT DOSPUNTOS instrucciones
     (32) case -> . CASE expresion DOSPUNTOS instrucciones
 
-    DEFAULT         shift and go to state 175
-    CASE            shift and go to state 176
+    DEFAULT         shift and go to state 179
+    CASE            shift and go to state 180
 
-    listacases                     shift and go to state 172
-    default                        shift and go to state 173
-    case                           shift and go to state 174
+    listacases                     shift and go to state 176
+    default                        shift and go to state 177
+    case                           shift and go to state 178
 
-state 152
+state 155
 
     (35) while -> WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE . instrucciones LLAVE_CIERRA
     (2) instrucciones -> . instrucciones instruccion
@@ -5622,7 +5789,7 @@ state 152
     FUNC            shift and go to state 26
     VAR             shift and go to state 27
 
-    instrucciones                  shift and go to state 177
+    instrucciones                  shift and go to state 181
     instruccion                    shift and go to state 3
     variables                      shift and go to state 4
     if                             shift and go to state 5
@@ -5637,7 +5804,7 @@ state 152
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 153
+state 156
 
     (36) for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion . PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
     (62) expresion -> expresion . MAS expresion
@@ -5655,24 +5822,24 @@ state 153
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PTCOMA          shift and go to state 178
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    PTCOMA          shift and go to state 182
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 154
+state 157
 
     (37) for -> FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion . PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
     (62) expresion -> expresion . MAS expresion
@@ -5690,24 +5857,24 @@ state 154
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    PTCOMA          shift and go to state 179
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    PTCOMA          shift and go to state 183
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 155
+state 158
 
     (38) declaracionfor1 -> VAR IDENTIFICADOR IGUAL . expresion
     (62) expresion -> . expresion MAS expresion
@@ -5741,6 +5908,7 @@ state 155
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -5758,11 +5926,12 @@ state 155
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 180
+    expresion                      shift and go to state 184
     llamada_fvoid                  shift and go to state 55
 
-state 156
+state 159
 
     (39) declaracionfor2 -> IDENTIFICADOR IGUAL expresion .
     (62) expresion -> expresion . MAS expresion
@@ -5781,23 +5950,23 @@ state 156
     (75) expresion -> expresion . AND expresion
 
     PTCOMA          reduce using rule 39 (declaracionfor2 -> IDENTIFICADOR IGUAL expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 157
+state 160
 
     (58) print -> PRINT PARENTESIS_ABRE expresion PARENTESIS_CIERRA finInstruccion .
 
@@ -5819,7 +5988,7 @@ state 157
     CASE            reduce using rule 58 (print -> PRINT PARENTESIS_ABRE expresion PARENTESIS_CIERRA finInstruccion .)
 
 
-state 158
+state 161
 
     (89) expresion -> TOUPPER PARENTESIS_ABRE expresion PARENTESIS_CIERRA .
 
@@ -5859,7 +6028,7 @@ state 158
     DOSPUNTOS       reduce using rule 89 (expresion -> TOUPPER PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
 
 
-state 159
+state 162
 
     (90) expresion -> TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA .
 
@@ -5899,7 +6068,7 @@ state 159
     DOSPUNTOS       reduce using rule 90 (expresion -> TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
 
 
-state 160
+state 163
 
     (91) expresion -> TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA .
 
@@ -5939,7 +6108,7 @@ state 160
     DOSPUNTOS       reduce using rule 91 (expresion -> TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
 
 
-state 161
+state 164
 
     (92) expresion -> ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA .
 
@@ -5979,7 +6148,47 @@ state 161
     DOSPUNTOS       reduce using rule 92 (expresion -> ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
 
 
-state 162
+state 165
+
+    (93) expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .
+
+    MAS             reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    MENOS           reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    POR             reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    DIV             reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    POT             reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    MODULO          reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    IGUALACION      reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    DIREFENCIACION  reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    MAYORQ          reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    MENORQ          reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    MAYORIGUAL      reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    MENORIGUAL      reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    OR              reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    AND             reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    PTCOMA          reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    error           reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    IDENTIFICADOR   reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    IF              reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    SWITCH          reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    WHILE           reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    FOR             reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    PRINT           reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    BREAK           reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    RETURN          reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    MAIN            reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    FUNC            reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    VAR             reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    $end            reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    LLAVE_CIERRA    reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    DEFAULT         reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    CASE            reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    PARENTESIS_CIERRA reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    COMA            reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+    DOSPUNTOS       reduce using rule 93 (expresion -> TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA .)
+
+
+state 166
 
     (34) main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones . LLAVE_CIERRA
     (2) instrucciones -> instrucciones . instruccion
@@ -6021,7 +6230,7 @@ state 162
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
     (21) var -> . VAR
 
-    LLAVE_CIERRA    shift and go to state 181
+    LLAVE_CIERRA    shift and go to state 185
     error           shift and go to state 15
     IDENTIFICADOR   shift and go to state 17
     IF              shift and go to state 18
@@ -6049,7 +6258,7 @@ state 162
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 163
+state 167
 
     (49) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE . instrucciones LLAVE_CIERRA
     (2) instrucciones -> . instrucciones instruccion
@@ -6105,7 +6314,7 @@ state 163
     FUNC            shift and go to state 26
     VAR             shift and go to state 27
 
-    instrucciones                  shift and go to state 182
+    instrucciones                  shift and go to state 186
     instruccion                    shift and go to state 3
     variables                      shift and go to state 4
     if                             shift and go to state 5
@@ -6120,14 +6329,14 @@ state 163
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 164
+state 168
 
     (50) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA
 
-    LLAVE_ABRE      shift and go to state 183
+    LLAVE_ABRE      shift and go to state 187
 
 
-state 165
+state 169
 
     (51) parametros -> parametros COMA . parametro
     (53) parametro -> . INT IDENTIFICADOR
@@ -6136,15 +6345,15 @@ state 165
     (56) parametro -> . BOOLEAN IDENTIFICADOR
     (57) parametro -> . CHAR IDENTIFICADOR
 
-    INT             shift and go to state 142
-    STRING          shift and go to state 143
-    DOUBLE          shift and go to state 144
-    BOOLEAN         shift and go to state 145
-    CHAR            shift and go to state 146
+    INT             shift and go to state 145
+    STRING          shift and go to state 146
+    DOUBLE          shift and go to state 147
+    BOOLEAN         shift and go to state 148
+    CHAR            shift and go to state 149
 
-    parametro                      shift and go to state 184
+    parametro                      shift and go to state 188
 
-state 166
+state 170
 
     (53) parametro -> INT IDENTIFICADOR .
 
@@ -6152,7 +6361,7 @@ state 166
     COMA            reduce using rule 53 (parametro -> INT IDENTIFICADOR .)
 
 
-state 167
+state 171
 
     (54) parametro -> STRING IDENTIFICADOR .
 
@@ -6160,7 +6369,7 @@ state 167
     COMA            reduce using rule 54 (parametro -> STRING IDENTIFICADOR .)
 
 
-state 168
+state 172
 
     (55) parametro -> DOUBLE IDENTIFICADOR .
 
@@ -6168,7 +6377,7 @@ state 168
     COMA            reduce using rule 55 (parametro -> DOUBLE IDENTIFICADOR .)
 
 
-state 169
+state 173
 
     (56) parametro -> BOOLEAN IDENTIFICADOR .
 
@@ -6176,7 +6385,7 @@ state 169
     COMA            reduce using rule 56 (parametro -> BOOLEAN IDENTIFICADOR .)
 
 
-state 170
+state 174
 
     (57) parametro -> CHAR IDENTIFICADOR .
 
@@ -6184,7 +6393,7 @@ state 170
     COMA            reduce using rule 57 (parametro -> CHAR IDENTIFICADOR .)
 
 
-state 171
+state 175
 
     (24) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones . LLAVE_CIERRA
     (25) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones . LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
@@ -6228,7 +6437,7 @@ state 171
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
     (21) var -> . VAR
 
-    LLAVE_CIERRA    shift and go to state 185
+    LLAVE_CIERRA    shift and go to state 189
     error           shift and go to state 15
     IDENTIFICADOR   shift and go to state 17
     IF              shift and go to state 18
@@ -6256,7 +6465,7 @@ state 171
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 172
+state 176
 
     (27) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases . LLAVE_CIERRA
     (28) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases . default LLAVE_CIERRA
@@ -6264,21 +6473,21 @@ state 172
     (33) default -> . DEFAULT DOSPUNTOS instrucciones
     (32) case -> . CASE expresion DOSPUNTOS instrucciones
 
-    LLAVE_CIERRA    shift and go to state 186
-    DEFAULT         shift and go to state 175
-    CASE            shift and go to state 176
+    LLAVE_CIERRA    shift and go to state 190
+    DEFAULT         shift and go to state 179
+    CASE            shift and go to state 180
 
-    default                        shift and go to state 187
-    case                           shift and go to state 188
+    default                        shift and go to state 191
+    case                           shift and go to state 192
 
-state 173
+state 177
 
     (29) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE default . LLAVE_CIERRA
 
-    LLAVE_CIERRA    shift and go to state 189
+    LLAVE_CIERRA    shift and go to state 193
 
 
-state 174
+state 178
 
     (31) listacases -> case .
 
@@ -6287,14 +6496,14 @@ state 174
     CASE            reduce using rule 31 (listacases -> case .)
 
 
-state 175
+state 179
 
     (33) default -> DEFAULT . DOSPUNTOS instrucciones
 
-    DOSPUNTOS       shift and go to state 190
+    DOSPUNTOS       shift and go to state 194
 
 
-state 176
+state 180
 
     (32) case -> CASE . expresion DOSPUNTOS instrucciones
     (62) expresion -> . expresion MAS expresion
@@ -6328,6 +6537,7 @@ state 176
     (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
     (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
 
@@ -6345,162 +6555,14 @@ state 176
     TOLOWER         shift and go to state 57
     TRUNCATE        shift and go to state 58
     ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
 
-    expresion                      shift and go to state 191
+    expresion                      shift and go to state 195
     llamada_fvoid                  shift and go to state 55
-
-state 177
-
-    (35) while -> WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones . LLAVE_CIERRA
-    (2) instrucciones -> instrucciones . instruccion
-    (4) instruccion -> . variables
-    (5) instruccion -> . if
-    (6) instruccion -> . switch
-    (7) instruccion -> . while
-    (8) instruccion -> . for
-    (9) instruccion -> . print
-    (10) instruccion -> . break
-    (11) instruccion -> . returnn finInstruccion
-    (12) instruccion -> . main
-    (13) instruccion -> . funcion_void
-    (14) instruccion -> . llamada_fvoid finInstruccion
-    (15) instruccion -> . error PTCOMA
-    (16) variables -> . var IDENTIFICADOR finInstruccion
-    (17) variables -> . var IDENTIFICADOR IGUAL expresion finInstruccion
-    (18) variables -> . var IDENTIFICADOR IGUAL NULL finInstruccion
-    (19) variables -> . IDENTIFICADOR IGUAL expresion finInstruccion
-    (20) variables -> . IDENTIFICADOR IGUAL NULL finInstruccion
-    (22) variables -> . IDENTIFICADOR INCREMENTO finInstruccion
-    (23) variables -> . IDENTIFICADOR DECREMENTO finInstruccion
-    (24) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (25) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (26) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if
-    (27) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases LLAVE_CIERRA
-    (28) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases default LLAVE_CIERRA
-    (29) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE default LLAVE_CIERRA
-    (35) while -> . WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (36) for -> . FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (37) for -> . FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (58) print -> . PRINT PARENTESIS_ABRE expresion PARENTESIS_CIERRA finInstruccion
-    (59) break -> . BREAK finInstruccion
-    (45) returnn -> . RETURN expresion
-    (34) main -> . MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (49) funcion_void -> . FUNC IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (50) funcion_void -> . FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
-    (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
-    (21) var -> . VAR
-
-    LLAVE_CIERRA    shift and go to state 192
-    error           shift and go to state 15
-    IDENTIFICADOR   shift and go to state 17
-    IF              shift and go to state 18
-    SWITCH          shift and go to state 19
-    WHILE           shift and go to state 20
-    FOR             shift and go to state 21
-    PRINT           shift and go to state 22
-    BREAK           shift and go to state 23
-    RETURN          shift and go to state 24
-    MAIN            shift and go to state 25
-    FUNC            shift and go to state 26
-    VAR             shift and go to state 27
-
-    instruccion                    shift and go to state 28
-    variables                      shift and go to state 4
-    if                             shift and go to state 5
-    switch                         shift and go to state 6
-    while                          shift and go to state 7
-    for                            shift and go to state 8
-    print                          shift and go to state 9
-    break                          shift and go to state 10
-    returnn                        shift and go to state 11
-    main                           shift and go to state 12
-    funcion_void                   shift and go to state 13
-    llamada_fvoid                  shift and go to state 14
-    var                            shift and go to state 16
-
-state 178
-
-    (36) for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA . actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (40) actualizacion -> . IDENTIFICADOR INCREMENTO
-    (41) actualizacion -> . IDENTIFICADOR DECREMENTO
-    (42) actualizacion -> . IDENTIFICADOR IGUAL expresion
-
-    IDENTIFICADOR   shift and go to state 194
-
-    actualizacion                  shift and go to state 193
-
-state 179
-
-    (37) for -> FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA . actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (40) actualizacion -> . IDENTIFICADOR INCREMENTO
-    (41) actualizacion -> . IDENTIFICADOR DECREMENTO
-    (42) actualizacion -> . IDENTIFICADOR IGUAL expresion
-
-    IDENTIFICADOR   shift and go to state 194
-
-    actualizacion                  shift and go to state 195
-
-state 180
-
-    (38) declaracionfor1 -> VAR IDENTIFICADOR IGUAL expresion .
-    (62) expresion -> expresion . MAS expresion
-    (63) expresion -> expresion . MENOS expresion
-    (64) expresion -> expresion . POR expresion
-    (65) expresion -> expresion . DIV expresion
-    (66) expresion -> expresion . POT expresion
-    (67) expresion -> expresion . MODULO expresion
-    (68) expresion -> expresion . IGUALACION expresion
-    (69) expresion -> expresion . DIREFENCIACION expresion
-    (70) expresion -> expresion . MAYORQ expresion
-    (71) expresion -> expresion . MENORQ expresion
-    (72) expresion -> expresion . MAYORIGUAL expresion
-    (73) expresion -> expresion . MENORIGUAL expresion
-    (74) expresion -> expresion . OR expresion
-    (75) expresion -> expresion . AND expresion
-
-    PTCOMA          reduce using rule 38 (declaracionfor1 -> VAR IDENTIFICADOR IGUAL expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
-
 
 state 181
 
-    (34) main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .
-
-    error           reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    IDENTIFICADOR   reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    IF              reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    SWITCH          reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    WHILE           reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    FOR             reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    PRINT           reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    BREAK           reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    RETURN          reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    MAIN            reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    FUNC            reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    VAR             reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    $end            reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    LLAVE_CIERRA    reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    DEFAULT         reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    CASE            reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-
-
-state 182
-
-    (49) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones . LLAVE_CIERRA
+    (35) while -> WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones . LLAVE_CIERRA
     (2) instrucciones -> instrucciones . instruccion
     (4) instruccion -> . variables
     (5) instruccion -> . if
@@ -6568,7 +6630,156 @@ state 182
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
+state 182
+
+    (36) for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA . actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (40) actualizacion -> . IDENTIFICADOR INCREMENTO
+    (41) actualizacion -> . IDENTIFICADOR DECREMENTO
+    (42) actualizacion -> . IDENTIFICADOR IGUAL expresion
+
+    IDENTIFICADOR   shift and go to state 198
+
+    actualizacion                  shift and go to state 197
+
 state 183
+
+    (37) for -> FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA . actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (40) actualizacion -> . IDENTIFICADOR INCREMENTO
+    (41) actualizacion -> . IDENTIFICADOR DECREMENTO
+    (42) actualizacion -> . IDENTIFICADOR IGUAL expresion
+
+    IDENTIFICADOR   shift and go to state 198
+
+    actualizacion                  shift and go to state 199
+
+state 184
+
+    (38) declaracionfor1 -> VAR IDENTIFICADOR IGUAL expresion .
+    (62) expresion -> expresion . MAS expresion
+    (63) expresion -> expresion . MENOS expresion
+    (64) expresion -> expresion . POR expresion
+    (65) expresion -> expresion . DIV expresion
+    (66) expresion -> expresion . POT expresion
+    (67) expresion -> expresion . MODULO expresion
+    (68) expresion -> expresion . IGUALACION expresion
+    (69) expresion -> expresion . DIREFENCIACION expresion
+    (70) expresion -> expresion . MAYORQ expresion
+    (71) expresion -> expresion . MENORQ expresion
+    (72) expresion -> expresion . MAYORIGUAL expresion
+    (73) expresion -> expresion . MENORIGUAL expresion
+    (74) expresion -> expresion . OR expresion
+    (75) expresion -> expresion . AND expresion
+
+    PTCOMA          reduce using rule 38 (declaracionfor1 -> VAR IDENTIFICADOR IGUAL expresion .)
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
+
+
+state 185
+
+    (34) main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .
+
+    error           reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    IDENTIFICADOR   reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    IF              reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    SWITCH          reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    WHILE           reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    FOR             reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    PRINT           reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    BREAK           reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    RETURN          reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    MAIN            reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    FUNC            reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    VAR             reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    $end            reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    LLAVE_CIERRA    reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    DEFAULT         reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    CASE            reduce using rule 34 (main -> MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+
+
+state 186
+
+    (49) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones . LLAVE_CIERRA
+    (2) instrucciones -> instrucciones . instruccion
+    (4) instruccion -> . variables
+    (5) instruccion -> . if
+    (6) instruccion -> . switch
+    (7) instruccion -> . while
+    (8) instruccion -> . for
+    (9) instruccion -> . print
+    (10) instruccion -> . break
+    (11) instruccion -> . returnn finInstruccion
+    (12) instruccion -> . main
+    (13) instruccion -> . funcion_void
+    (14) instruccion -> . llamada_fvoid finInstruccion
+    (15) instruccion -> . error PTCOMA
+    (16) variables -> . var IDENTIFICADOR finInstruccion
+    (17) variables -> . var IDENTIFICADOR IGUAL expresion finInstruccion
+    (18) variables -> . var IDENTIFICADOR IGUAL NULL finInstruccion
+    (19) variables -> . IDENTIFICADOR IGUAL expresion finInstruccion
+    (20) variables -> . IDENTIFICADOR IGUAL NULL finInstruccion
+    (22) variables -> . IDENTIFICADOR INCREMENTO finInstruccion
+    (23) variables -> . IDENTIFICADOR DECREMENTO finInstruccion
+    (24) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (25) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (26) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if
+    (27) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases LLAVE_CIERRA
+    (28) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases default LLAVE_CIERRA
+    (29) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE default LLAVE_CIERRA
+    (35) while -> . WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (36) for -> . FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (37) for -> . FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (58) print -> . PRINT PARENTESIS_ABRE expresion PARENTESIS_CIERRA finInstruccion
+    (59) break -> . BREAK finInstruccion
+    (45) returnn -> . RETURN expresion
+    (34) main -> . MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (49) funcion_void -> . FUNC IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (50) funcion_void -> . FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
+    (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
+    (21) var -> . VAR
+
+    LLAVE_CIERRA    shift and go to state 200
+    error           shift and go to state 15
+    IDENTIFICADOR   shift and go to state 17
+    IF              shift and go to state 18
+    SWITCH          shift and go to state 19
+    WHILE           shift and go to state 20
+    FOR             shift and go to state 21
+    PRINT           shift and go to state 22
+    BREAK           shift and go to state 23
+    RETURN          shift and go to state 24
+    MAIN            shift and go to state 25
+    FUNC            shift and go to state 26
+    VAR             shift and go to state 27
+
+    instruccion                    shift and go to state 28
+    variables                      shift and go to state 4
+    if                             shift and go to state 5
+    switch                         shift and go to state 6
+    while                          shift and go to state 7
+    for                            shift and go to state 8
+    print                          shift and go to state 9
+    break                          shift and go to state 10
+    returnn                        shift and go to state 11
+    main                           shift and go to state 12
+    funcion_void                   shift and go to state 13
+    llamada_fvoid                  shift and go to state 14
+    var                            shift and go to state 16
+
+state 187
 
     (50) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE . instrucciones LLAVE_CIERRA
     (2) instrucciones -> . instrucciones instruccion
@@ -6624,7 +6835,7 @@ state 183
     FUNC            shift and go to state 26
     VAR             shift and go to state 27
 
-    instrucciones                  shift and go to state 197
+    instrucciones                  shift and go to state 201
     instruccion                    shift and go to state 3
     variables                      shift and go to state 4
     if                             shift and go to state 5
@@ -6639,7 +6850,7 @@ state 183
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 184
+state 188
 
     (51) parametros -> parametros COMA parametro .
 
@@ -6647,7 +6858,7 @@ state 184
     COMA            reduce using rule 51 (parametros -> parametros COMA parametro .)
 
 
-state 185
+state 189
 
     (24) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .
     (25) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA . ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
@@ -6669,10 +6880,10 @@ state 185
     LLAVE_CIERRA    reduce using rule 24 (if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
     DEFAULT         reduce using rule 24 (if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
     CASE            reduce using rule 24 (if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    ELSE            shift and go to state 198
+    ELSE            shift and go to state 202
 
 
-state 186
+state 190
 
     (27) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases LLAVE_CIERRA .
 
@@ -6694,14 +6905,14 @@ state 186
     CASE            reduce using rule 27 (switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases LLAVE_CIERRA .)
 
 
-state 187
+state 191
 
     (28) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases default . LLAVE_CIERRA
 
-    LLAVE_CIERRA    shift and go to state 199
+    LLAVE_CIERRA    shift and go to state 203
 
 
-state 188
+state 192
 
     (30) listacases -> listacases case .
 
@@ -6710,7 +6921,7 @@ state 188
     CASE            reduce using rule 30 (listacases -> listacases case .)
 
 
-state 189
+state 193
 
     (29) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE default LLAVE_CIERRA .
 
@@ -6732,7 +6943,7 @@ state 189
     CASE            reduce using rule 29 (switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE default LLAVE_CIERRA .)
 
 
-state 190
+state 194
 
     (33) default -> DEFAULT DOSPUNTOS . instrucciones
     (2) instrucciones -> . instrucciones instruccion
@@ -6788,7 +6999,7 @@ state 190
     FUNC            shift and go to state 26
     VAR             shift and go to state 27
 
-    instrucciones                  shift and go to state 200
+    instrucciones                  shift and go to state 204
     instruccion                    shift and go to state 3
     variables                      shift and go to state 4
     if                             shift and go to state 5
@@ -6803,7 +7014,7 @@ state 190
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 191
+state 195
 
     (32) case -> CASE expresion . DOSPUNTOS instrucciones
     (62) expresion -> expresion . MAS expresion
@@ -6821,24 +7032,24 @@ state 191
     (74) expresion -> expresion . OR expresion
     (75) expresion -> expresion . AND expresion
 
-    DOSPUNTOS       shift and go to state 201
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    DOSPUNTOS       shift and go to state 205
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 192
+state 196
 
     (35) while -> WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .
 
@@ -6860,32 +7071,32 @@ state 192
     CASE            reduce using rule 35 (while -> WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
 
 
-state 193
+state 197
 
     (36) for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion . PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
 
-    PARENTESIS_CIERRA shift and go to state 202
+    PARENTESIS_CIERRA shift and go to state 206
 
 
-state 194
+state 198
 
     (40) actualizacion -> IDENTIFICADOR . INCREMENTO
     (41) actualizacion -> IDENTIFICADOR . DECREMENTO
     (42) actualizacion -> IDENTIFICADOR . IGUAL expresion
 
-    INCREMENTO      shift and go to state 203
-    DECREMENTO      shift and go to state 204
-    IGUAL           shift and go to state 205
+    INCREMENTO      shift and go to state 207
+    DECREMENTO      shift and go to state 208
+    IGUAL           shift and go to state 209
 
 
-state 195
+state 199
 
     (37) for -> FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion . PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
 
-    PARENTESIS_CIERRA shift and go to state 206
+    PARENTESIS_CIERRA shift and go to state 210
 
 
-state 196
+state 200
 
     (49) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .
 
@@ -6907,7 +7118,7 @@ state 196
     CASE            reduce using rule 49 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
 
 
-state 197
+state 201
 
     (50) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones . LLAVE_CIERRA
     (2) instrucciones -> instrucciones . instruccion
@@ -6949,7 +7160,7 @@ state 197
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
     (21) var -> . VAR
 
-    LLAVE_CIERRA    shift and go to state 207
+    LLAVE_CIERRA    shift and go to state 211
     error           shift and go to state 15
     IDENTIFICADOR   shift and go to state 17
     IF              shift and go to state 18
@@ -6977,7 +7188,7 @@ state 197
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 198
+state 202
 
     (25) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE . LLAVE_ABRE instrucciones LLAVE_CIERRA
     (26) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE . if
@@ -6985,12 +7196,12 @@ state 198
     (25) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
     (26) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if
 
-    LLAVE_ABRE      shift and go to state 208
+    LLAVE_ABRE      shift and go to state 212
     IF              shift and go to state 18
 
-    if                             shift and go to state 209
+    if                             shift and go to state 213
 
-state 199
+state 203
 
     (28) switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases default LLAVE_CIERRA .
 
@@ -7012,7 +7223,7 @@ state 199
     CASE            reduce using rule 28 (switch -> SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases default LLAVE_CIERRA .)
 
 
-state 200
+state 204
 
     (33) default -> DEFAULT DOSPUNTOS instrucciones .
     (2) instrucciones -> instrucciones . instruccion
@@ -7082,185 +7293,9 @@ state 200
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 201
-
-    (32) case -> CASE expresion DOSPUNTOS . instrucciones
-    (2) instrucciones -> . instrucciones instruccion
-    (3) instrucciones -> . instruccion
-    (4) instruccion -> . variables
-    (5) instruccion -> . if
-    (6) instruccion -> . switch
-    (7) instruccion -> . while
-    (8) instruccion -> . for
-    (9) instruccion -> . print
-    (10) instruccion -> . break
-    (11) instruccion -> . returnn finInstruccion
-    (12) instruccion -> . main
-    (13) instruccion -> . funcion_void
-    (14) instruccion -> . llamada_fvoid finInstruccion
-    (15) instruccion -> . error PTCOMA
-    (16) variables -> . var IDENTIFICADOR finInstruccion
-    (17) variables -> . var IDENTIFICADOR IGUAL expresion finInstruccion
-    (18) variables -> . var IDENTIFICADOR IGUAL NULL finInstruccion
-    (19) variables -> . IDENTIFICADOR IGUAL expresion finInstruccion
-    (20) variables -> . IDENTIFICADOR IGUAL NULL finInstruccion
-    (22) variables -> . IDENTIFICADOR INCREMENTO finInstruccion
-    (23) variables -> . IDENTIFICADOR DECREMENTO finInstruccion
-    (24) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (25) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (26) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if
-    (27) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases LLAVE_CIERRA
-    (28) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases default LLAVE_CIERRA
-    (29) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE default LLAVE_CIERRA
-    (35) while -> . WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (36) for -> . FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (37) for -> . FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (58) print -> . PRINT PARENTESIS_ABRE expresion PARENTESIS_CIERRA finInstruccion
-    (59) break -> . BREAK finInstruccion
-    (45) returnn -> . RETURN expresion
-    (34) main -> . MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (49) funcion_void -> . FUNC IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (50) funcion_void -> . FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
-    (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
-    (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
-    (21) var -> . VAR
-
-    error           shift and go to state 15
-    IDENTIFICADOR   shift and go to state 17
-    IF              shift and go to state 18
-    SWITCH          shift and go to state 19
-    WHILE           shift and go to state 20
-    FOR             shift and go to state 21
-    PRINT           shift and go to state 22
-    BREAK           shift and go to state 23
-    RETURN          shift and go to state 24
-    MAIN            shift and go to state 25
-    FUNC            shift and go to state 26
-    VAR             shift and go to state 27
-
-    instrucciones                  shift and go to state 210
-    instruccion                    shift and go to state 3
-    variables                      shift and go to state 4
-    if                             shift and go to state 5
-    switch                         shift and go to state 6
-    while                          shift and go to state 7
-    for                            shift and go to state 8
-    print                          shift and go to state 9
-    break                          shift and go to state 10
-    returnn                        shift and go to state 11
-    main                           shift and go to state 12
-    funcion_void                   shift and go to state 13
-    llamada_fvoid                  shift and go to state 14
-    var                            shift and go to state 16
-
-state 202
-
-    (36) for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA
-
-    LLAVE_ABRE      shift and go to state 211
-
-
-state 203
-
-    (40) actualizacion -> IDENTIFICADOR INCREMENTO .
-
-    PARENTESIS_CIERRA reduce using rule 40 (actualizacion -> IDENTIFICADOR INCREMENTO .)
-
-
-state 204
-
-    (41) actualizacion -> IDENTIFICADOR DECREMENTO .
-
-    PARENTESIS_CIERRA reduce using rule 41 (actualizacion -> IDENTIFICADOR DECREMENTO .)
-
-
 state 205
 
-    (42) actualizacion -> IDENTIFICADOR IGUAL . expresion
-    (62) expresion -> . expresion MAS expresion
-    (63) expresion -> . expresion MENOS expresion
-    (64) expresion -> . expresion POR expresion
-    (65) expresion -> . expresion DIV expresion
-    (66) expresion -> . expresion POT expresion
-    (67) expresion -> . expresion MODULO expresion
-    (68) expresion -> . expresion IGUALACION expresion
-    (69) expresion -> . expresion DIREFENCIACION expresion
-    (70) expresion -> . expresion MAYORQ expresion
-    (71) expresion -> . expresion MENORQ expresion
-    (72) expresion -> . expresion MAYORIGUAL expresion
-    (73) expresion -> . expresion MENORIGUAL expresion
-    (74) expresion -> . expresion OR expresion
-    (75) expresion -> . expresion AND expresion
-    (76) expresion -> . MENOS expresion
-    (77) expresion -> . NOT expresion
-    (78) expresion -> . IDENTIFICADOR INCREMENTO
-    (79) expresion -> . IDENTIFICADOR DECREMENTO
-    (80) expresion -> . PARENTESIS_ABRE expresion PARENTESIS_CIERRA
-    (81) expresion -> . ENTERO
-    (82) expresion -> . DECIMAL
-    (83) expresion -> . TRUE
-    (84) expresion -> . FALSE
-    (85) expresion -> . IDENTIFICADOR
-    (86) expresion -> . CADENA
-    (87) expresion -> . CHART
-    (88) expresion -> . llamada_fvoid
-    (89) expresion -> . TOUPPER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
-    (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
-    (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
-    (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
-    (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
-    (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
-
-    MENOS           shift and go to state 45
-    NOT             shift and go to state 46
-    IDENTIFICADOR   shift and go to state 47
-    PARENTESIS_ABRE shift and go to state 48
-    ENTERO          shift and go to state 49
-    DECIMAL         shift and go to state 50
-    TRUE            shift and go to state 51
-    FALSE           shift and go to state 52
-    CADENA          shift and go to state 53
-    CHART           shift and go to state 54
-    TOUPPER         shift and go to state 56
-    TOLOWER         shift and go to state 57
-    TRUNCATE        shift and go to state 58
-    ROUND           shift and go to state 59
-
-    expresion                      shift and go to state 212
-    llamada_fvoid                  shift and go to state 55
-
-state 206
-
-    (37) for -> FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA
-
-    LLAVE_ABRE      shift and go to state 213
-
-
-state 207
-
-    (50) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .
-
-    error           reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    IDENTIFICADOR   reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    IF              reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    SWITCH          reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    WHILE           reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    FOR             reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    PRINT           reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    BREAK           reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    RETURN          reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    MAIN            reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    FUNC            reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    VAR             reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    $end            reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    LLAVE_CIERRA    reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    DEFAULT         reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-    CASE            reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
-
-
-state 208
-
-    (25) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE . instrucciones LLAVE_CIERRA
+    (32) case -> CASE expresion DOSPUNTOS . instrucciones
     (2) instrucciones -> . instrucciones instruccion
     (3) instrucciones -> . instruccion
     (4) instruccion -> . variables
@@ -7329,7 +7364,185 @@ state 208
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
+state 206
+
+    (36) for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA
+
+    LLAVE_ABRE      shift and go to state 215
+
+
+state 207
+
+    (40) actualizacion -> IDENTIFICADOR INCREMENTO .
+
+    PARENTESIS_CIERRA reduce using rule 40 (actualizacion -> IDENTIFICADOR INCREMENTO .)
+
+
+state 208
+
+    (41) actualizacion -> IDENTIFICADOR DECREMENTO .
+
+    PARENTESIS_CIERRA reduce using rule 41 (actualizacion -> IDENTIFICADOR DECREMENTO .)
+
+
 state 209
+
+    (42) actualizacion -> IDENTIFICADOR IGUAL . expresion
+    (62) expresion -> . expresion MAS expresion
+    (63) expresion -> . expresion MENOS expresion
+    (64) expresion -> . expresion POR expresion
+    (65) expresion -> . expresion DIV expresion
+    (66) expresion -> . expresion POT expresion
+    (67) expresion -> . expresion MODULO expresion
+    (68) expresion -> . expresion IGUALACION expresion
+    (69) expresion -> . expresion DIREFENCIACION expresion
+    (70) expresion -> . expresion MAYORQ expresion
+    (71) expresion -> . expresion MENORQ expresion
+    (72) expresion -> . expresion MAYORIGUAL expresion
+    (73) expresion -> . expresion MENORIGUAL expresion
+    (74) expresion -> . expresion OR expresion
+    (75) expresion -> . expresion AND expresion
+    (76) expresion -> . MENOS expresion
+    (77) expresion -> . NOT expresion
+    (78) expresion -> . IDENTIFICADOR INCREMENTO
+    (79) expresion -> . IDENTIFICADOR DECREMENTO
+    (80) expresion -> . PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (81) expresion -> . ENTERO
+    (82) expresion -> . DECIMAL
+    (83) expresion -> . TRUE
+    (84) expresion -> . FALSE
+    (85) expresion -> . IDENTIFICADOR
+    (86) expresion -> . CADENA
+    (87) expresion -> . CHART
+    (88) expresion -> . llamada_fvoid
+    (89) expresion -> . TOUPPER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (90) expresion -> . TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (91) expresion -> . TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (92) expresion -> . ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (93) expresion -> . TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA
+    (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
+    (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
+
+    MENOS           shift and go to state 45
+    NOT             shift and go to state 46
+    IDENTIFICADOR   shift and go to state 47
+    PARENTESIS_ABRE shift and go to state 48
+    ENTERO          shift and go to state 49
+    DECIMAL         shift and go to state 50
+    TRUE            shift and go to state 51
+    FALSE           shift and go to state 52
+    CADENA          shift and go to state 53
+    CHART           shift and go to state 54
+    TOUPPER         shift and go to state 56
+    TOLOWER         shift and go to state 57
+    TRUNCATE        shift and go to state 58
+    ROUND           shift and go to state 59
+    TYPEOF          shift and go to state 60
+
+    expresion                      shift and go to state 216
+    llamada_fvoid                  shift and go to state 55
+
+state 210
+
+    (37) for -> FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA . LLAVE_ABRE instrucciones LLAVE_CIERRA
+
+    LLAVE_ABRE      shift and go to state 217
+
+
+state 211
+
+    (50) funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .
+
+    error           reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    IDENTIFICADOR   reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    IF              reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    SWITCH          reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    WHILE           reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    FOR             reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    PRINT           reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    BREAK           reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    RETURN          reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    MAIN            reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    FUNC            reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    VAR             reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    $end            reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    LLAVE_CIERRA    reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    DEFAULT         reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+    CASE            reduce using rule 50 (funcion_void -> FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
+
+
+state 212
+
+    (25) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE . instrucciones LLAVE_CIERRA
+    (2) instrucciones -> . instrucciones instruccion
+    (3) instrucciones -> . instruccion
+    (4) instruccion -> . variables
+    (5) instruccion -> . if
+    (6) instruccion -> . switch
+    (7) instruccion -> . while
+    (8) instruccion -> . for
+    (9) instruccion -> . print
+    (10) instruccion -> . break
+    (11) instruccion -> . returnn finInstruccion
+    (12) instruccion -> . main
+    (13) instruccion -> . funcion_void
+    (14) instruccion -> . llamada_fvoid finInstruccion
+    (15) instruccion -> . error PTCOMA
+    (16) variables -> . var IDENTIFICADOR finInstruccion
+    (17) variables -> . var IDENTIFICADOR IGUAL expresion finInstruccion
+    (18) variables -> . var IDENTIFICADOR IGUAL NULL finInstruccion
+    (19) variables -> . IDENTIFICADOR IGUAL expresion finInstruccion
+    (20) variables -> . IDENTIFICADOR IGUAL NULL finInstruccion
+    (22) variables -> . IDENTIFICADOR INCREMENTO finInstruccion
+    (23) variables -> . IDENTIFICADOR DECREMENTO finInstruccion
+    (24) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (25) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (26) if -> . IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if
+    (27) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases LLAVE_CIERRA
+    (28) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE listacases default LLAVE_CIERRA
+    (29) switch -> . SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE default LLAVE_CIERRA
+    (35) while -> . WHILE PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (36) for -> . FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (37) for -> . FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (58) print -> . PRINT PARENTESIS_ABRE expresion PARENTESIS_CIERRA finInstruccion
+    (59) break -> . BREAK finInstruccion
+    (45) returnn -> . RETURN expresion
+    (34) main -> . MAIN PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (49) funcion_void -> . FUNC IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (50) funcion_void -> . FUNC IDENTIFICADOR PARENTESIS_ABRE parametros PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA
+    (43) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE PARENTESIS_CIERRA
+    (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
+    (21) var -> . VAR
+
+    error           shift and go to state 15
+    IDENTIFICADOR   shift and go to state 17
+    IF              shift and go to state 18
+    SWITCH          shift and go to state 19
+    WHILE           shift and go to state 20
+    FOR             shift and go to state 21
+    PRINT           shift and go to state 22
+    BREAK           shift and go to state 23
+    RETURN          shift and go to state 24
+    MAIN            shift and go to state 25
+    FUNC            shift and go to state 26
+    VAR             shift and go to state 27
+
+    instrucciones                  shift and go to state 218
+    instruccion                    shift and go to state 3
+    variables                      shift and go to state 4
+    if                             shift and go to state 5
+    switch                         shift and go to state 6
+    while                          shift and go to state 7
+    for                            shift and go to state 8
+    print                          shift and go to state 9
+    break                          shift and go to state 10
+    returnn                        shift and go to state 11
+    main                           shift and go to state 12
+    funcion_void                   shift and go to state 13
+    llamada_fvoid                  shift and go to state 14
+    var                            shift and go to state 16
+
+state 213
 
     (26) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if .
 
@@ -7351,7 +7564,7 @@ state 209
     CASE            reduce using rule 26 (if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE if .)
 
 
-state 210
+state 214
 
     (32) case -> CASE expresion DOSPUNTOS instrucciones .
     (2) instrucciones -> instrucciones . instruccion
@@ -7423,7 +7636,7 @@ state 210
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 211
+state 215
 
     (36) for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE . instrucciones LLAVE_CIERRA
     (2) instrucciones -> . instrucciones instruccion
@@ -7479,7 +7692,7 @@ state 211
     FUNC            shift and go to state 26
     VAR             shift and go to state 27
 
-    instrucciones                  shift and go to state 215
+    instrucciones                  shift and go to state 219
     instruccion                    shift and go to state 3
     variables                      shift and go to state 4
     if                             shift and go to state 5
@@ -7494,7 +7707,7 @@ state 211
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 212
+state 216
 
     (42) actualizacion -> IDENTIFICADOR IGUAL expresion .
     (62) expresion -> expresion . MAS expresion
@@ -7513,23 +7726,23 @@ state 212
     (75) expresion -> expresion . AND expresion
 
     PARENTESIS_CIERRA reduce using rule 42 (actualizacion -> IDENTIFICADOR IGUAL expresion .)
-    MAS             shift and go to state 80
-    MENOS           shift and go to state 81
-    POR             shift and go to state 82
-    DIV             shift and go to state 83
-    POT             shift and go to state 84
-    MODULO          shift and go to state 85
-    IGUALACION      shift and go to state 86
-    DIREFENCIACION  shift and go to state 87
-    MAYORQ          shift and go to state 88
-    MENORQ          shift and go to state 89
-    MAYORIGUAL      shift and go to state 90
-    MENORIGUAL      shift and go to state 91
-    OR              shift and go to state 92
-    AND             shift and go to state 93
+    MAS             shift and go to state 81
+    MENOS           shift and go to state 82
+    POR             shift and go to state 83
+    DIV             shift and go to state 84
+    POT             shift and go to state 85
+    MODULO          shift and go to state 86
+    IGUALACION      shift and go to state 87
+    DIREFENCIACION  shift and go to state 88
+    MAYORQ          shift and go to state 89
+    MENORQ          shift and go to state 90
+    MAYORIGUAL      shift and go to state 91
+    MENORIGUAL      shift and go to state 92
+    OR              shift and go to state 93
+    AND             shift and go to state 94
 
 
-state 213
+state 217
 
     (37) for -> FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE . instrucciones LLAVE_CIERRA
     (2) instrucciones -> . instrucciones instruccion
@@ -7585,7 +7798,7 @@ state 213
     FUNC            shift and go to state 26
     VAR             shift and go to state 27
 
-    instrucciones                  shift and go to state 216
+    instrucciones                  shift and go to state 220
     instruccion                    shift and go to state 3
     variables                      shift and go to state 4
     if                             shift and go to state 5
@@ -7600,7 +7813,7 @@ state 213
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 214
+state 218
 
     (25) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones . LLAVE_CIERRA
     (2) instrucciones -> instrucciones . instruccion
@@ -7642,7 +7855,7 @@ state 214
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
     (21) var -> . VAR
 
-    LLAVE_CIERRA    shift and go to state 217
+    LLAVE_CIERRA    shift and go to state 221
     error           shift and go to state 15
     IDENTIFICADOR   shift and go to state 17
     IF              shift and go to state 18
@@ -7670,7 +7883,7 @@ state 214
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 215
+state 219
 
     (36) for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones . LLAVE_CIERRA
     (2) instrucciones -> instrucciones . instruccion
@@ -7712,7 +7925,7 @@ state 215
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
     (21) var -> . VAR
 
-    LLAVE_CIERRA    shift and go to state 218
+    LLAVE_CIERRA    shift and go to state 222
     error           shift and go to state 15
     IDENTIFICADOR   shift and go to state 17
     IF              shift and go to state 18
@@ -7740,7 +7953,7 @@ state 215
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 216
+state 220
 
     (37) for -> FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones . LLAVE_CIERRA
     (2) instrucciones -> instrucciones . instruccion
@@ -7782,7 +7995,7 @@ state 216
     (44) llamada_fvoid -> . IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA
     (21) var -> . VAR
 
-    LLAVE_CIERRA    shift and go to state 219
+    LLAVE_CIERRA    shift and go to state 223
     error           shift and go to state 15
     IDENTIFICADOR   shift and go to state 17
     IF              shift and go to state 18
@@ -7810,7 +8023,7 @@ state 216
     llamada_fvoid                  shift and go to state 14
     var                            shift and go to state 16
 
-state 217
+state 221
 
     (25) if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA .
 
@@ -7832,7 +8045,7 @@ state 217
     CASE            reduce using rule 25 (if -> IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA ELSE LLAVE_ABRE instrucciones LLAVE_CIERRA .)
 
 
-state 218
+state 222
 
     (36) for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .
 
@@ -7854,7 +8067,7 @@ state 218
     CASE            reduce using rule 36 (for -> FOR PARENTESIS_ABRE declaracionfor1 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .)
 
 
-state 219
+state 223
 
     (37) for -> FOR PARENTESIS_ABRE declaracionfor2 PTCOMA expresion PTCOMA actualizacion PARENTESIS_CIERRA LLAVE_ABRE instrucciones LLAVE_CIERRA .
 

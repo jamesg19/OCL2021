@@ -22,7 +22,9 @@ class Declaracion(Instruccion):
             #SI LA EXPRESION CONTIENE UNA OPERACION var variableP = 10+20+var1
             #determina el valor de variableP y determina el tipo de dato(integer, string, boolean, char o decimal)
             if self.tipo == None:
-                if isinstance(value,str):#CADENA
+                if isinstance(value,chr):#CHAR
+                    self.tipo=TIPO.CHARACTER
+                elif isinstance(value,chr):#CADENA:
                     self.tipo=TIPO.CADENA
                 elif isinstance(value,int):#INTEGER
                     self.tipo=TIPO.ENTERO
@@ -30,8 +32,8 @@ class Declaracion(Instruccion):
                     self.tipo=TIPO.DECIMAL
                 elif isinstance(value,bool):#BOOLEANO
                     self.tipo=TIPO.BOOLEANO
-                else:
-                    self.tipo=TIPO.CHARACTER
+                
+
             
             if isinstance(value, Excepcion): return value
 
@@ -51,6 +53,7 @@ class Declaracion(Instruccion):
             #SI LA EXPRESION CONTIENE UNA OPERACION var variableP = 10+20+var1
             #determina el valor de variableP y determina el tipo de dato(integer, string, boolean, char o decimal)
             if self.tipo == None:
+
                 if isinstance(value,str):#CADENA
                     self.tipo=TIPO.CADENA
                 elif isinstance(value,int):#INTEGER
@@ -61,7 +64,7 @@ class Declaracion(Instruccion):
                     self.tipo=TIPO.BOOLEANO
                 else:
                     self.tipo=TIPO.CHARACTER
-            
+
             if isinstance(value, Excepcion): return value
 
             #if self.tipo != self.expresion.tipo:

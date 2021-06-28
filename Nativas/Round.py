@@ -13,7 +13,7 @@ class Round(Instruccion):
     
     def interpretar(self, tree, table):
         value = self.expresion.interpretar(tree, table) 
-
+        if isinstance(value, Excepcion): return value
         if self.tipo == None:
                 if isinstance(value,float):#DECIMAL
                     self.tipo=TIPO.ENTERO
@@ -23,7 +23,7 @@ class Round(Instruccion):
                 else:
                    return Excepcion("Semantico", "Tipo de parametro de Round no es numerico.", self.fila, self.columna) 
             
-        if isinstance(value, Excepcion): return value
+        
         #retorna el valor redondeado segun los decimales ingresados
         return round(value)
     

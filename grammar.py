@@ -40,6 +40,7 @@ reservadas = {
     'toupper'       : 'TOUPPER',
     'truncate'      : 'TRUNCATE',
     'round'         : 'ROUND',
+    'typeof'        : 'TYPEOF',
     'func'          : 'FUNC',
 
 }
@@ -195,7 +196,7 @@ def t_CADENA(t):
     return t
 
 def t_CHART(t):
-    r'(\'([(-Za-zÀ-ÖØ-öø-ÿ#-&]|([\\][nN]|[\\][tT]|[\\][rR]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))*\')'
+    r'(\'([(-Za-zÀ-ÖØ-öø-ÿ#-&]|([\\][nN]|[\\][tT]|[\\][rR]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))\')'
     #r'(\'([(-Za-z#-&]|([\\n]|[\\t]|[\\r]|[\\][\\]|[\\][\']|[\\][\"]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))\')'
     t.value = t.value[1:-1] # remuevo las comillas
     return t
@@ -271,6 +272,7 @@ from Nativas.Truncate import Truncate
 from Nativas.ToLower import ToLower
 from Nativas.ToUpper import ToUpper
 from Nativas.Round import Round
+from Nativas.Typeof import Typeof
 from Instrucciones.Return import Return
 
 
@@ -623,6 +625,10 @@ def p_truncate(t):
 def p_round(t):
     ''' expresion : ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
     t[0] = Round(t[3], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_typeof(t):
+    ''' expresion : TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
+    t[0] = Typeof(t[3], t.lineno(1), find_column(input, t.slice[1]))
 
 '''
 import ply.yacc as yacc
