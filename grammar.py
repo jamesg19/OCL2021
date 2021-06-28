@@ -6,6 +6,7 @@ CARNÉ: 201731172
 USAC
 '''
 
+
 import re
 from TS.Excepcion import Excepcion
 #TABLA ASCII 
@@ -38,6 +39,7 @@ reservadas = {
     'tolower'       : 'TOLOWER',
     'toupper'       : 'TOUPPER',
     'truncate'      : 'TRUNCATE',
+    'round'         : 'ROUND',
     'func'          : 'FUNC',
 
 }
@@ -268,6 +270,7 @@ from Instrucciones.Llamada import Llamada
 from Nativas.Truncate import Truncate
 from Nativas.ToLower import ToLower
 from Nativas.ToUpper import ToUpper
+from Nativas.Round import Round
 from Instrucciones.Return import Return
 
 
@@ -616,6 +619,10 @@ def p_tolower(t):
 def p_truncate(t):
     ''' expresion : TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
     t[0] = Truncate(t[3], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_round(t):
+    ''' expresion : ROUND PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
+    t[0] = Round(t[3], t.lineno(1), find_column(input, t.slice[1]))
 
 '''
 import ply.yacc as yacc

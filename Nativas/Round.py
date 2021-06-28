@@ -1,9 +1,10 @@
 from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
 from TS.Tipo import TIPO
+import math
 
 
-class ToLower(Instruccion):
+class Round(Instruccion):
     def __init__(self, expresion, fila, columna):
         self.expresion = expresion
         self.fila = fila
@@ -14,11 +15,15 @@ class ToLower(Instruccion):
         value = self.expresion.interpretar(tree, table) 
 
         if self.tipo == None:
-                if isinstance(value,str):#CADENA
-                    self.tipo=TIPO.CADENA
+                if isinstance(value,float):#DECIMAL
+                    self.tipo=TIPO.ENTERO
+                elif isinstance(value,int):#ENTERO
+                    self.tipo=TIPO.ENTERO
                     
                 else:
-                   return Excepcion("Semantico", "Tipo de parametro de ToLower no es cadena.", self.fila, self.columna) 
+                   return Excepcion("Semantico", "Tipo de parametro de Round no es numerico.", self.fila, self.columna) 
             
         if isinstance(value, Excepcion): return value
-        return value.lower()
+        #retorna el valor redondeado segun los decimales ingresados
+        return round(value)
+    
