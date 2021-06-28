@@ -5,6 +5,8 @@ ALUMNO ESTRELLA: JAMES OSMIN GRAMAJO CARCAMO
 CARNÉ: 201731172
 USAC
 '''
+from Nativas.ToLower import ToLower
+from Nativas.ToUpper import ToUpper
 from Instrucciones.Return import Return
 import re
 from TS.Excepcion import Excepcion
@@ -310,7 +312,6 @@ def p_declara(t):
     ''' variables : var IDENTIFICADOR  IGUAL expresion  finInstruccion ''' 
     t[0] = Declaracion(TIPO.ENTERO, t[2], t.lineno(2), find_column(input, t.slice[2]), t[4])
     
-
 def p_asginacionnula1(t):
     ''' variables : var IDENTIFICADOR  IGUAL NULL  finInstruccion '''
     t[0] = DeclaracionNULA(TIPO.NULO, t[2], t.lineno(2), find_column(input, t.slice[2]))
@@ -600,6 +601,14 @@ def p_chart(t):
 def p_expresion_llamadaa(t):
     '''expresion : llamada_fvoid '''
     t[0] = t[1]
+
+def p_toupper(t):
+    ''' expresion : TOUPPER PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
+    t[0] = ToUpper(t[3], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_tolower(t):
+    ''' expresion : TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
+    t[0] = ToLower(t[3], t.lineno(1), find_column(input, t.slice[1]))
 
 '''
 import ply.yacc as yacc

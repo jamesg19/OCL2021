@@ -6,6 +6,8 @@ from Instrucciones.AsignacionNULA import AsignacionNULA
 from Instrucciones.DeclaracionNULA import DeclaracionNULA
 from Instrucciones.Funcion import Funcion
 from Instrucciones.Llamada import Llamada
+from Nativas.ToLower import ToLower
+from Nativas.ToUpper import ToUpper
 import os
 import re
 from TS.Excepcion import Excepcion
@@ -205,6 +207,8 @@ def ejecutar():
         ast = Arbol(instrucciones)
         TSGlobal = TablaSimbolos()
         ast.setTSglobal(TSGlobal)
+        #grammar.crearNativas(ast)
+
         for error in grammar.errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICOS
             ast.getExcepciones().append(error)
             ast.updateConsolaError(error.toString())
