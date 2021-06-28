@@ -5,9 +5,7 @@ ALUMNO ESTRELLA: JAMES OSMIN GRAMAJO CARCAMO
 CARNÉ: 201731172
 USAC
 '''
-from Nativas.ToLower import ToLower
-from Nativas.ToUpper import ToUpper
-from Instrucciones.Return import Return
+
 import re
 from TS.Excepcion import Excepcion
 #TABLA ASCII 
@@ -39,6 +37,7 @@ reservadas = {
     'read'          : 'READ',
     'tolower'       : 'TOLOWER',
     'toupper'       : 'TOUPPER',
+    'truncate'      : 'TRUNCATE',
     'func'          : 'FUNC',
 
 }
@@ -266,6 +265,10 @@ from Expresiones.Incremento import Incremento
 from Expresiones.Decremento import Decremento
 from Instrucciones.Funcion import Funcion
 from Instrucciones.Llamada import Llamada
+from Nativas.Truncate import Truncate
+from Nativas.ToLower import ToLower
+from Nativas.ToUpper import ToUpper
+from Instrucciones.Return import Return
 
 
 def p_inicio(t):
@@ -609,6 +612,10 @@ def p_toupper(t):
 def p_tolower(t):
     ''' expresion : TOLOWER PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
     t[0] = ToLower(t[3], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_truncate(t):
+    ''' expresion : TRUNCATE PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
+    t[0] = Truncate(t[3], t.lineno(1), find_column(input, t.slice[1]))
 
 '''
 import ply.yacc as yacc

@@ -201,7 +201,7 @@ def ejecutar():
     from TS.TablaSimbolos import TablaSimbolos
     import grammar
     try:
-        contador = 0
+        contador = 0 
         instrucciones = grammar.parse(entrada.lower()) #ARBOL AST
         #instrucciones = grammar.parse(entrada) #ARBOL AST
         ast = Arbol(instrucciones)
