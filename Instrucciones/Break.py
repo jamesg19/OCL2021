@@ -1,5 +1,7 @@
+from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
+from Abstract.NodoAST import NodoAST
 from TS.Tipo import TIPO
 from TS.TablaSimbolos import TablaSimbolos
 
@@ -11,3 +13,7 @@ class Break(Instruccion):
 
     def interpretar(self, tree, table):
         return self
+
+    def getNodo(self):
+        nodo = NodoAST("BREAK")
+        return nodo 

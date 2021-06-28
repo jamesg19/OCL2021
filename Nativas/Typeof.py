@@ -1,3 +1,4 @@
+from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
 from TS.Tipo import TIPO
@@ -30,6 +31,12 @@ class Typeof(Instruccion):
                 else :#CHAR:
                     self.tipo=TIPO.CHARACTER
                     return "TIPO: CHAR"
+
+    def getNodo(self):
+        nodo = NodoAST("Typeof")
+        #nodo.agregarHijo(str(self.identificador))
+        nodo.agregarHijoNodo(self.expresion.getNodo())
+        return nodo
                     
                     
             

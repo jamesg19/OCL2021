@@ -1,6 +1,7 @@
 
 from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
+from Abstract.NodoAST import NodoAST
 from TS.Simbolo import Simbolo
 from TS.Tipo import *
 
@@ -24,3 +25,8 @@ class Decremento(Instruccion):
             return simbolo.valor
         else:                    
             return Excepcion("Semantico",("Ne necesita dato numerico"+str(self.id)),self.fila,self.columna)
+
+    def getNodo(self):
+        nodo = NodoAST("DECREMENTO --")
+        nodo.agregarHijo(str(self.id))
+        return nodo

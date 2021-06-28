@@ -4,6 +4,7 @@ from TS.Tipo              import TIPO
 from TS.Tipo              import OperadorRelacional
 from TS.TablaSimbolos     import TablaSimbolos
 from Expresiones.Relacional     import Relacional
+from Abstract.NodoAST import NodoAST
 
 class Switch(Instruccion):
     def __init__(self, expresion, lst_case,default, fila, columna):
@@ -49,6 +50,21 @@ class Switch(Instruccion):
             if not(result): # si result  == true --> el caso evaluado trae break
                 if self.default != None:
                     self.default.interpretar(tree,table)
+
+
+    def getNodo(self):
+        nodo = NodoAST("SWITCH")
+
+        lst_cases = NodoAST("LISTA_CASE")
+        for instr in self.lst_case:
+            lst_cases.agregarHijoNodo(instr.getNodo())
+        nodo.agregarHijoNodo(lst_cases)
+        
+        if self.default != None:
+            default = NodoAST("INSTRUCCIONES DEFAULT")
+            default.agregarHijoNodo(instr.getNodo())
+            nodo.agregarHijoNodo(default) 
+        return nodo
 
 
 

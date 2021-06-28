@@ -1,5 +1,6 @@
 from Abstract.Instruccion import Instruccion
 from Instrucciones.Break import Break
+from Abstract.NodoAST       import NodoAST
 from TS.Excepcion         import Excepcion
 from TS.Tipo              import TIPO
 from TS.TablaSimbolos     import TablaSimbolos
@@ -18,3 +19,12 @@ class Default(Instruccion):
                 tree.getExcepciones().append(result)
                 tree.updateConsolaError(result.toString())
             if isinstance(result, Break): return True
+
+    def getNodo(self):
+        nodo = NodoAST("DEFAULT")
+
+        instrucciones = NodoAST("INSTRUCCIONES")
+        for instr in self.instrucciones:
+            instrucciones.agregarHijoNodo(instr.getNodo())
+        nodo.agregarHijoNodo(instrucciones)
+        return nodo

@@ -1,5 +1,6 @@
 from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
+from Abstract.NodoAST import NodoAST
 from TS.Simbolo import Simbolo
 from TS.Tipo import *
 
@@ -25,3 +26,8 @@ class Incremento(Instruccion):
             return simbolo.valor
         else:                    
             return Excepcion("Semantico",(" EL INCREMENTO DEBE SER VAR ENTERO O DECIMAL "+str(self.id)),self.fila,self.columna)
+
+    def getNodo(self):
+        nodo = NodoAST("INCREMENTO ++")
+        nodo.agregarHijo(str(self.id))
+        return nodo

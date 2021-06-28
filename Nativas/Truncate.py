@@ -1,3 +1,4 @@
+from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
 from TS.Tipo import TIPO
@@ -26,4 +27,10 @@ class Truncate(Instruccion):
             
         if isinstance(value, Excepcion): return value
         return math.trunc(value)
+    
+    def getNodo(self):
+        nodo = NodoAST("Truncate")
+        #nodo.agregarHijo(str(self.identificador))
+        nodo.agregarHijoNodo(self.expresion.getNodo())
+        return nodo
     

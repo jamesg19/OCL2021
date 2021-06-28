@@ -1,4 +1,5 @@
 from TS.Excepcion import Excepcion
+from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
 from TS.Simbolo import Simbolo
 from TS.Tipo import OperadorAritmetico, OperadorLogico, TIPO, OperadorRelacional
@@ -22,4 +23,11 @@ class DeclaracionNULA(Instruccion):
 
         if isinstance(result, Excepcion): return result
         return None
+
+    def getNodo(self):
+        nodo = NodoAST("DECLARACION NULA")
+        nodo.agregarHijo(str(self.tipo))
+        nodo.agregarHijo(str(self.identificador))
+        #nodo.agregarHijoNodo(self.expresion.getNodo())
+        return nodo
 

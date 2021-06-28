@@ -1,3 +1,4 @@
+from Abstract.NodoAST import NodoAST
 from TS.Excepcion import Excepcion
 from Abstract.Instruccion import Instruccion
 
@@ -15,9 +16,15 @@ class Identificador(Instruccion):
             self.tipo = simbolo.getTipo()
             return simbolo.getValor()
 
+
         except:
             return Excepcion("Semantico", "Variable (" + self.identificador + ") no encontrada.", self.fila, self.columna)
 
+
+    def getNodo(self):
+        nodo = NodoAST("IDENTIFICADOR")
+        nodo.agregarHijo(str(self.identificador))
+        return nodo
         #if simbolo == None:
             #return Excepcion("Semantico", "Variable " + self.identificador + " no encontrada.", self.fila, self.columna)
 

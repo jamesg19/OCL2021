@@ -1,4 +1,5 @@
 from Instrucciones.Return import Return
+from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
 from TS.Tipo import TIPO
@@ -53,4 +54,14 @@ class For(Instruccion):
             #ACTUALIZA LA VARIABLE
             actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
             if isinstance(actualiza, Excepcion): return actualiza
+
+
+    def getNodo(self):
+        nodo = NodoAST("FOR")
+
+        instrucciones = NodoAST("INSTRUCCIONES")
+        for instr in self.instrucciones:
+            instrucciones.agregarHijoNodo(instr.getNodo())
+        nodo.agregarHijoNodo(instrucciones)
+        return nodo
         

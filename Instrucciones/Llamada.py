@@ -4,6 +4,7 @@ from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
 from TS.TablaSimbolos import TablaSimbolos
 from Instrucciones.Break import Break
+from Abstract.NodoAST import NodoAST
 
 
 class Llamada(Instruccion):
@@ -44,3 +45,12 @@ class Llamada(Instruccion):
         self.tipo = result.tipo
         
         return value
+
+    def getNodo(self):
+        nodo = NodoAST("LLAMADA A FUNCION")
+        nodo.agregarHijo(str(self.nombre))
+        parametros = NodoAST("PARAMETROS")
+        for param in self.parametros:
+            parametros.agregarHijoNodo(param.getNodo())
+        nodo.agregarHijoNodo(parametros)
+        return nodo

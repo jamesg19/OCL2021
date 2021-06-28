@@ -1,3 +1,4 @@
+from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
 from TS.Tipo import TIPO
@@ -23,3 +24,9 @@ class ToLower(Instruccion):
             
         if isinstance(value, Excepcion): return value
         return value.lower()
+
+    def getNodo(self):
+        nodo = NodoAST("ToLower")
+        #nodo.agregarHijo(str(self.identificador))
+        nodo.agregarHijoNodo(self.expresion.getNodo())
+        return nodo

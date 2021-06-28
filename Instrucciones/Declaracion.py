@@ -1,4 +1,5 @@
 from TS.Excepcion import Excepcion
+from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
 from TS.Simbolo import Simbolo
 from TS.Tipo import OperadorAritmetico, OperadorLogico, TIPO, OperadorRelacional
@@ -15,6 +16,7 @@ class Declaracion(Instruccion):
     def interpretar(self, tree, table):
         try:
             #LE ASIGNO EL TIPO DE VARIABLE SEGUN LOS VALORES DE LA EXPRESION IGUALADA
+            #self.tipo=self.expresion.tipo
             self.tipo=self.expresion.tipo
 
             value = self.expresion.interpretar(tree, table) # Valor a asignar a la variable
@@ -22,9 +24,8 @@ class Declaracion(Instruccion):
             #SI LA EXPRESION CONTIENE UNA OPERACION var variableP = 10+20+var1
             #determina el valor de variableP y determina el tipo de dato(integer, string, boolean, char o decimal)
             if self.tipo == None:
-                if isinstance(value,chr):#CHAR
-                    self.tipo=TIPO.CHARACTER
-                elif isinstance(value,chr):#CADENA:
+                
+                if isinstance(value,str):#CADENA:
                     self.tipo=TIPO.CADENA
                 elif isinstance(value,int):#INTEGER
                     self.tipo=TIPO.ENTERO
@@ -32,9 +33,10 @@ class Declaracion(Instruccion):
                     self.tipo=TIPO.DECIMAL
                 elif isinstance(value,bool):#BOOLEANO
                     self.tipo=TIPO.BOOLEANO
+                else:
+                    self.tipo=TIPO.CHARACTER
                 
 
-            
             if isinstance(value, Excepcion): return value
 
             #if self.tipo != self.expresion.tipo:
@@ -76,4 +78,11 @@ class Declaracion(Instruccion):
 
             if isinstance(result, Excepcion): return result
             return None
+
+    def getNodo(self):
+        nodo = NodoAST("DECLARACION")
+        nodo.agregarHijo(str(self.tipo))
+        nodo.agregarHijo(str(self.identificador))
+        nodo.agregarHijoNodo(self.expresion.getNodo())
+        return nodo
             

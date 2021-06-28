@@ -1,6 +1,8 @@
 from Instrucciones.Return import Return
+from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
 from Instrucciones.Break import Break
+from Abstract.NodoAST import NodoAST
 from TS.Excepcion         import Excepcion
 from TS.Tipo              import TIPO
 from TS.TablaSimbolos     import TablaSimbolos
@@ -28,6 +30,17 @@ class Case(Instruccion):
             if isinstance(result, Return): return result
 
 
+    
+    def getNodo(self):
+        nodo = NodoAST("CASE")
+        
+        instrucciones = NodoAST("INSTRUCCIONES")
+        for instr in self.instrucciones:
+            instrucciones.agregarHijoNodo(instr.getNodo())
+        nodo.agregarHijoNodo(instrucciones)
+        return nodo
 
+
+    
 
 

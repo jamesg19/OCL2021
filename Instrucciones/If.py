@@ -4,6 +4,7 @@ from TS.Excepcion import Excepcion
 from TS.Tipo import TIPO
 from TS.TablaSimbolos import TablaSimbolos
 from Instrucciones.Break import Break
+from Abstract.NodoAST import NodoAST
 
 
 class If(Instruccion):
@@ -49,3 +50,21 @@ class If(Instruccion):
 
         else:
             return Excepcion("Semantico", "Tipo de dato no booleano en IF.", self.fila, self.columna)
+
+    def getNodo(self):
+        nodo = NodoAST("IF")
+
+        instruccionesIf = NodoAST("INSTRUCCIONES IF")
+        for instr in self.instruccionesIf:
+            instruccionesIf.agregarHijoNodo(instr.getNodo())
+        nodo.agregarHijoNodo(instruccionesIf)
+
+        if self.instruccionesElse != None:
+            instruccionesElse = NodoAST("INSTRUCCIONES ELSE")
+            for instr in self.instruccionesElse:
+                instruccionesElse.agregarHijoNodo(instr.getNodo())
+            nodo.agregarHijoNodo(instruccionesElse) 
+        elif self.elseIf != None:
+            nodo.agregarHijoNodo(self.elseIf.getNodo())
+
+        return nodo

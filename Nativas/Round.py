@@ -1,3 +1,4 @@
+from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
 from TS.Tipo import TIPO
@@ -26,4 +27,10 @@ class Round(Instruccion):
         
         #retorna el valor redondeado segun los decimales ingresados
         return round(value)
+    #getNodo para AST
+    def getNodo(self):
+        nodo = NodoAST("ROUND")
+        #nodo.agregarHijo(str(self.identificador))
+        nodo.agregarHijoNodo(self.expresion.getNodo())
+        return nodo 
     

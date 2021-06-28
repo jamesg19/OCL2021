@@ -1,3 +1,4 @@
+from Abstract.NodoAST import NodoAST
 from Instrucciones.Return import Return
 from Instrucciones.Main import Main
 from Instrucciones.Asignacion import Asignacion
@@ -77,10 +78,14 @@ def guardarComo():
     fguardar.close()
     archivo = guardar
 
+def openASTPDF():
+    dirname = os.path.dirname(__file__)
+    os.startfile(dirname+"/ast.pdf")
+
 def openPDF():
     dirname = os.path.dirname(__file__)
     #direcc = os.path.join(dirname, 'errores.pdf')
-    os.startfile("C:\\Users\\james\\Desktop\\errores.html")
+    os.startfile(dirname+"/errores.html")
 
 def CrearReporteError(data):
     try:
@@ -147,7 +152,8 @@ def CrearReporteError(data):
                 "<script src=\"assets/js/Table-With-Search.js\"></script>"\
                 "</body>"\
                 "</html>"
-        fguardar = open("C:\\Users\\james\\Desktop\\errores.html", "w+",encoding="utf-8")
+        dirname = os.path.dirname(__file__)
+        fguardar = open(dirname+"/errores.html", "w+",encoding="utf-8")
         fguardar.write(formato)
         fguardar.close()
     except:
@@ -269,6 +275,23 @@ def ejecutar():
     imprimir_en_consolaError(ast.getConsolaError())#imprime los errores
     CrearReporteError(ast.getConsolaError())
 
+    #AST
+    init = NodoAST("RAIZ")
+    instr = NodoAST("INSTRUCCIONES")
+
+    for instruccion in ast.getInstrucciones():
+        instr.agregarHijoNodo(instruccion.getNodo())
+
+    init.agregarHijoNodo(instr)
+    grafo = ast.getDot(init) #DEVUELVE EL CODIGO GRAPHVIZ DEL AST
+
+    dirname = os.path.dirname(__file__)
+    direcc = os.path.join(dirname, 'ast.dot')
+    arch = open(direcc, "w+")
+    arch.write(grafo)
+    arch.close()
+    os.system('dot -T pdf -o ast.pdf ast.dot')
+
 
 #def debug():
     #btn = tk.Button(text="Next")
@@ -342,6 +365,7 @@ def recorrerInput(i):  #Funcion para obtener palabras reservadas, signos, numero
             l.append(i[counter])
             lista.append(l)
         elif i[counter] == "\"":
+
             if len(val) != 0:
                 l = []
                 l.append("variable")
@@ -467,7 +491,11 @@ menubar.add_cascade(menu=run, label="Ejecutar")
 er = tk.Menu(menubar,tearoff=0)
 
 er.add_command(label="Exportar Errores", command=openPDF)
+er.add_command(label="Generar AST", command=openASTPDF)
 menubar.add_cascade(menu=er, label="Exportar Errores")
+
+#er.add_command(label="Generar AST", command=openASTPDF)
+#menubar.add_cascade(menu=er, label="Generar AST")
 
 
 raiz.title("COMPI 1 2021 JAMES GRAMAJO")
