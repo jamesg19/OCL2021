@@ -7,6 +7,7 @@ USAC
 '''
 
 
+from Expresiones.Casteo import Casteo
 from Instrucciones.Continue import Continue
 import re
 from TS.Excepcion import Excepcion
@@ -637,6 +638,22 @@ def p_round(t):
 def p_typeof(t):
     ''' expresion : TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
     t[0] = Typeof(t[3], t.lineno(1), find_column(input, t.slice[1]))
+#*************************************************************CASTEOS************************************************************
+def p_castINT(t):
+    ''' expresion : PARENTESIS_ABRE INT PARENTESIS_CIERRA expresion '''
+    t[0] = Casteo(TIPO.ENTERO, t[4], t.lineno(2), find_column(input, t.slice[2]))
+def p_castDOUBLE(t):
+    ''' expresion : PARENTESIS_ABRE DOUBLE PARENTESIS_CIERRA expresion '''
+    t[0] = Casteo(TIPO.DECIMAL, t[4], t.lineno(2), find_column(input, t.slice[2]))
+def p_castSTRING(t):
+    ''' expresion : PARENTESIS_ABRE STRING PARENTESIS_CIERRA expresion '''
+    t[0] = Casteo(TIPO.CADENA, t[4], t.lineno(2), find_column(input, t.slice[2]))
+def p_castBOOLEAN(t):
+    ''' expresion : PARENTESIS_ABRE BOOLEAN PARENTESIS_CIERRA expresion '''
+    t[0] = Casteo(TIPO.BOOLEANO, t[4], t.lineno(2), find_column(input, t.slice[2]))
+def p_castCHAR(t):
+    ''' expresion : PARENTESIS_ABRE CHAR PARENTESIS_CIERRA expresion '''
+    t[0] = Casteo(TIPO.CHARACTER, t[4], t.lineno(2), find_column(input, t.slice[2]))
 
 '''
 import ply.yacc as yacc

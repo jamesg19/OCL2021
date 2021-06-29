@@ -45,7 +45,7 @@ class ForA(Instruccion):
                         if isinstance(result, Return): return result
 
                         #SI HAY UN CONTINUE
-                        elif isinstance(result, Continue): 
+                        if isinstance(result, Continue): 
                             self.hayContinue=True
                             actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
                             if isinstance(actualiza, Excepcion): return actualiza

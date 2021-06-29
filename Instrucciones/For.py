@@ -47,7 +47,7 @@ class For(Instruccion):
                             tree.updateConsolaError(result.toString())
                     
                         #SI HAY UN CONTINUE
-                        elif isinstance(result, Continue): 
+                        if isinstance(result, Continue): 
                             self.hayContinue=True
                             actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
                             if isinstance(actualiza, Excepcion): return actualiza

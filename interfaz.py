@@ -278,7 +278,7 @@ def ejecutar():
                     err = Excepcion("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
-                    
+
         #Tercera pasada
         for instruccion in ast.getInstrucciones():    
             if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA) or isinstance(instruccion, Funcion) ):
@@ -308,7 +308,6 @@ def ejecutar():
     arch.write(grafo)
     arch.close()
     os.system('dot -T pdf -o ast.pdf ast.dot')
-
 
 #def debug():
     #btn = tk.Button(text="Next")
