@@ -15,11 +15,10 @@ class Return(Instruccion):
     def interpretar(self, tree, table):
         result = self.expresion.interpretar(tree, table)
         if isinstance(result, Excepcion): return result
-
         self.tipo = self.expresion.tipo #TIPO DEL RESULT
         self.result = result            #VALOR DEL RESULT
-
         return self
+    
     
     def getNodo(self):
         nodo = NodoAST("RETURN")

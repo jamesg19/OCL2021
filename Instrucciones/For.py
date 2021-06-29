@@ -1,3 +1,4 @@
+from Instrucciones.Continue import Continue
 from Instrucciones.Return import Return
 from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
@@ -14,6 +15,7 @@ class For(Instruccion):
         self.actualiza=actualiza
         self.instrucciones = instrucciones
         self.fila = fila
+        self.hayContinue=False
         self.columna = columna
 
     def interpretar(self, tree, table):
@@ -43,14 +45,33 @@ class For(Instruccion):
                         if isinstance(result, Excepcion) :
                             tree.getExcepciones().append(result)
                             tree.updateConsolaError(result.toString())
+                    
+                        #SI HAY UN CONTINUE
+                        elif isinstance(result, Continue): 
+                            self.hayContinue=True
+                            actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
+                            if isinstance(actualiza, Excepcion): return actualiza
+                            break
+                            
                         #SI HAY UN BREAK SALE DEL CICLO FOR
                         if isinstance(result, Break): return None
                         if isinstance(result, Return): return result
+                        
+                        
                 else:
                     break
                 
             else:
                 return Excepcion("Semantico", "Tipo de dato no booleano en FOR.", self.fila, self.columna)
+            if self.hayContinue==True: 
+                self.hayContinue=False
+                print(" CONTINUEEEEE............")
+                #ACTUALIZA LA VARIABLE
+                #actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
+                #if isinstance(actualiza, Excepcion): return actualiza
+                continue
+
+            print("ANALIZA  ")
             #ACTUALIZA LA VARIABLE
             actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
             if isinstance(actualiza, Excepcion): return actualiza

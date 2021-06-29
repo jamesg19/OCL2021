@@ -1,3 +1,5 @@
+
+from Instrucciones.Continue import Continue
 from Abstract.NodoAST import NodoAST
 from Instrucciones.Return import Return
 from Instrucciones.Main import Main
@@ -13,7 +15,7 @@ import os
 import re
 from TS.Excepcion import Excepcion
 import tkinter as tk
-from tkinter import ttk
+from tkinter import Message, ttk
 from tkinter import scrolledtext
 from tkinter import filedialog
 from tkinter import messagebox
@@ -84,8 +86,13 @@ def openASTPDF():
 
 def openPDF():
     dirname = os.path.dirname(__file__)
-    #direcc = os.path.join(dirname, 'errores.pdf')
     os.startfile(dirname+"/errores.html")
+
+def showConsola():
+    from consola import consolajpr
+    me=consolajpr()
+    
+    print(me.getTextoConsola())
 
 def CrearReporteError(data):
     try:
@@ -235,7 +242,12 @@ def ejecutar():
                 if isinstance(value, Return): 
                     err = Excepcion("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
-                    ast.updateConsola(err.toString())
+                    ast.updateConsolaError(err.toString())
+
+                if isinstance(value, Continue): 
+                    err = Excepcion("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
+                    ast.getExcepciones().append(err)
+                    ast.updateConsolaError(err.toString())
                 
         for instruccion in ast.getInstrucciones():      # 2DA PASADA (MAIN)
             
@@ -262,6 +274,11 @@ def ejecutar():
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
 
+                if isinstance(value, Continue): 
+                    err = Excepcion("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
+                    ast.getExcepciones().append(err)
+                    ast.updateConsolaError(err.toString())
+                    
         #Tercera pasada
         for instruccion in ast.getInstrucciones():    
             if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA) or isinstance(instruccion, Funcion) ):
@@ -492,6 +509,7 @@ er = tk.Menu(menubar,tearoff=0)
 
 er.add_command(label="Exportar Errores", command=openPDF)
 er.add_command(label="Generar AST", command=openASTPDF)
+er.add_command(label="Consola", command=showConsola)
 menubar.add_cascade(menu=er, label="Exportar Errores")
 
 #er.add_command(label="Generar AST", command=openASTPDF)

@@ -1,3 +1,4 @@
+from Instrucciones.Continue import Continue
 from Instrucciones.Return import Return
 from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
@@ -12,6 +13,7 @@ class ForA(Instruccion):
         self.condicion = condicion
         self.actualiza=actualiza
         self.instrucciones = instrucciones
+        self.hayContinue=False
         self.fila = fila
         self.columna = columna
 
@@ -41,11 +43,27 @@ class ForA(Instruccion):
                         #SI HAY UN BREAK SALE DEL CICLO FOR
                         if isinstance(result, Break): return None
                         if isinstance(result, Return): return result
+
+                        #SI HAY UN CONTINUE
+                        elif isinstance(result, Continue): 
+                            self.hayContinue=True
+                            actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
+                            if isinstance(actualiza, Excepcion): return actualiza
+                            break
                 else:
                     break
                 
             else:
                 return Excepcion("Semantico", "Tipo de dato no booleano en FOR.", self.fila, self.columna)
+            
+            if self.hayContinue==True: 
+                self.hayContinue=False
+                print(" CONTINUEEEEE............")
+                #ACTUALIZA LA VARIABLE
+                #actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
+                #if isinstance(actualiza, Excepcion): return actualiza
+                continue
+
             #ACTUALIZA LA VARIABLE
             actualiza=self.actualiza.interpretar(tree, nuevaTabla2)
             if isinstance(actualiza, Excepcion): return actualiza

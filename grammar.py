@@ -7,6 +7,7 @@ USAC
 '''
 
 
+from Instrucciones.Continue import Continue
 import re
 from TS.Excepcion import Excepcion
 #TABLA ASCII 
@@ -42,6 +43,7 @@ reservadas = {
     'round'         : 'ROUND',
     'typeof'        : 'TYPEOF',
     'func'          : 'FUNC',
+    'continue'      : 'CONTINUE',
 
 }
 
@@ -302,10 +304,12 @@ def p_declaraciones(t):
                 | for
                 | print
                 | break
+                | continue
                 | returnn finInstruccion
                 | main
                 | funcion_void
                 | llamada_fvoid finInstruccion
+                
     '''
     t[0] = t[1]
 def p_instruccion_error(t):
@@ -508,6 +512,10 @@ def p_print(t):
 def p_break(t):
     ''' break : BREAK finInstruccion '''
     t[0] = Break(t.lineno(1), find_column(input, t.slice[1]))
+
+def p_continue(t):
+    ''' continue : CONTINUE finInstruccion '''
+    t[0] = Continue(t.lineno(1), find_column(input, t.slice[1]))
 
 def p_finInstruccion(t):
     ''' finInstruccion : PTCOMA

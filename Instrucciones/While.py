@@ -1,3 +1,4 @@
+from Instrucciones.Continue import Continue
 from Instrucciones.Return import Return
 from Abstract.Instruccion import Instruccion
 from TS.Excepcion import Excepcion
@@ -30,6 +31,9 @@ class While(Instruccion):
                             tree.updateConsolaError(result.toString())
                         if isinstance(result, Break): return None
                         if isinstance(result, Return): return result
+
+                        if isinstance(result, Continue): 
+                            continue
                 else:
                     break
             else:
