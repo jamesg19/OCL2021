@@ -7,8 +7,7 @@ USAC
 '''
 
 
-from Expresiones.Casteo import Casteo
-from Instrucciones.Continue import Continue
+
 import re
 from TS.Excepcion import Excepcion
 #TABLA ASCII 
@@ -43,6 +42,7 @@ reservadas = {
     'truncate'      : 'TRUNCATE',
     'round'         : 'ROUND',
     'typeof'        : 'TYPEOF',
+    'lenght'        : 'LENGHT',
     'func'          : 'FUNC',
     'continue'      : 'CONTINUE',
 
@@ -193,7 +193,7 @@ def t_COMENTARIO(t):
     return None
 
 def t_CADENA(t):
-    r'(\"([(-Za-zÀ-ÖØ-öø-ÿ#-&]|([\\][nN]|[\\][tT]|[\\][rR]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]|[░░]|[▒▒]|[▓▓]))*\")'
+    r'(\"([(-Za-zÀ-ÖØ-öø-ÿ#-&]|([\\][nN]|[\\][tT]|[\\][rR]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]|[░░]|[▒▒]|[▓▓]|[@]|[\^]))*\")'
     t.value = t.value[1:-1] # remuevo las comillas
     #t.value.replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t').replace('\\"', '\"').replace('\\\\', '\\')
     return t
@@ -277,6 +277,9 @@ from Nativas.ToUpper import ToUpper
 from Nativas.Round import Round
 from Nativas.Typeof import Typeof
 from Instrucciones.Return import Return
+from Nativas.Lenght import Lenght
+from Expresiones.Casteo import Casteo
+from Instrucciones.Continue import Continue
 
 
 def p_inicio(t):
@@ -638,6 +641,9 @@ def p_round(t):
 def p_typeof(t):
     ''' expresion : TYPEOF PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
     t[0] = Typeof(t[3], t.lineno(1), find_column(input, t.slice[1]))
+def p_lenght(t):
+    ''' expresion : LENGHT PARENTESIS_ABRE expresion PARENTESIS_CIERRA '''
+    t[0] = Lenght(t[3], t.lineno(1), find_column(input, t.slice[1]))
 #*************************************************************CASTEOS************************************************************
 def p_castINT(t):
     ''' expresion : PARENTESIS_ABRE INT PARENTESIS_CIERRA expresion '''

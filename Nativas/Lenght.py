@@ -5,7 +5,7 @@ from TS.Tipo import TIPO
 import math
 
 #DEVUELVE UN ENTERO
-class Round(Instruccion):
+class Lenght(Instruccion):
     def __init__(self, expresion, fila, columna):
         self.expresion = expresion
         self.fila = fila
@@ -16,20 +16,17 @@ class Round(Instruccion):
         value = self.expresion.interpretar(tree, table) 
         if isinstance(value, Excepcion): return value
         if self.tipo == None:
-                if isinstance(value,float):#DECIMAL
-                    self.tipo=TIPO.ENTERO
-                elif isinstance(value,int):#ENTERO
+                if isinstance(value,str):# CADENA
+                    
                     self.tipo=TIPO.ENTERO
                     
                 else:
-                   return Excepcion("Semantico", "Tipo de parametro de Round no es numerico.", self.fila, self.columna) 
-            
-        
-        #retorna el valor redondeado segun los decimales ingresados
-        return round(value)
+                   return Excepcion("Semantico", "Tipo de parametro de LENGHT no es cadena.", self.fila, self.columna) 
+        num=len(value)
+        return int(num)
     #getNodo para AST
     def getNodo(self):
-        nodo = NodoAST("ROUND")
+        nodo = NodoAST("LENGHT")
         #nodo.agregarHijo(str(self.identificador))
         nodo.agregarHijoNodo(self.expresion.getNodo())
         return nodo 

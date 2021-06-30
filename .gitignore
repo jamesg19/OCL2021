@@ -1,8 +1,8 @@
-parse.out
-parsetab.py
 __pycache__
 ast.pdf
 ast.dot
 errores.html
+parser.out
+parsetab.py
 
 

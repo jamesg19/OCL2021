@@ -20,16 +20,16 @@ class Typeof(Instruccion):
                     self.tipo=TIPO.CADENA
                     return "TIPO: CADENA"
                 elif isinstance(value,bool):#BOOLEANO
-                    self.tipo=TIPO.BOOLEANO
+                    self.tipo=TIPO.CADENA
                     return "TIPO: BOOLEANO"
                 elif isinstance(value,int):#INTEGER
-                    self.tipo=TIPO.ENTERO
+                    self.tipo=TIPO.CADENA
                     return "TIPO: ENTERO"
                 elif isinstance(value,float):#DECIMAL
-                    self.tipo=TIPO.DECIMAL
+                    self.tipo=TIPO.CADENA
                     return "TIPO: DECIMAL"
                 else :#CHAR:
-                    self.tipo=TIPO.CHARACTER
+                    self.tipo=TIPO.CADENA
                     return "TIPO: CHAR"
 
     def getNodo(self):
