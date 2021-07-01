@@ -54,7 +54,7 @@ class AccesoArreglo(Instruccion):
         num = dimension.interpretar(tree, table)
         if isinstance(num, Excepcion): return num
         if dimension.tipo != TIPO.ENTERO:
-            return Excepcion("Semantico", "Expresion diferente a ENTERO en Arreglo.", self.fila, self.columna)
+            return Excepcion("Semantico", "Expresion diferente a ENTERO en AccesoArreglo.", self.fila, self.columna)
         try:
             value = self.buscarDimensiones(tree, table, copy.copy(expresiones), arreglo[num])
         except:

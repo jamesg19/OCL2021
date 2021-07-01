@@ -1,3 +1,5 @@
+
+from Instrucciones.MiniConsola import MiniConsola
 from Abstract.NodoAST import NodoAST
 from Abstract.Instruccion import Instruccion
 from TS.Tipo import TIPO
@@ -9,12 +11,11 @@ class Read(Instruccion):
         self.tipo = TIPO.CADENA
 
     def interpretar(self, tree, table):
-        print(tree.getConsola()) #IMPRIME LA CONSOLA
-        print("Ingreso a un READ. Ingrese el valor")
-        tree.setConsola("")     #RESETEA LA CONSOLA
-        # ESTO SOLO ES DE EJEMPLO
-        lectura = input() # OBTENERME EL VALOR INGRESADO
-        return lectura
+        LECTURA_VAL =MiniConsola()
+        valorIngresado= LECTURA_VAL.getValor()
+        return valorIngresado
+        
+                        
 
     def getNodo(self):
         nodo = NodoAST("READ")

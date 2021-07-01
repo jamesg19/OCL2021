@@ -106,11 +106,13 @@ class Casteo(Instruccion):
             if self.expresion.tipo == TIPO.CADENA:
                 try:
                     if val.lower()=="false":
+                        print("es falso")
                         self.expresion.tipo=TIPO.BOOLEANO
-                        return bool(val)
+                        return False
                     elif val.lower()=="true":
                         self.expresion.tipo=TIPO.BOOLEANO
-                        return bool(val)
+                        print("es true")
+                        return True
                     else:
                         return Excepcion("Semantico", "No se puede castear para (BOOLEAN) STRING...", self.fila, self.columna)
 

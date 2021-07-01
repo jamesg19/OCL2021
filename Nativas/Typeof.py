@@ -16,6 +16,16 @@ class Typeof(Instruccion):
         if isinstance(value, Excepcion) :
             return value
         if self.tipo == None:
+                try:
+                    if  value=="None":
+                        
+                        self.tipo=TIPO.CADENA
+                        return "TIPO: NULO"
+                    #if value == None:
+                        #return "TIPO: NULO"
+                except:
+                    return "TIPO: NULO"
+
                 if isinstance(value,str):#CADENA
                     self.tipo=TIPO.CADENA
                     return "TIPO: CADENA"
@@ -30,6 +40,7 @@ class Typeof(Instruccion):
                     return "TIPO: DECIMAL"
                 else :#CHAR:
                     self.tipo=TIPO.CADENA
+                    #print("tiiiiippppooooooooooo")
                     return "TIPO: CHAR"
 
     def getNodo(self):

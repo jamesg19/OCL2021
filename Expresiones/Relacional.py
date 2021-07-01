@@ -19,6 +19,12 @@ class Relacional(Instruccion):
         der = self.OperacionDer.interpretar(tree, table)
         if isinstance(der, Excepcion): return der
         
+        if self.OperacionIzq.tipo == TIPO.NULO:
+                return Excepcion("Semantico", "Error de operacion en valor NULO", self.fila, self.columna)
+        if self.OperacionDer.tipo == TIPO.NULO:
+            return Excepcion("Semantico", "Error de operacion en valor NULO.", self.fila, self.columna)
+
+
         #-----------------------------------------------MENOR QUE  < -------------------------------------------------
         if self.operador == OperadorRelacional.MENORQUE:
             if self.OperacionIzq.tipo == TIPO.ENTERO and self.OperacionDer.tipo == TIPO.ENTERO:

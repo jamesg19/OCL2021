@@ -6,9 +6,7 @@ CARNÉ: 3517 27817 0922 (DPI)
 ESTUDIANTE EXTERNO (CUNOC-QUETZALTENANGO)
 '''
 
-from Expresiones.AccesoArreglo import AccesoArreglo
-from Instrucciones.DeclaracionArr1 import DeclaracionArr1
-from Instrucciones.ModificarArreglo import ModificarArreglo
+
 import re
 from TS.Excepcion import Excepcion
 #TABLA ASCII 
@@ -182,7 +180,7 @@ def t_COMENTARIO(t):
     return None
 
 def t_CADENA(t):
-    r'(\"([(-Za-zÀ-ÖØ-öø-ÿ#-&]|([\\][nN]|[\\][tT]|[\\][rR]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]|[░░]|[▒▒]|[▓▓]|[@]|[\^]))*\")'
+    r'(\"([(-Za-zÀ-ÖØ-öø-ÿ#-&]|([\\][nN]|[\\][tT]|[\\][rR]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]|[░░]|[▒▒]|[▓▓]|[@]|[\^]|[¿]))*\")'
     t.value = t.value[1:-1] # remuevo las comillas
     #t.value.replace('\\n', '\n').replace('\\r', '\r').replace('\\t', '\t').replace('\\"', '\"').replace('\\\\', '\\')
     return t
@@ -269,6 +267,10 @@ from Instrucciones.Return import Return
 from Nativas.Lenght import Lenght
 from Expresiones.Casteo import Casteo
 from Instrucciones.Continue import Continue
+from Expresiones.Read import Read
+from Expresiones.AccesoArreglo import AccesoArreglo
+from Instrucciones.DeclaracionArr1 import DeclaracionArr1
+from Instrucciones.ModificarArreglo import ModificarArreglo
 
 
 def p_inicio(t):
@@ -441,7 +443,7 @@ def p_llamada2(t) :
 #///////////////////////////////////////DECLARACION ARREGLOS//////////////////////////////////////////////////
 
 def p_declArr(t) :
-    '''declArr_instr     : tipo1'''
+    '''declArr_instr : tipo1 '''
     t[0] = t[1]
 
 def p_tipo1(t) :
@@ -709,6 +711,10 @@ def p_castCHAR(t):
 def p_expresion_Arreglo(t):
     '''expresion : IDENTIFICADOR lista_expresiones'''
     t[0] = AccesoArreglo(t[1], t[2], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_read(t):
+    '''expresion : READ PARENTESIS_ABRE PARENTESIS_CIERRA'''
+    t[0] = Read(t.lineno(1), find_column(input, t.slice[1]))
 
 '''
 import ply.yacc as yacc
