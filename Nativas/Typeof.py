@@ -33,7 +33,7 @@ class Typeof(Instruccion):
                     return "TIPO: CHAR"
 
     def getNodo(self):
-        nodo = NodoAST("Typeof")
+        nodo = NodoAST("TYPEOF")
         #nodo.agregarHijo(str(self.identificador))
         nodo.agregarHijoNodo(self.expresion.getNodo())
         return nodo

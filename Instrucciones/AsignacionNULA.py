@@ -11,13 +11,14 @@ class AsignacionNULA(Instruccion):
         self.expresion = expresion
         self.fila = fila
         self.columna = columna
+        self.arreglo = False
 
     def interpretar(self, tree, table):
         value = "None"
         if isinstance(value, Excepcion): 
             return value
         
-        simbolo = Simbolo(self.identificador, TIPO.NULO, self.fila, self.columna, value)
+        simbolo = Simbolo(self.identificador, TIPO.NULO, self.arreglo, self.fila, self.columna, value)
 
         result = table.actualizarTabla(simbolo)
 

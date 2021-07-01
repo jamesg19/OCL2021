@@ -1,13 +1,14 @@
 '''
-ESCUELA DE VACACIONES JUNIO 2021
+ESCUELA DE VACACIONES JUNIO 2021 USAC
 GRAMATICA PROYECTO COMPILADORES 1 
-ALUMNO ESTRELLA: JAMES OSMIN GRAMAJO CARCAMO
-CARNÉ: 201731172
-USAC
+ALUMNO: JAMES OSMIN GRAMAJO CARCAMO
+CARNÉ: 3517 27817 0922 (DPI)
+ESTUDIANTE EXTERNO (CUNOC-QUETZALTENANGO)
 '''
 
-
-
+from Expresiones.AccesoArreglo import AccesoArreglo
+from Instrucciones.DeclaracionArr1 import DeclaracionArr1
+from Instrucciones.ModificarArreglo import ModificarArreglo
 import re
 from TS.Excepcion import Excepcion
 #TABLA ASCII 
@@ -54,14 +55,8 @@ reservadas = {
 
 tokens=[
 
-    'COMILLAS',
-    'COMILLASIMPLE',
-    'ESPCOMILLAS',
-    'ESPCOMILLASIMPLE',
     'ESPBARRAINVERTIVA',
     'ESPLINEA',
-    'ESPRETORNO',
-    'ESPTAB',
     'MAS',
     'MENOS',
     'POR',
@@ -105,14 +100,8 @@ states = (
 
 #tokens
 
-t_COMILLAS=         r'[\"]'
-t_COMILLASIMPLE=    r'[\']'
-t_ESPCOMILLAS=      r'[\\][\"]'
-t_ESPCOMILLASIMPLE= r'[\\][\']'
 t_ESPBARRAINVERTIVA=r'[\\]'
 t_ESPLINEA=         r'[\\][n]'
-t_ESPRETORNO=       r'[\\][r]'
-t_ESPTAB=           r'[\\][t]'
 t_MAS=              r'\+'
 t_MENOS=            r'-'
 t_POR=              r'\*'
@@ -313,6 +302,8 @@ def p_declaraciones(t):
                 | main
                 | funcion_void
                 | llamada_fvoid finInstruccion
+                | declArr_instr finInstruccion
+                | modArr_instr finInstruccion
                 
     '''
     t[0] = t[1]
@@ -446,6 +437,60 @@ def p_llamada1(t) :
 def p_llamada2(t) :
     ''' llamada_fvoid     : IDENTIFICADOR PARENTESIS_ABRE parametros_llamada PARENTESIS_CIERRA '''
     t[0] = Llamada(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
+
+#///////////////////////////////////////DECLARACION ARREGLOS//////////////////////////////////////////////////
+
+def p_declArr(t) :
+    '''declArr_instr     : tipo1'''
+    t[0] = t[1]
+
+def p_tipo1(t) :
+    '''tipo1     : tip lista_Dimension IDENTIFICADOR IGUAL NEW tip lista_expresiones'''
+    t[0] = DeclaracionArr1(t[1], t[2], t[3], t[6], t[7], t.lineno(3), find_column(input, t.slice[3]))
+
+def p_lista_Dim1(t) :
+    '''lista_Dimension     : lista_Dimension CORCHETE_ABRE CORCHETE_CIERRA'''
+    t[0] = t[1] + 1
+
+def p_lista_Dim2(t) :
+    'lista_Dimension    : CORCHETE_ABRE CORCHETE_CIERRA'
+    t[0] = 1
+
+def p_lista_expresiones_1(t) :
+    'lista_expresiones     : lista_expresiones CORCHETE_ABRE expresion CORCHETE_CIERRA'
+    t[1].append(t[3])
+    t[0] = t[1]
+
+def p_lista_expresiones_2(t) :
+    'lista_expresiones    : CORCHETE_ABRE expresion CORCHETE_CIERRA'
+    t[0] = [t[2]]
+
+def p_tip(t):
+    ''' tip : STRING
+            | INT
+            | DOUBLE 
+            | CHAR
+            | BOOLEAN'''
+    if t[1].lower()=="string":
+        t[0]=TIPO.CADENA
+    elif t[1].lower()=="int":
+        t[0]=TIPO.ENTERO
+    elif t[1].lower()=="double":
+        t[0]=TIPO.DECIMAL
+    elif t[1].lower()=="char":
+        t[0]=TIPO.CHARACTER
+    elif t[1].lower()=="boolean":
+        t[0]=TIPO.BOOLEANO
+
+#///////////////////////////////////////////  MODIFICACION ARREGLOS  ///////////////////////////////////////////////
+
+
+def p_modArr(t) :
+    '''modArr_instr     :  IDENTIFICADOR lista_expresiones IGUAL expresion'''
+    t[0] = ModificarArreglo(t[1], t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
+
+
+#///////////////////////////////////////////// RETURN /////////////////////////////////////////////////////////
 
 def p_returnn(t):
     ''' returnn : RETURN expresion '''
@@ -660,6 +705,10 @@ def p_castBOOLEAN(t):
 def p_castCHAR(t):
     ''' expresion : PARENTESIS_ABRE CHAR PARENTESIS_CIERRA expresion '''
     t[0] = Casteo(TIPO.CHARACTER, t[4], t.lineno(2), find_column(input, t.slice[2]))
+
+def p_expresion_Arreglo(t):
+    '''expresion : IDENTIFICADOR lista_expresiones'''
+    t[0] = AccesoArreglo(t[1], t[2], t.lineno(1), find_column(input, t.slice[1]))
 
 '''
 import ply.yacc as yacc

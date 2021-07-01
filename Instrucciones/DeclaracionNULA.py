@@ -11,13 +11,14 @@ class DeclaracionNULA(Instruccion):
         self.tipo = tipo
         self.fila = fila
         self.columna = columna
+        self.arreglo = False
 
     def interpretar(self, tree, table):
         self.tipo=TIPO.NULO
        
         value="None"
 
-        simbolo = Simbolo(str(self.identificador), TIPO.NULO, self.fila, self.columna, value)
+        simbolo = Simbolo(str(self.identificador), TIPO.NULO, self.arreglo, self.fila, self.columna, value)
 
         result = table.setTabla(simbolo)
 
