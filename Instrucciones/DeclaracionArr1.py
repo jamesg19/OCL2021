@@ -21,28 +21,39 @@ class DeclaracionArr1(Instruccion):
 
     def interpretar(self, tree, table):
         print(f" TIPO1= {self.tipo} TIPO2: {self.tipo2}")
+        
+        # VERIFICA SI LOS TIPOS COINCIDEN
         if self.tipo != self.tipo2:                     #VERIFICACION DE TIPOS
             return Excepcion("Semantico", "Tipo de dato diferente en Arreglo.", self.fila, self.columna)
+        
+        #VERIFICA LAS DIMENSIONES EN [] [] []Y VERIFICA LAS DIMENSIONES EN LA EXPRESION
         if self.dimensiones != len(self.expresiones):   #VERIFICACION DE DIMENSIONES
             return Excepcion("Semantico", "Dimensiones diferentes en Arreglo.", self.fila, self.columna)
 
         # CREACION DEL ARREGLO
         value = self.crearDimensiones(tree, table, self.tipo, copy.copy(self.expresiones))     #RETORNA EL ARREGLO DE DIMENSIONES
+        
         if isinstance(value, Excepcion): return value
+        # CREACION DEL SIMBOLO
         simbolo = Simbolo(str(self.identificador), self.tipo, self.arreglo, self.fila, self.columna, value)
+        # ACTUALIZA LA TABLA
         result = table.setTabla(simbolo)
         if isinstance(result, Excepcion): return result
         return None
 
 
-
+    #CREAR DIMENSIONES
     def crearDimensiones(self, tree, table, tipo, expresiones):
         arr = []
+        # VERIFICA EL TAMANO DE LAS EXPRESIONES
         if len(expresiones) == 0:
             return None
+        #OBTIENE LA EPRESION
         dimension = expresiones.pop(0)
+        #OBTIENE EL NUMERO DE DIMENSIONES
         num = dimension.interpretar(tree, table)
         if isinstance(num, Excepcion): return num
+        #VERIFICA QUE LOS NUMEROS DENTRO [][][] SEAN ENTEROS
         if dimension.tipo != TIPO.ENTERO:
             return Excepcion("Semantico", "El tipo de expresion en dimensiones es incorrecto ", self.fila, self.columna)
         contador = 0

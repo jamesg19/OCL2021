@@ -307,6 +307,7 @@ def p_declaraciones(t):
                 | llamada_fvoid finInstruccion
                 | declArr_instr finInstruccion
                 | modArr_instr finInstruccion
+                | declArr_instr2 finInstruccion
                 
     '''
     t[0] = t[1]
@@ -496,7 +497,7 @@ def p_modArr(t) :
 
 
 def p_declArr2(t) :
-    '''declArr_instr : tipo2 '''
+    '''declArr_instr2 : tipo2 '''
     t[0] = t[1]
 
 def p_tipo2(t) :
@@ -505,22 +506,41 @@ def p_tipo2(t) :
 
 
 def p_lstexpresiones2a(t) :
-    'list_expresenes2     : list_expresenes2 COMA LLAVE_ABRE list_expresenes2a LLAVE_CIERRA'
-    t[1].append(t[3])
+    'list_expresenes2     : list_expresenes2 COMA LLAVE_ABRE valores LLAVE_CIERRA'
+    if t[4] != "":
+        t[1].append(t[4])
     t[0] = t[1]
 
 def p_lstexpresiones2b(t) :
-    'list_expresenes2    : LLAVE_ABRE list_expresenes2a LLAVE_CIERRA '
-    t[0] = [t[2]]
+    'list_expresenes2    : LLAVE_ABRE valores LLAVE_CIERRA '
+    #t[0] = [t[2]] corrigiendo error
+    if t[2] == "":
+        t[0] = []
+    else:
+        t[0] = [t[2]]
 
-def p_lstexpresiones2aa(t) :
-    'list_expresenes2a     : list_expresenes2a COMA LLAVE_ABRE expresion LLAVE_CIERRA'
-    t[1].append(t[3])
+def p_lista_val1(t) :
+    'valores     : list_expresenes2'
+    t[0] = t[1]
+    #t[1].append(t[3])
+    #t[0] = t[1]
+
+def p_lista_val2(t) :
+    'valores    : sub_expresion '
     t[0] = t[1]
 
-def p_lstexpresiones2bb(t) :
-    'list_expresenes2a    : LLAVE_ABRE expresion LLAVE_CIERRA '
-    t[0] = [t[2]]
+def p_subexpresion1(t):
+    ''' sub_expresion : sub_expresion COMA expresion '''
+    if t[3] != "": #expresion pos 3
+        t[1].append(t[3])
+    t[0] = t[1]
+
+def p_subexpresion2(t):
+    ''' sub_expresion :  expresion '''
+    if t[1] != "": #expresion pos 3
+        t[0]=[]
+    else:
+        t[0] = [t[1]]
 
 
 
@@ -771,17 +791,27 @@ input = ''
 def getErrores():
     return errores
 
+    
 def parse(inp) :
     global errores
     global lexer
     global parser
+    global variables
+    global funciones
     errores = []
+    funciones=[]
+    variables=[]
     lexer = lex.lex(reflags= re.IGNORECASE)
     parser = yacc.yacc()
     global input
     input = inp
     return parser.parse(inp)
 
+def getVariables(t):
+    return variables
+
+def getFunciones(t):
+    return funciones
 
 #-------------------------------------------------INTERFAZ-------------------------------------------------
 '''

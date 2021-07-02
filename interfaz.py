@@ -1,4 +1,6 @@
 
+from Instrucciones.ModificarArreglo import ModificarArreglo
+from Instrucciones.DeclaracionArr1 import DeclaracionArr1
 from Instrucciones.Continue import Continue
 from Abstract.NodoAST import NodoAST
 from Instrucciones.Return import Return
@@ -11,6 +13,8 @@ from Instrucciones.Funcion import Funcion
 from Instrucciones.Llamada import Llamada
 from Nativas.ToLower import ToLower
 from Nativas.ToUpper import ToUpper
+from grammar import getVariables as listaVariables
+from grammar import getFunciones as listaFunciones
 import os
 import re
 from TS.Excepcion import Excepcion
@@ -20,6 +24,9 @@ from tkinter import scrolledtext
 from tkinter import filedialog
 from tkinter import messagebox
 from Instrucciones.Break import Break
+import sys
+
+sys.setrecursionlimit(100000)
 
 #from tkinter import * as tk
 
@@ -200,19 +207,26 @@ def posicion(event):
     #recorrerInput(editor.get(1,tk.END))
     pos.grid(column = 1, row = 4)
 
+def getVariables(t):
+    return variables
+
+def getFunciones(t):
+    return funciones
 ###########################################  METODO PARA EJECUTAR EL CODIGO  ##################################### 
 def ejecutar():
     errores.delete(1.0, tk.END)
     consola.delete(1.0, tk.END)
-    #f = open("./entradaa.txt", "r")
-    #entrada = f.read()
+
     entrada = editor.get(1.0, tk.END)
-    #f = open("./entradaa.txt", "r")
-    #entrada = f.read()
     
     from TS.Arbol import Arbol
     from TS.TablaSimbolos import TablaSimbolos
     import grammar
+
+    global variables
+    global funciones
+    funciones=[]
+    variables=[]
     try:
         contador = 0 
         instrucciones = grammar.parse(entrada.lower()) #ARBOL AST
@@ -221,17 +235,22 @@ def ejecutar():
         TSGlobal = TablaSimbolos()
         ast.setTSglobal(TSGlobal)
         #grammar.crearNativas(ast)
+        
+        if len(TSGlobal.getVariables())!=0:
+            TSGlobal.tsvariables()
+        i=0
+
 
         for error in grammar.errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICOS
             ast.getExcepciones().append(error)
             ast.updateConsolaError(error.toString())
-
+        # PRIMERA PASADA
         for instruccion in ast.getInstrucciones():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
-            imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
+            #imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
             if isinstance(instruccion, Funcion):
                 ast.addFuncion(instruccion)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
 
-            if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, DeclaracionNULA) or isinstance(instruccion, AsignacionNULA):
+            if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, DeclaracionNULA) or isinstance(instruccion, AsignacionNULA)or isinstance(instruccion, DeclaracionArr1)or isinstance(instruccion, ModificarArreglo):
                 value = instruccion.interpretar(ast,TSGlobal)
                 if isinstance(value, Excepcion) :
                     ast.getExcepciones().append(value)
@@ -249,10 +268,14 @@ def ejecutar():
                     err = Excepcion("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
-                
+        #SEGUNDA PASADA       
         for instruccion in ast.getInstrucciones():      # 2DA PASADA (MAIN)
-            imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
+            #print(ast.getConsola())
+            #print("JAMES")
+           
             if isinstance(instruccion, Main):
+                imprimir_en_consola(ast.getConsola())
+
                 contador =contador + 1
                 if contador > 1: # VERIFICAR LA DUPLICIDAD
                     err = Excepcion("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
@@ -279,16 +302,38 @@ def ejecutar():
                     err = Excepcion("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
-                
+            else:
+                imprimir_en_consola(ast.getConsola())
 
-        #Tercera pasada
+
+        #TERCERA PASADA
         for instruccion in ast.getInstrucciones(): 
             imprimir_en_consola(ast.getConsola())#Imprime las instrucciones   
-            if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA) or isinstance(instruccion, Funcion) ):
+            if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA) or isinstance(instruccion, Funcion)or isinstance(instruccion, DeclaracionArr1)or isinstance(instruccion, ModificarArreglo) ):
                 err = Excepcion("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
                 ast.getExcepciones().append(err)
                 ast.updateConsolaError(err.toString())
-                
+
+        for variable in TSGlobal.getVariables():
+            variables.append(variable)
+            print(variable.getID())
+            
+
+        for funcion in ast.getFunciones():
+            funciones.append(funcion)
+
+        for variable in variables:
+            print("**ID")
+            print(variable.getID())
+            print("**TIPO")
+            print(variable.getTipo())
+            print("**VALOR")
+            print(variable.getValor())
+            print("**FILA")
+            print(variable.getFila())
+            print("**COLUMNA")
+            print(variable.getColumna())  
+
     except IOError:
         imprimir_en_consolaError(IOError)
     #imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
@@ -476,7 +521,7 @@ editor.bind('<Return>',    lineas)
 editor.bind('<BackSpace>', lineas)
 editor.bind('<<Change>>',  lineas)
 editor.bind('<Configure>', lineas)
-#editor.bind('<Motion>', lineas)
+editor.bind('<Motion>', lineas)
 editor.bind('<KeyPress>', lineas)
 editor.bind('<Button-1>', posicion)
 
