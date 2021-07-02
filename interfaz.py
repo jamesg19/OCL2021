@@ -227,6 +227,7 @@ def ejecutar():
             ast.updateConsolaError(error.toString())
 
         for instruccion in ast.getInstrucciones():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
+            imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
             if isinstance(instruccion, Funcion):
                 ast.addFuncion(instruccion)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
 
@@ -250,7 +251,7 @@ def ejecutar():
                     ast.updateConsolaError(err.toString())
                 
         for instruccion in ast.getInstrucciones():      # 2DA PASADA (MAIN)
-            
+            imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
             if isinstance(instruccion, Main):
                 contador =contador + 1
                 if contador > 1: # VERIFICAR LA DUPLICIDAD
@@ -278,9 +279,11 @@ def ejecutar():
                     err = Excepcion("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
+                
 
         #Tercera pasada
-        for instruccion in ast.getInstrucciones():    
+        for instruccion in ast.getInstrucciones(): 
+            imprimir_en_consola(ast.getConsola())#Imprime las instrucciones   
             if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA) or isinstance(instruccion, Funcion) ):
                 err = Excepcion("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
                 ast.getExcepciones().append(err)
@@ -288,7 +291,7 @@ def ejecutar():
                 
     except IOError:
         imprimir_en_consolaError(IOError)
-    imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
+    #imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
     imprimir_en_consolaError(ast.getConsolaError())#imprime los errores
     CrearReporteError(ast.getConsolaError())
 

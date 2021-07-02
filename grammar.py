@@ -7,6 +7,7 @@ ESTUDIANTE EXTERNO (CUNOC-QUETZALTENANGO)
 '''
 
 
+from Instrucciones.DeclaracionArr2 import DeclaracionArr2
 import re
 from TS.Excepcion import Excepcion
 #TABLA ASCII 
@@ -186,7 +187,7 @@ def t_CADENA(t):
     return t
 
 def t_CHART(t):
-    r'(\'([(-Za-zÀ-ÖØ-öø-ÿ#-&]|([\\][nN]|[\\][tT]|[\\][rR]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))\')'
+    r'(\'([(-Za-zÀ-ÖØ-öø-ÿ#-&]|([\\][nN]|[\\][tT]|[\\][rR]|[\\][\']|[\\][\"]|[\\][\\]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]|[@]|[\^]|[¿]))\')'
     #r'(\'([(-Za-z#-&]|([\\n]|[\\t]|[\\r]|[\\][\\]|[\\][\']|[\\][\"]|[\{]|[\}]|[\|]|[\!]|[\_]|[]|[ ]))\')'
     t.value = t.value[1:-1] # remuevo las comillas
     return t
@@ -490,6 +491,42 @@ def p_tip(t):
 def p_modArr(t) :
     '''modArr_instr     :  IDENTIFICADOR lista_expresiones IGUAL expresion'''
     t[0] = ModificarArreglo(t[1], t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
+
+#///////////////////////////////////////////  DECLARACION DE ARREGLOS TIPO II//////////////////////////////////
+
+
+def p_declArr2(t) :
+    '''declArr_instr : tipo2 '''
+    t[0] = t[1]
+
+def p_tipo2(t) :
+    '''tipo2     : tip lista_Dimension IDENTIFICADOR IGUAL list_expresenes2'''
+    t[0] = DeclaracionArr2(t[1], t[2], t[3], t[5], t.lineno(3), find_column(input, t.slice[3]))
+
+
+def p_lstexpresiones2a(t) :
+    'list_expresenes2     : list_expresenes2 COMA LLAVE_ABRE list_expresenes2a LLAVE_CIERRA'
+    t[1].append(t[3])
+    t[0] = t[1]
+
+def p_lstexpresiones2b(t) :
+    'list_expresenes2    : LLAVE_ABRE list_expresenes2a LLAVE_CIERRA '
+    t[0] = [t[2]]
+
+def p_lstexpresiones2aa(t) :
+    'list_expresenes2a     : list_expresenes2a COMA LLAVE_ABRE expresion LLAVE_CIERRA'
+    t[1].append(t[3])
+    t[0] = t[1]
+
+def p_lstexpresiones2bb(t) :
+    'list_expresenes2a    : LLAVE_ABRE expresion LLAVE_CIERRA '
+    t[0] = [t[2]]
+
+
+
+
+
+
 
 
 #///////////////////////////////////////////// RETURN /////////////////////////////////////////////////////////
