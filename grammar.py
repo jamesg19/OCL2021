@@ -618,19 +618,19 @@ def p_parametro_arrINT(t):
 
 def p_parametro_arrSTRING(t):
     'parametro     : STRING lista_Dimension IDENTIFICADOR'
-    t[0] = {'tipo':TIPO.STRING,'identificador':t[3]}
+    t[0] = {'tipo':TIPO.CADENA,'identificador':t[3]}
 
 def p_parametro_arrDOUBLE(t):
     'parametro     : DOUBLE lista_Dimension IDENTIFICADOR'
-    t[0] = {'tipo':TIPO.STRING,'identificador':t[3]}
+    t[0] = {'tipo':TIPO.DECIMAL,'identificador':t[3]}
 
 def p_parametro_arrCHAR(t):
     'parametro     : CHAR lista_Dimension IDENTIFICADOR'
-    t[0] = {'tipo':TIPO.STRING,'identificador':t[3]}
+    t[0] = {'tipo':TIPO.CHARACTER,'identificador':t[3]}
 
 def p_parametro_arrBOOLEAN(t):
     'parametro     : BOOLEAN lista_Dimension IDENTIFICADOR'
-    t[0] = {'tipo':TIPO.STRING,'identificador':t[3]}
+    t[0] = {'tipo':TIPO.BOOLEANO,'identificador':t[3]}
 
 
 def p_print(t):

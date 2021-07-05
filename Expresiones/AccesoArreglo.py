@@ -58,5 +58,7 @@ class AccesoArreglo(Instruccion):
         try:
             value = self.buscarDimensiones(tree, table, copy.copy(expresiones), arreglo[num])
         except:
-            return Excepcion("Semantico", f"Índice {num} fuera de límites para longitud del arreglo", self.fila, self.columna)
+            return " "
+            
+            #return Excepcion("Semantico", f"Índice {num} fuera de límites para longitud del arreglo", self.fila, self.columna)
         return value
