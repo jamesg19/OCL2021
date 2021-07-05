@@ -38,9 +38,11 @@ class DeclaracionArr2(Instruccion):
             if isinstance(value, Excepcion): return value
             simbolo = Simbolo(str(self.identificador), self.tipo, self.arreglo, self.fila, self.columna, value)
             
+            simbolo.arreglo=True
             result = table.setTabla(simbolo)
             if isinstance(result, Excepcion): return result
             return None
+        
 
         if self.dimensiones != dimensiones:
             return Excepcion("Semantico", "Dimensiones diferentes en Arreglo.", self.fila, self.columna)
@@ -55,12 +57,13 @@ class DeclaracionArr2(Instruccion):
             #Obtiene la dimension
             listaa=len(dimension)
             while listaa !=0:
-                arreglo=self.crearDimensiones(tree, table, tipo, copy.copy(expresiones))
+                arreglo=self.crearDimensiones(tree, table, tipo, dimension)
                 arr.append(arreglo)
-                listaa-=1
+                listaa= listaa-1
         else:
             value=dimension.interpretar(tree,table)
             if isinstance(value, Excepcion): return value
+
             if self.tipo == dimension.tipo:
                 return value
             if self.tipo != dimension.tipo:
@@ -73,7 +76,7 @@ class DeclaracionArr2(Instruccion):
     
         if isinstance(expresion, list):
             if isinstance(expresion[0], list):
-                contador += 1
+                contador = contador+1
                 return self.crearDimensiones2(expresion[0], contador)
             else:
                 return contador
@@ -84,10 +87,6 @@ class DeclaracionArr2(Instruccion):
         nodo.agregarHijo(str(self.dimensiones))
         nodo.agregarHijo(str(self.identificador))
 
-        #exp = NodoAST("EXPRESIONES DE LAS DIMENSIONES")
-        '''for expresion in self.expresiones:
-            exp.agregarHijoNodo(expresion.getNodo())
-        nodo.agregarHijoNodo(exp)'''
         return nodo
 
 

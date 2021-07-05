@@ -23,8 +23,8 @@ class AccesoArreglo(Instruccion):
 
         self.tipo = simbolo.getTipo()
 
-        if not simbolo.getArreglo(): 
-            return Excepcion("Semantico", "Variable " + self.identificador + " no es un arreglo.", self.fila, self.columna)
+        #if not simbolo.getArreglo(): 
+            #return Excepcion("Semantico", "Variable " + self.identificador + " no es un arreglo.", self.fila, self.columna)
 
 
         # BUSQUEDA DEL ARREGLO

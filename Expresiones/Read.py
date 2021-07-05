@@ -11,6 +11,7 @@ class Read(Instruccion):
         self.tipo = TIPO.CADENA
 
     def interpretar(self, tree, table):
+        
         LECTURA_VAL =MiniConsola()
         valorIngresado= LECTURA_VAL.getValor()
         return valorIngresado

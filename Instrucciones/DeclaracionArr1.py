@@ -20,7 +20,7 @@ class DeclaracionArr1(Instruccion):
 
 
     def interpretar(self, tree, table):
-        print(f" TIPO1= {self.tipo} TIPO2: {self.tipo2}")
+        #print(f" TIPO1= {self.tipo} TIPO2: {self.tipo2}")
         
         # VERIFICA SI LOS TIPOS COINCIDEN
         if self.tipo != self.tipo2:                     #VERIFICACION DE TIPOS
@@ -36,6 +36,7 @@ class DeclaracionArr1(Instruccion):
         if isinstance(value, Excepcion): return value
         # CREACION DEL SIMBOLO
         simbolo = Simbolo(str(self.identificador), self.tipo, self.arreglo, self.fila, self.columna, value)
+        
         # ACTUALIZA LA TABLA
         result = table.setTabla(simbolo)
         if isinstance(result, Excepcion): return result

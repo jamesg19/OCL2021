@@ -16,10 +16,14 @@ class Funcion(Instruccion):
         self.columna = columna
         self.tipo = TIPO.NULO
     
+    
+
     def interpretar(self, tree, table):
         nuevaTabla = TablaSimbolos(table) 
+
         for instruccion in self.instrucciones:      # REALIZAR LAS ACCIONES
             value = instruccion.interpretar(tree,nuevaTabla)
+
             if isinstance(value, Excepcion) :
                 tree.getExcepciones().append(value)
                 tree.updateConsolaError(value.toString())
@@ -30,7 +34,6 @@ class Funcion(Instruccion):
             if isinstance(value, Return):
                 self.tipo = value.tipo
                 return value.result
-            
         return None
     
 

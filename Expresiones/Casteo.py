@@ -38,7 +38,12 @@ class Casteo(Instruccion):
                 try:
                     return float(self.obtenerVal(self.expresion.tipo, val))
                 except:
-                    return Excepcion("Semantico", "No se puede castear para (DOUBLE) CHAR.", self.fila, self.columna)
+                    pass
+                try:
+                    return ord(self.obtenerVal(self.expresion.tipo, val))
+                except:
+                    pass
+                return Excepcion("Semantico", "No se puede castear para (DOUBLE) CHAR.", self.fila, self.columna)
             return Excepcion("Semantico", "Tipo Erroneo de casteo para (Double).", self.fila, self.columna)
 
         #**********************************************CATEO INT**********************************************
@@ -64,7 +69,13 @@ class Casteo(Instruccion):
                 try:
                     return int(self.obtenerVal(self.expresion.tipo, val))
                 except:
-                    return Excepcion("Semantico", "No se puede castear para (INT) CHAR.", self.fila, self.columna)
+                    pass
+                try:
+                    return ord(self.obtenerVal(self.expresion.tipo, val))
+                except:
+                    pass
+
+                return Excepcion("Semantico", "No se puede castear para (INT) CHAR.", self.fila, self.columna)
             return Excepcion("Semantico", "Tipo Erroneo de casteo para (INT).", self.fila, self.columna)
 
         #**********************************************CATEO STRING**********************************************

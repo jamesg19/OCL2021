@@ -1,4 +1,4 @@
-
+from Instrucciones.DeclaracionArr2 import DeclaracionArr2
 from Instrucciones.ModificarArreglo import ModificarArreglo
 from Instrucciones.DeclaracionArr1 import DeclaracionArr1
 from Instrucciones.Continue import Continue
@@ -19,6 +19,7 @@ import os
 import re
 from TS.Excepcion import Excepcion
 import tkinter as tk
+from tkinter import *
 from tkinter import Message, ttk
 from tkinter import scrolledtext
 from tkinter import filedialog
@@ -26,7 +27,7 @@ from tkinter import messagebox
 from Instrucciones.Break import Break
 import sys
 
-sys.setrecursionlimit(100000)
+sys.setrecursionlimit(25000)
 
 #from tkinter import * as tk
 
@@ -214,8 +215,12 @@ def getFunciones(t):
     return funciones
 ###########################################  METODO PARA EJECUTAR EL CODIGO  ##################################### 
 def ejecutar():
+    #limpia las cajas de texto
     errores.delete(1.0, tk.END)
     consola.delete(1.0, tk.END)
+    #simbols.delete(1.0, tk.END)
+    simbols.delete(*simbols.get_children())
+    
 
     entrada = editor.get(1.0, tk.END)
     
@@ -231,7 +236,7 @@ def ejecutar():
         contador = 0 
         instrucciones = grammar.parse(entrada.lower()) #ARBOL AST
         #instrucciones = grammar.parse(entrada) #ARBOL AST
-        ast = Arbol(instrucciones)
+        ast = Arbol(instrucciones,consolaJPR=errores)
         TSGlobal = TablaSimbolos()
         ast.setTSglobal(TSGlobal)
         #grammar.crearNativas(ast)
@@ -250,7 +255,7 @@ def ejecutar():
             if isinstance(instruccion, Funcion):
                 ast.addFuncion(instruccion)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
 
-            if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, DeclaracionNULA) or isinstance(instruccion, AsignacionNULA)or isinstance(instruccion, DeclaracionArr1)or isinstance(instruccion, ModificarArreglo):
+            if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, DeclaracionNULA) or isinstance(instruccion, AsignacionNULA) or isinstance(instruccion, DeclaracionArr2) or isinstance(instruccion, DeclaracionArr1)or isinstance(instruccion, ModificarArreglo):
                 value = instruccion.interpretar(ast,TSGlobal)
                 if isinstance(value, Excepcion) :
                     ast.getExcepciones().append(value)
@@ -274,7 +279,7 @@ def ejecutar():
             #print("JAMES")
            
             if isinstance(instruccion, Main):
-                imprimir_en_consola(ast.getConsola())
+                #imprimir_en_consola(ast.getConsola())
 
                 contador =contador + 1
                 if contador > 1: # VERIFICAR LA DUPLICIDAD
@@ -303,40 +308,44 @@ def ejecutar():
                     ast.getExcepciones().append(err)
                     ast.updateConsolaError(err.toString())
             else:
-                imprimir_en_consola(ast.getConsola())
+                pass
+                #imprimir_en_consola(ast.getConsola())
 
 
         #TERCERA PASADA
         for instruccion in ast.getInstrucciones(): 
-            imprimir_en_consola(ast.getConsola())#Imprime las instrucciones   
-            if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA) or isinstance(instruccion, Funcion)or isinstance(instruccion, DeclaracionArr1)or isinstance(instruccion, ModificarArreglo) ):
+            #imprimir_en_consola(ast.getConsola())#Imprime las instrucciones   
+            if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, DeclaracionNULA)  or isinstance(instruccion, Asignacion)  or isinstance(instruccion, AsignacionNULA) or isinstance(instruccion, Funcion) or isinstance(instruccion, DeclaracionArr2)  or isinstance(instruccion, DeclaracionArr1)or isinstance(instruccion, ModificarArreglo) ):
                 err = Excepcion("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
                 ast.getExcepciones().append(err)
                 ast.updateConsolaError(err.toString())
-
+        info=""
         for variable in TSGlobal.getVariables():
             variables.append(variable)
             print(variable.getID())
             
-
+        
         for funcion in ast.getFunciones():
             funciones.append(funcion)
+            
+        cont=0    
+        for funcion in funciones:
+            cont+=1
+
+            simbols.insert('','end',text="FUNC",value=[cont,funcion.nombre ," - - -","FUNC", " - - -", funcion.fila,funcion.columna])
 
         for variable in variables:
-            print("**ID")
-            print(variable.getID())
-            print("**TIPO")
-            print(variable.getTipo())
-            print("**VALOR")
-            print(variable.getValor())
-            print("**FILA")
-            print(variable.getFila())
-            print("**COLUMNA")
-            print(variable.getColumna())  
+            cont+=1
+            #datos=f"ID : {variable.getID()} TIPO: {variable.getTipo()} VALOR: {variable.getValor()} FILA: {variable.getFila()} COLUMNA: {variable.getColumna()} \n"
+            simbols.insert('','end',text="VARIABLE",value=[cont,variable.getID() ,variable.getTipo(),"VAR", variable.getValor(), variable.getFila(),variable.getColumna()])
+            #info+=datos
+
+        #imprimirTablaSimbolos(info)
 
     except IOError:
         imprimir_en_consolaError(IOError)
     #imprimir_en_consola(ast.getConsola())#Imprime las instrucciones
+    
     imprimir_en_consolaError(ast.getConsolaError())#imprime los errores
     CrearReporteError(ast.getConsolaError())
 
@@ -499,6 +508,8 @@ consola  = scrolledtext.ScrolledText( undo = True)
 errores = scrolledtext.ScrolledText( undo = True)
 
 
+
+
 #################################CAMBIO DE COLORES
 editor.tag_config('reservada', foreground='blue')
 editor.tag_config('string', foreground='orange')
@@ -510,12 +521,15 @@ editor.tag_config('operacion', foreground='red')
 editor.tag_config('signo', foreground='black')
 
 #####################FUNCIONALIDADES EN EL TECLADO
-editor.config(bd=0, padx=6, pady=4, font=("Arial",12))
-consola.config(bd=0,padx=6, pady=4, font=("Arial",12),height=10)
+editor.config(bd=0, padx=6, pady=8, font=("Arial",12))
+'''consola.config(bd=0,padx=6, pady=70, font=("Arial",12),height=10)
+errores.config(bd=0,padx=6, pady=110, font=("Arial",12),height=10)
+simbols.config(bd=0,padx=2, pady=50, font=("Arial",12),height=10)'''
 #Barra vertical, izquierda, donde se mostrara la catidad de lineas
 lines = tk.Canvas( width = 30, height = 465, background = 'gray60')
 lbl = ttk.Label( text = "ERRORES: ")  
-lbl2 = ttk.Label( text = "CONSOLA")   
+lbl2 = ttk.Label( text = "CONSOLA")  
+lbl3 = ttk.Label( text = "TABLA SIMBOLOS")   
 
 editor.bind('<Return>',    lineas)
 editor.bind('<BackSpace>', lineas)
@@ -530,7 +544,38 @@ frame.grid(sticky='news')
 #Posicion de los elementos
 editor.grid (row = 3, column = 1, padx = 10,  pady = 10)
 errores.grid(row = 3, column = 2, padx = 10,  pady = 10)
-consola.grid(row = 5, column = 1, padx = 10,  pady = 10)
+
+consola.grid(row = 5, column = 1, padx = 0,  pady = 0)
+#simbols.grid(row = 5, column = 2, padx = 0,  pady = 0)
+
+
+
+simbols=ttk.Treeview()
+simbols['columns']=('Num.', 'ID', 'Tipo1', 'Tipo2', 'Valor', 'Linea', 'Columna')
+simbols.column('#0', width=0, stretch=NO)
+simbols.column('Num.', anchor=CENTER, width=10)
+simbols.column('ID', anchor=CENTER, width=110)
+simbols.column('Tipo1', anchor=CENTER, width=80)
+simbols.column('Tipo2', anchor=CENTER, width=110)
+simbols.column('Valor', anchor=CENTER, width=80)
+simbols.column('Linea', anchor=CENTER, width=110)
+simbols.column('Columna', anchor=CENTER, width=110)  
+simbols.heading('#0', text='', anchor=CENTER)
+simbols.heading('Num.', text='Num.', anchor=CENTER)
+simbols.heading('ID', text='ID', anchor=CENTER)
+simbols.heading('Tipo1', text='Tipo1', anchor=CENTER)
+simbols.heading('Tipo2', text='Tipo2', anchor=CENTER)
+simbols.heading('Valor', text='Valor', anchor=CENTER)
+simbols.heading('Linea', text='Linea', anchor=CENTER)
+simbols.heading('Columna', text='Columna', anchor=CENTER)
+simbols.grid(column=2, row=5,padx=10, pady=10,sticky="ew")
+
+
+
+
+
+
+
 lines.grid  (row = 3, column = 0 )
 lbl.grid(row=4,column=0)
 lbl2.grid(row=2,column=2)
@@ -556,7 +601,6 @@ er = tk.Menu(menubar,tearoff=0)
 
 er.add_command(label="Exportar Errores", command=openPDF)
 er.add_command(label="Generar AST", command=openASTPDF)
-er.add_command(label="Consola", command=showConsola)
 menubar.add_cascade(menu=er, label="Exportar Errores")
 
 #er.add_command(label="Generar AST", command=openASTPDF)
@@ -569,14 +613,18 @@ raiz.config(menu=menubar)
 #from grammar import compilar as exec_code
 
 def  imprimir_en_consola(consol):
-    #consola.configure(state='enabled')
     errores.delete("1.0",tk.END)
     errores.insert(tk.INSERT,consol)
-    #consola.configure(state='disabled')
+
 def  imprimir_en_consolaError(consoll):
-    #errores.configure(state='enabled')
     consola.delete("1.0",tk.END)
     consola.insert(tk.INSERT,consoll)
     #errores.configure(state='disabled')
+
+def imprimirTablaSimbolos(consoll):
+    #simbols.insert('','end',text=simbolo.id,value=[simbolo.tipo,self.decla_tipo , self.entorno, simbolo.valor, simbolo.fila,simbolo.columna])
+    simbols.insert(tk.INSERT,consoll)
+
+
 
 raiz.mainloop()

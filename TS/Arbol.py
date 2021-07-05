@@ -1,9 +1,11 @@
+import tkinter
 class Arbol:
-    def __init__(self, instrucciones ):
+    def __init__(self, instrucciones , consolaJPR):
         self.instrucciones = instrucciones
         self.excepciones = []
         self.funciones=[]
         self.consola = ""
+        self.consolaJPR=consolaJPR
         self.consolaError=""
         self.TSglobal = None
 
@@ -29,9 +31,11 @@ class Arbol:
         self.consola = consola
 
     def updateConsola(self,cadena):
-        self.consola += str(cadena) + '\n'
+        self.consolaJPR.insert(tkinter.INSERT,str(cadena)+"\n")
+        #self.consola += str(cadena) + '\n'
 
     def updateConsolaError(self,cadena):
+        
         self.consolaError+=str(cadena)+ '\n'
 
     def getTSGlobal(self):

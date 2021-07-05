@@ -42,7 +42,7 @@ reservadas = {
     'truncate'      : 'TRUNCATE',
     'round'         : 'ROUND',
     'typeof'        : 'TYPEOF',
-    'lenght'        : 'LENGHT',
+    'length'        : 'LENGHT',
     'func'          : 'FUNC',
     'continue'      : 'CONTINUE',
 
@@ -611,6 +611,26 @@ def p_parametro_boolean(t) :
 def p_parametro_char(t) :
     'parametro     : CHAR IDENTIFICADOR'
     t[0] = {'tipo':TIPO.CHARACTER,'identificador':t[2]}
+
+def p_parametro_arrINT(t):
+    'parametro     : INT lista_Dimension IDENTIFICADOR'
+    t[0] = {'tipo':TIPO.ENTERO,'identificador':t[3]}
+
+def p_parametro_arrSTRING(t):
+    'parametro     : STRING lista_Dimension IDENTIFICADOR'
+    t[0] = {'tipo':TIPO.STRING,'identificador':t[3]}
+
+def p_parametro_arrDOUBLE(t):
+    'parametro     : DOUBLE lista_Dimension IDENTIFICADOR'
+    t[0] = {'tipo':TIPO.STRING,'identificador':t[3]}
+
+def p_parametro_arrCHAR(t):
+    'parametro     : CHAR lista_Dimension IDENTIFICADOR'
+    t[0] = {'tipo':TIPO.STRING,'identificador':t[3]}
+
+def p_parametro_arrBOOLEAN(t):
+    'parametro     : BOOLEAN lista_Dimension IDENTIFICADOR'
+    t[0] = {'tipo':TIPO.STRING,'identificador':t[3]}
 
 
 def p_print(t):

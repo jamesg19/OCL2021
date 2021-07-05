@@ -25,8 +25,8 @@ class ModificarArreglo(Instruccion):
         if simbolo == None:
             return Excepcion("Semantico", "Variable " + self.identificador + " no encontrada.", self.fila, self.columna)
 
-        if not simbolo.getArreglo(): 
-            return Excepcion("Semantico", "Variable " + self.identificador + " no es un arreglo.", self.fila, self.columna)
+        #if not simbolo.getArreglo(): 
+            #return Excepcion("Semantico", "Variable " + self.identificador + " no es un arreglo ", self.fila, self.columna)
 
         if simbolo.getTipo() != self.valor.tipo:
             tip1=self.getTIPOEXPR(str(simbolo.getTipo()))

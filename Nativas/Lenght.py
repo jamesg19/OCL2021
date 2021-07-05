@@ -16,17 +16,21 @@ class Lenght(Instruccion):
         value = self.expresion.interpretar(tree, table) 
         if isinstance(value, Excepcion): return value
         if self.tipo == None:
+
                 if isinstance(value,str):# CADENA
                     
                     self.tipo=TIPO.ENTERO
-                    
+
+                elif isinstance(value,list):
+                    self.tipo=TIPO.ENTERO
+                  
                 else:
                    return Excepcion("Semantico", "Tipo de parametro de LENGHT no es cadena.", self.fila, self.columna) 
         num=len(value)
         return int(num)
     #getNodo para AST
     def getNodo(self):
-        nodo = NodoAST("LENGHT")
+        nodo = NodoAST("LENGTH")
         #nodo.agregarHijo(str(self.identificador))
         nodo.agregarHijoNodo(self.expresion.getNodo())
         return nodo 

@@ -51,11 +51,12 @@ class TablaSimbolos:
                     tablaActual.tabla[simbolo.id.lower()].setValor(simbolo.getValor())
                     tablaActual.tabla[simbolo.id.lower()].setTipo(simbolo.getTipo())
                     try:
-                        for variable in variables:
-                            if variable.id==simbolo.id:
-                                variable.setValor(simbolo.getValor())
-                                variable.setTipo(tablaActual.tabla[simbolo.id.lower()].getTipo())
-                                break 
+                        pass
+                        #for variable in variables:
+                            #if variable.id==simbolo.id:
+                                #variable.setValor(simbolo.getValor())
+                                #variable.setTipo(tablaActual.tabla[simbolo.id.lower()].getTipo())
+                                #break 
                     except:
                         pass
                     return None             #VARIABLE ACTUALIZADA
