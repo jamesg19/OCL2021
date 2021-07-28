@@ -234,7 +234,7 @@ def ejecutar():
     variables=[]
     try:
         contador = 0 
-        instrucciones = grammar.parse(entrada.lower()) #ARBOL AST
+        instrucciones = grammar.parse(entrada.lower(),raiz) #ARBOL AST
         #instrucciones = grammar.parse(entrada) #ARBOL AST
         ast = Arbol(instrucciones,consolaJPR=errores)
         TSGlobal = TablaSimbolos()

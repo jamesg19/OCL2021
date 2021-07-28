@@ -791,7 +791,7 @@ def p_expresion_Arreglo(t):
 
 def p_read(t):
     '''expresion : READ PARENTESIS_ABRE PARENTESIS_CIERRA'''
-    t[0] = Read(t.lineno(1), find_column(input, t.slice[1]))
+    t[0] = Read(t.lineno(1), find_column(input, t.slice[1]),rootTk)
 
 '''
 import ply.yacc as yacc
@@ -812,7 +812,7 @@ def getErrores():
     return errores
 
     
-def parse(inp) :
+def parse(inp, root):
     global errores
     global lexer
     global parser
@@ -825,6 +825,8 @@ def parse(inp) :
     parser = yacc.yacc()
     global input
     input = inp
+    global rootTk
+    rootTk=root
     return parser.parse(inp)
 
 def getVariables(t):
